@@ -1,0 +1,14 @@
+{
+  "resources/js/swagger.css": {
+    "file": "assets/swagger-c01f4933.css",
+    "src": "resources/js/swagger.css"
+  },
+  "resources/js/swagger.js": {
+    "file": "assets/swagger-e902509f.js",
+    "src": "resources/js/swagger.js",
+    "isEntry": true,
+    "css": [
+      "assets/swagger-c01f4933.css"
+    ]
+  }
+}

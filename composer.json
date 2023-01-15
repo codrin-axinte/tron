@@ -1,0 +1,111 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "Morph CMS.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "ext-intl": "*",
+        "codezero/laravel-unique-translation": "^3.5",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^7.4.1",
+        "jeffbeltran/sanctum-tokens": "^2.0",
+        "joshbrw/laravel-module-installer": "^2.0",
+        "laravel/fortify": "^1.9",
+        "laravel/framework": "^v9.47",
+        "laravel/horizon": "^5.9",
+        "laravel/nova": "^4.0",
+        "laravel/sanctum": "^2.14",
+        "laravel/scout": "^9.4",
+        "laravel/telescope": "^4.7",
+        "laravel/tinker": "^2.7",
+        "manogi/nova-tiptap": "^3.2",
+        "meilisearch/meilisearch-php": "^0.23.0",
+        "mll-lab/laravel-graphql-playground": "^2.6",
+        "morphcms/morphling-module": "*",
+        "norman-huth/nova-secret-field": "1.0.2",
+        "outl1ne/nova-simple-repeatable": "^2.1",
+        "morphcms/acl-module": "*",
+        "morphcms/settings-module": "*",
+        "nuwave/lighthouse": "^5.51",
+        "nwidart/laravel-modules": "^9.0",
+        "outl1ne/nova-translatable": "^2.0.4",
+        "spatie/laravel-medialibrary": "^10.4",
+        "tailflow/laravel-orion": "^2.13",
+        "outl1ne/nova-menu-builder": "^7.0.10",
+        "psr/simple-cache": "^2.0",
+        "predis/predis": "^2.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.12",
+        "beyondcode/laravel-dump-server": "^1.8",
+        "fakerphp/faker": "^1.17.1",
+        "laravel/pint": "^v1.0.0",
+        "laravel-lang/attributes": "^2.0",
+        "laravel-lang/lang": "^12.1",
+        "laravel-lang/publisher": "^14.4",
+        "laravel/sail": "^1.13",
+        "mockery/mockery": "^1.5.0",
+        "nunomaduro/larastan": "^2.2",
+        "nunomaduro/collision": "^6.1",
+        "phpunit/phpunit": "^9.5.8",
+        "spatie/laravel-ignition": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "App\\": "app/",
+            "Modules\\": "modules/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi",
+            "@php artisan nova:publish"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "phpstan": [
+            "./vendor/bin/phpstan analyse"
+        ],
+        "pint": [
+            "./vendor/bin/pint"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "joshbrw/laravel-module-installer": true,
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com/"
+        }
+    ]
+}
