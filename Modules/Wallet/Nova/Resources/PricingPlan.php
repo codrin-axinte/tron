@@ -42,12 +42,15 @@ class PricingPlan extends Resource
             Text::make(__('Name'), 'name')
                 ->help(__('A unique and descriptive name.'))
                 ->placeholder(__('Gold Package'))
+                ->sortable()
                 ->translatable()
                 ->required(),
 
             Currency::make(__('Price'), 'price')
                 ->placeholder('5.00')
                 ->symbol('TRX')
+                ->sortable()
+                ->filterable()
                 ->required(),
 
             Textarea::make(__('Description'), 'description')
@@ -58,8 +61,8 @@ class PricingPlan extends Resource
                 ->alwaysShow()
                 ->rows(2),
 
-            Boolean::make(__('Is Best'), 'is_best'),
-            Boolean::make(__('Enabled'), 'enabled'),
+            Boolean::make(__('Is Best'), 'is_best')->sortable()->filterable(),
+            Boolean::make(__('Enabled'), 'enabled')->sortable()->filterable(),
 
             Panel::make(__('Features List'), [
                 SimpleRepeatable::make(__('Features'), 'features', [

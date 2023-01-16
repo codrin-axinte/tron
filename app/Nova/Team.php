@@ -50,13 +50,13 @@ class Team extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make('Owner', 'owner', \App\Models\User::class)
+            BelongsTo::make('Owner', 'owner', User::class)
                 ->sortable()
                 ->filterable()
                 ->searchable()
                 ->readonly(),
 
-            BelongsToMany::make('Members', 'members', \App\Models\User::class),
+            BelongsToMany::make('Members', 'members', User::class),
         ];
     }
 }

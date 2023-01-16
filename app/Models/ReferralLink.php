@@ -10,24 +10,11 @@ class ReferralLink extends Model
 {
     protected $guarded = [];
 
-    protected static function boot()
-    {
-        static::creating(function (ReferralLink $model) {
-            $model->generateCode();
-        });
-    }
+
 
     private function generateCode()
     {
         $this->code = (string)Str::uuid();
-    }
-
-    public static function getReferral($user, $program)
-    {
-        return static::firstOrCreate([
-            'user_id' => $user->id,
-            'referral_program_id' => $program->id
-        ]);
     }
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -86,6 +86,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
 
     public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user');
+        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user')->latest();
     }
 }

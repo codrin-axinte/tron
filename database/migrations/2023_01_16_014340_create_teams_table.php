@@ -21,6 +21,7 @@ return new class extends Migration {
         });
 
         Schema::create('team_member', function (Blueprint $table) {
+            $table->id();
             $table->foreignIdFor(\App\Models\Team::class);
             $table->foreignIdFor(\App\Models\User::class);
             $table->timestamps();

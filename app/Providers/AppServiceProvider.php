@@ -17,13 +17,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(CompoundInterestCalculator::class);
+
         $this->app->singleton(Updater::class, function ($app) {
             $config = $app['config']->get('updater');
 
             return new Updater($config['version'], $config['updates']);
         });
 
-        $this->app->singleton(CompoundInterestCalculator::class);
     }
 
     /**

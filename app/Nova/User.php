@@ -92,13 +92,15 @@ class User extends Resource
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
 
-            DateTime::make(__('Verified At'), 'email_verified_at')->canSeeWhen(UserPermission::ViewAny->value),
+            DateTime::make(__('Verified At'), 'email_verified_at')
+                ->hideFromIndex()
+                ->canSeeWhen(UserPermission::ViewAny->value),
 
             BelongsTo::make(__('Wallet'), 'wallet', Wallet::class)
                 ->exceptOnForms(),
 
             BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
-            HasOne::make(__('Team'), 'team', Team::class)->exceptOnForms(),
+            HasOne::make(__('Team'), 'ownedTeam', Team::class)->exceptOnForms(),
 
             SanctumTokens::make()->canSeeWhen(GenericPermission::ManageTokens->value),
 
