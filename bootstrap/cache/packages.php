@@ -20,6 +20,17 @@
       0 => 'CodeZero\\UniqueTranslation\\UniqueTranslationServiceProvider',
     ),
   ),
+  'defstudio/telegraph' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'DefStudio\\Telegraph\\TelegraphServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Telegraph' => 'DefStudio\\Telegraph\\Facades\\Telegraph',
+    ),
+  ),
   'eminiarts/nova-tabs' => 
   array (
     'providers' => 
@@ -32,6 +43,13 @@
     'providers' => 
     array (
       0 => 'Fruitcake\\Cors\\CorsServiceProvider',
+    ),
+  ),
+  'glorand/laravel-model-settings' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Glorand\\Model\\Settings\\ModelSettingsServiceProvider',
     ),
   ),
   'inertiajs/inertia-laravel' => 
@@ -194,33 +212,6 @@
       0 => 'MLL\\GraphQLPlayground\\GraphQLPlaygroundServiceProvider',
     ),
   ),
-  'morphcms/acl-module' => 
-  array (
-    'providers' => 
-    array (
-    ),
-    'aliases' => 
-    array (
-    ),
-  ),
-  'morphcms/morphling-module' => 
-  array (
-    'providers' => 
-    array (
-    ),
-    'aliases' => 
-    array (
-    ),
-  ),
-  'morphcms/settings-module' => 
-  array (
-    'providers' => 
-    array (
-    ),
-    'aliases' => 
-    array (
-    ),
-  ),
   'nesbot/carbon' => 
   array (
     'providers' => 
@@ -314,6 +305,13 @@
       0 => 'Outl1ne\\NovaSimpleRepeatable\\SimpleRepeatableServiceProvider',
     ),
   ),
+  'outl1ne/nova-sortable' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Outl1ne\\NovaSortable\\ToolServiceProvider',
+    ),
+  ),
   'outl1ne/nova-translatable' => 
   array (
     'providers' => 
@@ -335,6 +333,24 @@
     'providers' => 
     array (
       0 => 'Rap2hpoutre\\FastExcel\\Providers\\FastExcelServiceProvider',
+    ),
+  ),
+  'sammyjo20/saloon-laravel' => 
+  array (
+    'aliases' => 
+    array (
+      'Saloon' => 'Sammyjo20\\SaloonLaravel\\Facades\\Saloon',
+    ),
+    'providers' => 
+    array (
+      0 => 'Sammyjo20\\SaloonLaravel\\SaloonServiceProvider',
+    ),
+  ),
+  'spatie/eloquent-sortable' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\EloquentSortable\\EloquentSortableServiceProvider',
     ),
   ),
   'spatie/laravel-ignition' => 

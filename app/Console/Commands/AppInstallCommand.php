@@ -59,7 +59,7 @@ class AppInstallCommand extends Command
         $this->info('Application installed!');
 
         $this->info('You can now visit the admin panel at: '.route('nova.pages.home'));
-        $this->info('Your website is at this url: '.config('app.fronted_url'));
+        $this->info('Your website is at this url: '.config('app.frontend_url'));
         $this->info('Check out API list at: '.route('swagger.index'));
 
         return self::SUCCESS;

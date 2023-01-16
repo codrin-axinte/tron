@@ -15,5 +15,4 @@ yarn-error.log
 /.vscode
 auth.json
 morphcms
-modules/*
 packages

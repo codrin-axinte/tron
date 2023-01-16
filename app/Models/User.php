@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\HasReferralLinks;
+use App\Traits\HasTeam;
+use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,11 +14,13 @@ use Laravel\Sanctum\HasApiTokens;
 use Modules\Acl\Enums\GenericPermission;
 use Modules\Acl\Services\AclService;
 use Modules\Morphling\Contracts\CanOwnModels;
+use Modules\Wallet\Models\PricingPlan;
+use Modules\Wallet\Traits\HasWallet;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Impersonatable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Impersonatable, HasWallet, HasSettingsTable, HasTeam;
 
     /**
      * The attributes that are mass assignable.
@@ -77,5 +82,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
         }
 
         return true;
+    }
+
+    public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user');
     }
 }

@@ -2,13 +2,18 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\FilterByRole;
 use Eminiarts\Tabs\Tabs;
 use Eminiarts\Tabs\Traits\HasTabs;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Jeffbeltran\SanctumTokens\SanctumTokens;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphedByMany;
 use Laravel\Nova\Fields\Password;
@@ -21,6 +26,9 @@ use Modules\Acl\Enums\UserPermission;
 use Modules\Acl\Nova\Actions\AssignRole;
 use Modules\Acl\Nova\Resources\Role;
 use Modules\Acl\Services\AclService;
+use Modules\Wallet\Nova\Resources\PricingPlan;
+use Modules\Wallet\Nova\Resources\Wallet;
+use Outl1ne\MultiselectField\Multiselect;
 
 class User extends Resource
 {
@@ -49,12 +57,12 @@ class User extends Resource
         'id', 'name', 'email',
     ];
 
-    public static $with = ['roles'];
+    public static $with = ['roles', 'wallet'];
 
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return array
      */
     public function fields(NovaRequest $request): array
@@ -62,7 +70,8 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            UiAvatar::make(__('Avatar'))->resolveUsing(fn () => $this->name ?? implode(' ', explode('@', $this->email))),
+            UiAvatar::make(__('Avatar'))
+                ->resolveUsing(fn() => $this->name ?? implode(' ', explode('@', $this->email))),
 
             Text::make('Name')
                 ->sortable()
@@ -74,7 +83,9 @@ class User extends Resource
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
-            $this->makeRolesField(),
+            Multiselect::make(__('Roles'))
+                ->belongsToMany(Role::class)
+                ->canSee(fn() => $request->user()->can(RolePermission::Attach->value)),
 
             Password::make('Password')
                 ->onlyOnForms()
@@ -83,10 +94,11 @@ class User extends Resource
 
             DateTime::make(__('Verified At'), 'email_verified_at')->canSeeWhen(UserPermission::ViewAny->value),
 
-            Tabs::make(__('Details'), [
-                MorphedByMany::make(__('Roles'), 'roles', Role::class),
-                // TODO: Dynamic Tabs
-            ]),
+            BelongsTo::make(__('Wallet'), 'wallet', Wallet::class)
+                ->exceptOnForms(),
+
+            BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
+            HasOne::make(__('Team'), 'team', Team::class)->exceptOnForms(),
 
             SanctumTokens::make()->canSeeWhen(GenericPermission::ManageTokens->value),
 
@@ -101,28 +113,20 @@ class User extends Resource
         $values = ['none' => false];
 
         if ($roles->isNotEmpty()) {
-            $labels = $roles->mapWithKeys(fn (string $role) => [$role => Str::headline($role)])->toArray();
-            $values = $roles->mapWithKeys(fn (string $role) => [$role => true])->toArray();
+            $labels = $roles->mapWithKeys(fn(string $role) => [$role => Str::headline($role)])->toArray();
+            $values = $roles->mapWithKeys(fn(string $role) => [$role => true])->toArray();
         }
 
-        return BooleanGroup::make(__('Roles'), fn () => $values)
+        return BooleanGroup::make(__('Roles'), fn() => $values)
             ->options($labels)
             ->exceptOnForms()
             ->canSeeWhen(RolePermission::ViewAny->value);
     }
 
-    /**
-     * Get the actions available for the resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
-     */
-    public function actions(NovaRequest $request): array
+    public function filters(NovaRequest $request): array
     {
         return [
-            AssignRole::make()
-                ->showInline()
-                ->canSee(fn () => $request->user()->can(RolePermission::Attach->value)),
+            FilterByRole::make(),
         ];
     }
 

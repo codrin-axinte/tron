@@ -21,6 +21,7 @@ class AfterInstallSeeder extends Seeder
         // $locale = app()->getLocale();
         // $this->faker = fake($locale);
         // $carbon = Carbon::setLocale($locale);
-        //$acl = new AclBuilder();
+        $acl = new AclBuilder();
+        $acl->create('trader');
     }
 }

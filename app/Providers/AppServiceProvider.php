@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\CompoundInterestCalculator;
 use App\Updater\Updater;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
 
             return new Updater($config['version'], $config['updates']);
         });
+
+        $this->app->singleton(CompoundInterestCalculator::class);
     }
 
     /**

@@ -1,0 +1,43 @@
+{
+    "name": "morphcms/settings-module",
+    "type": "laravel-module",
+    "description": "Manage settings for each module and platform.",
+    "keywords": [
+        "morphling",
+        "laravel",
+        "settings",
+        "preferences",
+        "laravel nova"
+    ],
+    "authors": [
+        {
+            "name": "Codrin Axinte",
+            "email": "codrin.axinte@binomeway.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Settings\\": ""
+        }
+    },
+    "require": {
+        "whitecube/nova-flexible-content": "^v1.0.0",
+        "eminiarts/nova-tabs": "^2.0.3",
+        "outl1ne/nova-settings": "^5.0.2",
+        "jackiedo/dotenv-editor": "^2.0",
+        "laravel/nova": "^4.0"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com/"
+        }
+    ]
+}

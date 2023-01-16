@@ -1,5 +1,6 @@
 {
     "Morphling": true,
     "Acl": true,
-    "Settings": true
+    "Settings": true,
+    "Wallet": true
 }

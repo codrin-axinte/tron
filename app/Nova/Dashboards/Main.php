@@ -18,7 +18,6 @@ class Main extends Dashboard
     {
         return [
             UsersPerDay::make()->canSeeWhen(UserPermission::ViewAny->value),
-            Help::make()->canSee(fn () => app()->environment('local')),
         ];
     }
 }
