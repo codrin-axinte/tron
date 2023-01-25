@@ -28,7 +28,7 @@ class TestBotCommand extends Command
      */
     public function handle()
     {
-        TelegraphBot::first()->update()->send();
+        TelegraphBot::first()->unregisterWebhook(true)->send();
 
         return Command::SUCCESS;
     }
