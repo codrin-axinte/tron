@@ -3,7 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ReferralLink extends Resource
@@ -20,7 +22,7 @@ class ReferralLink extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'code';
 
     /**
      * The columns that should be searched.
@@ -28,7 +30,7 @@ class ReferralLink extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'code'
     ];
 
     /**
@@ -40,7 +42,12 @@ class ReferralLink extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+           // ID::make()->sortable(),
+            BelongsTo::make(__('User'), 'user', User::class)
+                ->sortable()
+                ->searchable()
+                ->filterable(),
+            Text::make(__('Invitation Code'), 'code')->required(),
         ];
     }
 }

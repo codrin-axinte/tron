@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Database\Seeders\AfterInstallSeeder;
+use App\Actions\Installation\AfterInstallAction;
+use App\Actions\Installation\CreateTelegraphBot;
+use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Pipeline\Pipeline;
 
 class AppInstallCommand extends Command
 {
@@ -30,12 +33,10 @@ class AppInstallCommand extends Command
     {
         if (app()->environment('local')) {
             $this->call('migrate:fresh', [
-                '--seed' => true,
                 '--no-interaction' => true,
             ]);
         } else {
             $this->call('migrate', [
-                '--seed' => true,
                 '--no-interaction' => true,
             ]);
         }
@@ -48,19 +49,27 @@ class AppInstallCommand extends Command
             '--no-interaction' => true,
         ]);
 
-        $this->call('db:seed', [
-            '--no-interaction' => true,
-            '--class' => AfterInstallSeeder::class,
-        ]);
+        $payload = [
+            'user' => User::latest()->first(),
+        ];
+
+        app(Pipeline::class)
+            ->send($payload)
+            ->through([
+                CreateTelegraphBot::class,
+                AfterInstallAction::class,
+            ])
+            ->thenReturn();
+
 
         $this->comment('Generating open-api specs...');
         $this->call('orion:specs');
 
         $this->info('Application installed!');
 
-        $this->info('You can now visit the admin panel at: '.route('nova.pages.home'));
-        $this->info('Your website is at this url: '.config('app.frontend_url'));
-        $this->info('Check out API list at: '.route('swagger.index'));
+        $this->info('You can now visit the admin panel at: ' . route('nova.pages.home'));
+        $this->info('Your website is at this url: ' . config('app.frontend_url'));
+        $this->info('Check out API list at: ' . route('swagger.index'));
 
         return self::SUCCESS;
     }

@@ -11,12 +11,6 @@ class ReferralLink extends Model
     protected $guarded = [];
 
 
-
-    private function generateCode()
-    {
-        $this->code = (string)Str::uuid();
-    }
-
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);

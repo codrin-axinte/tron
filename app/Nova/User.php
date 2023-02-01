@@ -99,11 +99,12 @@ class User extends Resource
             BelongsTo::make(__('Wallet'), 'wallet', Wallet::class)
                 ->exceptOnForms(),
 
+            HasOne::make(__('Referral Link'), 'referralLink', ReferralLink::class)->exceptOnForms(),
             BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
             HasOne::make(__('Team'), 'ownedTeam', Team::class)->exceptOnForms(),
 
-            SanctumTokens::make()->canSeeWhen(GenericPermission::ManageTokens->value),
 
+            SanctumTokens::make()->canSeeWhen(GenericPermission::ManageTokens->value),
         ];
     }
 

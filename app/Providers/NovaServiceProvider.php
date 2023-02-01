@@ -30,6 +30,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         ])->render());
 
         Nova::initialPath('/dashboards/main');
+        Nova::withBreadcrumbs();
 
         Nova::userMenu(function (Request $request, Menu $menu) {
             $menu->prepend(

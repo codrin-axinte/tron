@@ -20,7 +20,15 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Impersonatable, HasWallet, HasSettingsTable, HasTeam;
+    use HasApiTokens,
+        HasFactory,
+        Notifiable,
+        HasRoles,
+        Impersonatable,
+        HasWallet,
+        HasSettingsTable,
+        HasTeam,
+        HasReferralLinks;
 
     /**
      * The attributes that are mass assignable.

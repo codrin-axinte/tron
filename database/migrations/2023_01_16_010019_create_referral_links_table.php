@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('referral_links', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class);
-            $table->uuid('code');
+            $table->string('code')->unique();
             $table->timestamps();
         });
     }

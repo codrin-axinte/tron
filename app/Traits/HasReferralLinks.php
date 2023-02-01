@@ -14,7 +14,7 @@ trait HasReferralLinks
     {
         static::created(function ($model) {
             $model->referralLinks()->create([
-                'code' => ''
+                'code' => \Str::random(6),
             ]);
         });
 
