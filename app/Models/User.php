@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasReferralLinks;
 use App\Traits\HasTeam;
+use DefStudio\Telegraph\Models\TelegraphChat;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -95,5 +96,15 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
     public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user')->latest();
+    }
+
+    public function subscribedPlan(): ?PricingPlan
+    {
+        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user')->latest()->first();
+    }
+
+    public function chats(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(TelegraphChat::class, 'chat_user')->withTimestamps();
     }
 }

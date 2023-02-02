@@ -16,5 +16,8 @@ class ReferralLink extends Model
         return $this->belongsTo(User::class);
     }
 
-
+    public function scopeFindByCode($query, string $code)
+    {
+        return $query->where(['code' => $code])->firstOrNew();
+    }
 }
