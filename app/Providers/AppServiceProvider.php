@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Services\CompoundInterestCalculator;
+use App\Telegram\DefaultWebhookHandler;
+use App\Telegram\GuestWebhookHandler;
+use App\Telegram\TelegramWebhookHandler;
 use App\Updater\Updater;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;

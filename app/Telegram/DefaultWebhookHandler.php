@@ -2,8 +2,15 @@
 
 namespace App\Telegram;
 
+use App\Actions\MLM\ChangePackage;
 use App\Actions\Onboarding\CreateUserFromTelegram;
 use App\Actions\Onboarding\VerifyInvitationCode;
+use App\Enums\ChatHooks;
+use App\Models\MessageTemplate;
+use App\Renderers\PricingPlanRenderer;
+use App\Telegram\Traits\ExtendsSetupChat;
+use App\Telegram\Traits\HasChatMenus;
+use App\Telegram\Traits\HasMessageTemplates;
 use DefStudio\Telegraph\Enums\ChatActions;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Keyboard\ReplyKeyboard;
@@ -15,11 +22,11 @@ use DefStudio\Telegraph\Keyboard\Button;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Stringable;
 use Modules\Wallet\Models\PricingPlan;
+use function Symfony\Component\String\b;
 
 class DefaultWebhookHandler extends WebhookHandler
 {
-
-    private ?\App\Models\User $currentUser = null;
+    use ExtendsSetupChat, HasMessageTemplates, HasChatMenus;
 
     /*  protected function handleChatMemberJoined(User $member): void
       {
@@ -32,29 +39,43 @@ class DefaultWebhookHandler extends WebhookHandler
           $this->chat->message('Hello, ' . $member->username() . '. Please, enter use the command /join <code> to ')->send();
       }*/
 
-    /*  protected function handleChatMessage(Stringable $text): void
-      {
-          //
-      }*/
+    protected function handleChatMessage(Stringable $text): void
+    {
 
+    }
+
+    public function test()
+    {
+        // Debug
+        //$this->chat->message('Test')->forceReply('Input your pin card')->send();
+    }
 
     public function start()
     {
-        $response = $this->chat->markdown("*hi*")->send();
-
-        if ($response == "Failed") {
-            $response->dump();
+        if ($this->isAuth()) {
+            $this->showMenu();
+            return;
         }
+
+        // Show message template for onboarding
+        $this->sendTemplate(ChatHooks::Start);
     }
+
 
     public function dummy()
     {
         $this->chat->message('💀 Not implemented yet.')->send();
+        $this->start();
     }
 
     public function myCode()
     {
-        $user = $this->getCurrentUser();
+        if ($this->isGuest()) {
+            $this->handleUnknownCommand(new Stringable('myCode'));
+            return;
+        }
+
+        $user = $this->currentUser;
         $code = $user->referralLink->code;
 
         $this->chat->action(ChatActions::TYPING)->send();
@@ -63,80 +84,83 @@ class DefaultWebhookHandler extends WebhookHandler
     }
 
 
-    public function upgrade(string $packageId)
+    public function upgrade(?string $packageId = null)
     {
-        $this->dummy();
+        $package = $this->data->get('package', $packageId);
+
+        $package = PricingPlan::query()->find($package);
+
+        if (!$package) {
+            $this->chat->message('You must specify a valid package ID.');
+            return;
+        }
+
+        //  $this->chat->message('⏳ Changing package to ' . $package->name . '...')->send();
+
+        $this->chat->action(ChatActions::TYPING)->send();
+
+        try {
+            app(ChangePackage::class)->handle($this->getCurrentUser(), $package);
+            $this->chat->markdown("✅ *Great*! You have changed your plan to $package->name.")->dispatch();
+
+        } catch (\Throwable $exception) {
+            $this->chat->markdown('❌ *Something went wrong*. I could not change your plan.')->dispatch();
+        }
+
+        $this->start();
     }
 
     public function packages()
     {
+        $user = $this->currentUser;
+
         $plans = PricingPlan::query()->ordered()->get();
+        $currentPlan = $user->subscribedPlan();
+        $message = '';
+        $renderer = app(PricingPlanRenderer::class);
 
-        $keyboard = Keyboard::make()
-            ->buttons(
-                $plans->map(
-                    fn($plan) => Button::make($plan->name . ' ' . $plan->price . ' TRX')
-                        ->action('upgrade')
-                        ->param('packageId', $plan->id)
-                )->toArray());
+        $this->chat->action(ChatActions::TYPING)->send();
 
-        $this->chat->message('Choose a package')
-            ->keyboard($keyboard)->send();
+        foreach ($plans as $plan) {
+            $message .= $renderer->render($plan, $currentPlan);
+            $message .= "\n\n";
+        }
+
+        $keyboard = $this->plansMenu($plans, $currentPlan);
+
+        $this->chat
+            ->edit($this->messageId)
+            ->markdown($message)
+            ->keyboard($keyboard)
+            ->dispatch();
     }
 
     public function team()
     {
-        $user = $this->getCurrentUser();
+        if ($this->isGuest()) {
+            $this->handleUnknownCommand(new Stringable('team'));
+            return;
+        }
 
+        $user = $this->currentUser;
         $team = $user->ownedTeam;
         $members = $user->ownedTeam->members;
 
         $this->chat->action(ChatActions::TYPING)->send();
-        $message = "**Your team score is: $team->score ({$team->members->count()} members)** \n\n";
+        $message = "⭐ **Your team score is: $team->score ({$team->members->count()} members)** \n\n";
 
         foreach ($members as $member) {
             //$plan = $member->pricingPlans->first()->name ?? 'No plan';
             $message .= '- ' . $member->name . "\n";
         }
 
+
         $this->chat->markdown($message)->send();
+        $this->start();
     }
-
-    public function menu()
-    {
-        $user = $this->getCurrentUser();
-        $wallet = $user->wallet;
-        $plan = $user->subscribedPlan() ?? 'No Plan';
-
-        $menu = Keyboard::make()
-            ->row([
-                Button::make("Balance: {$wallet->amount} TRX ($plan->name)")->action('dummy')->width(1),
-            ])
-            ->row([
-                Button::make('💳 Deposit')->action('dummy'),
-                Button::make('💵 Withdraw')->action('dummy'),
-            ])
-            ->row([
-                Button::make('⚡ Upgrade package')->action('packages'),
-                Button::make('📈 Stats')->action('dummy'),
-            ])
-            ->row([
-                Button::make('🔗 Referral code')->action('myCode'),
-                Button::make('👥 My team')->action('team'),
-            ])
-            ->row([
-                //Button::make('👑 Leaderboard')->action('dummy'),
-                Button::make('ℹ️ Support')->action('help'),
-            ]);
-
-
-        $this->chat->message('Choose an option')->keyboard($menu)->send();
-    }
-
 
     public function join($code)
     {
-
         if ($this->chat->belongsToMany(\App\Models\User::class, 'chat_user')->exists()) {
             $this->chat->message('🎩 You are already a member of a team. Use the /help command if you are lost.')->send();
             return;
@@ -163,46 +187,13 @@ class DefaultWebhookHandler extends WebhookHandler
             $this->chat->message('💀 Something went wrong. I could not create your account.');
             \Log::error($exception->getMessage(), $exception->getTrace());
         }
-
-
-        /* $response = $this->chat->message('What is your invitation code?')
-             ->replyKeyboard(
-                 ReplyKeyboard::make()->button('Text'),
-             )->send();*/
-
-
-        //$this->chat->message('received')->removeReplyKeyboard()->send();
-        /* if ($code == "404") {
-             $this->chat->markdown("Verified")->send();
-         } else {
-             $this->chat->markdown("Not good")->send();
-         }*/
     }
-
-    private function getCurrentUser(): ?\App\Models\User
-    {
-        if (!$this->currentUser) {
-            $this->currentUser = $this->chat
-                ->belongsToMany(\App\Models\User::class, 'chat_user')
-                ->with([
-                    'wallet',
-                ])->first();
-        }
-
-        return $this->currentUser;
-    }
-
 
     public function help()
     {
-        $this->chat->message('This is the help menu')->send();
+        $this->sendTemplate(ChatHooks::Help);
+        $this->start();
     }
 
-    public function test()
-    {
-        $this->chat->message('hello world')
-            ->keyboard(Keyboard::make()->buttons([
-                Button::make('open')->url('https://test.it'),
-            ]))->send();
-    }
+
 }

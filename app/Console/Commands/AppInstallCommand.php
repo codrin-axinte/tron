@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Actions\Installation\AfterInstallAction;
+use App\Actions\Installation\CreateMessageTemplates;
 use App\Actions\Installation\CreateTelegraphBot;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -56,6 +57,7 @@ class AppInstallCommand extends Command
         app(Pipeline::class)
             ->send($payload)
             ->through([
+                CreateMessageTemplates::class,
                 CreateTelegraphBot::class,
                 AfterInstallAction::class,
             ])
