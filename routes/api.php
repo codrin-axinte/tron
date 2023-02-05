@@ -31,7 +31,10 @@ Route::put('/language', \App\Http\Controllers\UpdateLocaleController::class);
 Route::get('/welcome', \App\Http\Controllers\LandingController::class);
 Route::get('/test', function () {
 
-    $request = \App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest::make();
+    $request = \App\Http\Integrations\Tron\Requests\GetAccountBalanceRequest::make();
+    $request->addData('account_identifier', [
+
+    ]);
 
     $response = $request->send();
 

@@ -13,7 +13,7 @@ class CreateUserFromTelegram
     /**
      * @throws \Throwable
      */
-    public function create(TelegraphChat $chat, User $affiliate, \DefStudio\Telegraph\DTO\User $from): User
+    public function create(TelegraphChat $chat, User $affiliate, \DefStudio\Telegraph\DTO\User $from): ?User
     {
         return \DB::transaction(function () use ($chat, $affiliate, $from) {
             $user = User::factory()->withRandomPassword()->createOne([

@@ -55,7 +55,7 @@ abstract class TelegramCommand
         return $this;
     }
 
-    public function call($command, array $arguments = [])
+    protected function runCommand(string $command, array $arguments = [])
     {
         return $this->forwardCallTo($this->handler, $command, $arguments);
     }

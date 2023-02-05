@@ -10,7 +10,7 @@ class WalletRenderer
     {
         $message = "Your wallet information is: \n\n";
 
-        $message .= "\n💵Balance: *" . $wallet->amount . ' TRX*';
+        $message .= "\n💵Balance: *" . $wallet->amount . ' USD*';
         $message .= "\n🏦Address: *" . $wallet->address . '*';
 
         return $message;

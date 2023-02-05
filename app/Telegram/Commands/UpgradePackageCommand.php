@@ -57,7 +57,7 @@ class UpgradePackageCommand extends TelegramCommand
             $this
                 ->markdown("I have canceled your package upgrade for '$plan->name'. 😔")
                 ->send();
-            $this->call('packages');
+            $this->runCommand('packages');
 
         } catch (\Throwable $exception) {
             $this->error();

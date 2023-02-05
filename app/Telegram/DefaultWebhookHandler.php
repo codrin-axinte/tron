@@ -30,54 +30,47 @@ class DefaultWebhookHandler extends WebhookHandler
     protected int $messageId = 0;
     protected int $callbackQueryId = 0;
 
-    protected array $commands = [
-        'dummy' => DummyCommand::class,
-        'help' => HelpCommand::class,
-        'join' => JoinCommand::class,
-        'packages' => PackagesCommand::class,
-        'upgrade' => UpgradePackageCommand::class,
-        'team' => TeamCommand::class,
-        'myCode' => ShowReferralCodeCommand::class,
-        'test' => SandboxCommand::class,
-        'start' => StartCommand::class,
-        'wallet' => ShowWalletCommand::class,
-        'me' => MeCommand::class,
-        'admin' => AdminToolboxCommand::class,
-    ];
+    protected array $commands = [];
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->commands = config('tron.telegram_commands', []);
+    }
 
     /**
      * @throws \Exception
      */
     public function __call(string $name, array $arguments)
     {
-        if (array_key_exists($name, $this->commands)) {
-            $command = app($this->commands[$name]);
-            $command->setHandler(
-                new SetHandlerData(
-                    bot: $this->bot,
-                    chat: $this->chat,
-                    messageId: $this->messageId,
-                    callbackQueryId: $this->callbackQueryId,
-                    handler: $this,
-                    request: $this->request,
-                    data: $this->data,
-                    originalKeyboard: $this->originalKeyboard,
-                    message: $this->message,
-                    callbackQuery: $this->callbackQuery,
-                    currentUser: $this->currentUser
-                )
-            );
-
-            if ($command->authorized()) {
-                $command(...$arguments);
-            } else {
-                $this->chat->message('👮‍ You are not authorized to use this command.')->send();
-            }
-
+        if (!array_key_exists($name, $this->commands)) {
+            $this->handleUnknownCommand(new Stringable($name));
             return;
         }
 
-        $this->handleUnknownCommand(new Stringable($name));
+        $command = app($this->commands[$name]);
+        $command->setHandler(
+            new SetHandlerData(
+                bot: $this->bot,
+                chat: $this->chat,
+                messageId: $this->messageId,
+                callbackQueryId: $this->callbackQueryId,
+                handler: $this,
+                request: $this->request,
+                data: $this->data,
+                originalKeyboard: $this->originalKeyboard,
+                message: $this->message,
+                callbackQuery: $this->callbackQuery,
+                currentUser: $this->currentUser
+            )
+        );
+
+        if ($command->authorized()) {
+            $command(...$arguments);
+        } else {
+            $this->chat->message('👮‍ You are not authorized to use this command.')->send();
+        }
+
     }
 
     protected function canHandle(string $action): bool
