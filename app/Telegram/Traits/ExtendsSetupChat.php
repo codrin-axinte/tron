@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Traits;
 
+use App\Models\User;
 use App\Telegram\DefaultWebhookHandler;
 
 /**
@@ -22,15 +23,7 @@ trait ExtendsSetupChat
 
     private function getCurrentUser(): ?\App\Models\User
     {
-        if (!$this->currentUser) {
-            $this->currentUser = $this->chat
-                ->belongsToMany(\App\Models\User::class, 'chat_user')
-                ->with([
-                    'wallet',
-                ])->first();
-        }
-
-        return $this->currentUser;
+        return User::query()->with(['wallet'])->firstWhere('chat_id', $this->chat->id);
     }
 
 

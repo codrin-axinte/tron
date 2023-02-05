@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Telegram\Commands;
+namespace App\Telegram\Commands\Admin;
+
+use App\Telegram\Commands\TelegramCommand;
 
 class SandboxCommand extends TelegramCommand
 {

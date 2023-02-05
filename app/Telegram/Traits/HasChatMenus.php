@@ -4,6 +4,7 @@ namespace App\Telegram\Traits;
 
 use DefStudio\Telegraph\Keyboard\Button;
 use DefStudio\Telegraph\Keyboard\Keyboard;
+use Modules\Acl\Enums\GenericPermission;
 
 trait HasChatMenus
 {
@@ -12,11 +13,7 @@ trait HasChatMenus
     {
         $plan = $this->currentUser->subscribedPlan();
 
-        if (!$plan) {
-            $menu = $this->unverifiedMenu();
-        } else {
-            $menu = $this->mainMenu();
-        }
+        $menu = $this->mainMenu();
 
         $wallet = $this->currentUser->wallet;
         $planName = $plan ? $plan->name : 'No Plan';
@@ -52,27 +49,33 @@ trait HasChatMenus
             ->buttons([
                 Button::make('⚡ Upgrade package')->action('packages'),
                 Button::make('ℹ️ Support')->action('help'),
-            ]);
+            ])->when(
+                $this->currentUser->can(GenericPermission::ViewAdmin->value),
+                fn(Keyboard $keyboard) => $keyboard->button('🛠️ Admin')->action('admin')
+            );
     }
 
     private function mainMenu(): Keyboard
     {
         return Keyboard::make()
-            ->row([
-                Button::make('💳 Deposit')->action('dummy'),
-                Button::make('💵 Withdraw')->action('dummy'),
-            ])
-            ->row([
+            ->when($this->currentUser->hasRole('trader'), function (Keyboard $keyboard) {
+                return $keyboard
+                    ->buttons([
+                        Button::make('💳 Deposit')->action('dummy'),
+                        Button::make('💵 Withdraw')->action('dummy'),
+                        Button::make('🔗 Referral code')->action('myCode'),
+                        Button::make('👥 My team')->action('team'),
+                        //Button::make('👑 Leaderboard')->action('dummy'),
+                        Button::make('📈 Stats')->action('dummy'),
+                    ]);
+            })
+            ->buttons([
                 Button::make('⚡ Upgrade package')->action('packages'),
-                Button::make('📈 Stats')->action('dummy'),
-            ])
-            ->row([
-                Button::make('🔗 Referral code')->action('myCode'),
-                Button::make('👥 My team')->action('team'),
-            ])
-            ->row([
-                //Button::make('👑 Leaderboard')->action('dummy'),
                 Button::make('ℹ️ Support')->action('help'),
-            ]);
+            ])
+            ->when(
+                $this->currentUser->can(GenericPermission::ViewAdmin->value),
+                fn(Keyboard $keyboard) => $keyboard->button('🛠️ Admin')->action('admin')
+            )->chunk(2);
     }
 }

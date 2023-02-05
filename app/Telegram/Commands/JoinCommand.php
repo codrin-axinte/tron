@@ -14,6 +14,7 @@ class JoinCommand extends TelegramCommand
     {
         if ($this->isAuth()) {
             $this->chat->message('🎩 You are already a member of a team. Use the /help command if you are lost.')->send();
+            $this->start();
             return;
         }
 
@@ -32,11 +33,14 @@ class JoinCommand extends TelegramCommand
             //$this->chat->message('You were invited by: ' . $affiliate->name)->send();
             $this->chat->message("✅ The code '$code' is valid. Please, wait...")->send();
             $this->chat->action(ChatActions::TYPING)->send();
-            $user = $createUser->create($this->chat, $affiliate);
+
+            $user = $createUser->create($this->chat, $affiliate, $this->message->from());
 
             $this->chat->markdown("🎉Great, I have created your account. Now you have to choose a package.")->send();
             $this->call('packages');
-        } catch (\Exception|\Throwable $exception) {
+          //  $this->start();
+
+        } catch (\Throwable $exception) {
             $this->chat->message('💀 Something went wrong on our side. I could not create your account.')->send();
             \Log::error($exception->getMessage(), $exception->getTrace());
         }

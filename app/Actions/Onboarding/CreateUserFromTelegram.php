@@ -3,7 +3,7 @@
 namespace App\Actions\Onboarding;
 
 
-use App\Http\Integrations\Tron\Data\GenerateWalletResponseData;
+use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Models\User;
 use DefStudio\Telegraph\Models\TelegraphChat;
@@ -13,11 +13,15 @@ class CreateUserFromTelegram
     /**
      * @throws \Throwable
      */
-    public function create(TelegraphChat $chat, User $affiliate): User
+    public function create(TelegraphChat $chat, User $affiliate, \DefStudio\Telegraph\DTO\User $from): User
     {
-        return \DB::transaction(function () use ($chat, $affiliate) {
-            $user = User::factory()->withRandomPassword()->createOne();
-            $user->chats()->attach($chat);
+        return \DB::transaction(function () use ($chat, $affiliate, $from) {
+            $user = User::factory()->withRandomPassword()->createOne([
+                'name' => $from->firstName() . ' ' . $from->lastName(),
+                'username' => $from->username(),
+                'telegram_id' => $from->id(),
+                'chat_id' => $chat->id,
+            ]);
 
             $affiliate->ownedTeam->members()->attach($user);
 

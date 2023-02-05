@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Integrations\Tron\Data;
-
-use Spatie\LaravelData\Attributes\MapOutputName;
+namespace App\Http\Integrations\Tron\Data\Responses;
 
 class GenerateWalletResponseData extends \Spatie\LaravelData\Data
 {
