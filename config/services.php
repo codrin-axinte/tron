@@ -34,4 +34,8 @@ return [
         'token' => env('TELEGRAM_API_KEY'),
         'name' => env('APP_NAME') . ' Bot',
     ],
+    'tron' => [
+        'url' => env('TRON_API_URL', 'http://localhost:3000'),
+        'token' => env('TRON_TOKEN'),
+    ],
 ];

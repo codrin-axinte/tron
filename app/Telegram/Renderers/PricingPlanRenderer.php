@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Renderers;
+namespace App\Telegram\Renderers;
 
 use Modules\Wallet\Models\PricingPlan;
 

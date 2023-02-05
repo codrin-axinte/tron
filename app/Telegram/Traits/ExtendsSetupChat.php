@@ -2,9 +2,15 @@
 
 namespace App\Telegram\Traits;
 
+use App\Telegram\DefaultWebhookHandler;
+
+/**
+ * @mixin DefaultWebhookHandler
+ */
 trait ExtendsSetupChat
 {
     protected ?\App\Models\User $currentUser = null;
+
 
     protected function setupChat(): void
     {
@@ -12,6 +18,7 @@ trait ExtendsSetupChat
 
         $this->currentUser = $this->getCurrentUser();
     }
+
 
     private function getCurrentUser(): ?\App\Models\User
     {
@@ -25,13 +32,6 @@ trait ExtendsSetupChat
 
         return $this->currentUser;
     }
-    protected function isAuth(): bool
-    {
-        return (bool)$this->currentUser;
-    }
 
-    protected function isGuest(): bool
-    {
-        return !$this->currentUser;
-    }
+
 }

@@ -17,6 +17,7 @@ class Wallet extends Model
 
     protected $casts = [
         'amount' => 'double',
+        'mnemonic' => 'array',
     ];
 
     public function getTable(): string
