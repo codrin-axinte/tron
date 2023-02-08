@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Http\Integrations\Tron\Requests;
+namespace App\Http\Integrations\Tron\Requests\TRC20;
 
-use App\Http\Integrations\Tron\TronConnectorV2;
+use App\Http\Integrations\Tron\TronConnector;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 
 class GetAccountBalanceRequest extends SaloonRequest
 {
+    use HasJsonBody;
+
     /**
      * The connector class.
      *
      * @var string|null
      */
-    protected ?string $connector = TronConnectorV2::class;
+    protected ?string $connector = TronConnector::class;
 
     /**
      * The HTTP verb the request will use.
@@ -22,6 +25,7 @@ class GetAccountBalanceRequest extends SaloonRequest
      */
     protected ?string $method = Saloon::POST;
 
+
     /**
      * The endpoint of the request.
      *
@@ -29,6 +33,6 @@ class GetAccountBalanceRequest extends SaloonRequest
      */
     public function defineEndpoint(): string
     {
-        return '/wallet/getaccountbalance';
+        return "/api/trc20/balance";
     }
 }

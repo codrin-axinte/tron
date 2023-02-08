@@ -4,22 +4,26 @@ namespace App\Telegram\Traits;
 
 use App\Enums\ChatHooks;
 use App\Models\MessageTemplate;
+use DefStudio\Telegraph\Models\TelegraphChat;
 
 trait HasMessageTemplates
 {
-    protected function sendTemplate(mixed $hooks): static
+    protected function sendTemplate(mixed $hooks, ?TelegraphChat $chat = null): static
     {
         $templates = $this->findTemplates($hooks);
 
+        $chat = $chat ?? $this->chat;
+
         foreach ($templates as $template) {
-            $this->chat->markdown($template->content)->send();
+            $chat->markdown($template->content)->send();
         }
 
         return $this;
     }
 
 
-    private function findTemplates(mixed $hooks)
+
+    protected function findTemplates(mixed $hooks)
     {
         if (is_array($hooks)) {
             $hooks = array_map(fn($hook) => $hook instanceof ChatHooks ? $hook->value : $hook, $hooks);

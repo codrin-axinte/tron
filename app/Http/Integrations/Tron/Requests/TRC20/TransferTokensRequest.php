@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Integrations\Tron\Requests;
+namespace App\Http\Integrations\Tron\Requests\TRC20;
 
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\TronConnector;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 
-class TransferTokens extends SaloonRequest
+class TransferTokensRequest extends SaloonRequest
 {
+    use HasJsonBody;
     /**
      * The connector class.
      *
@@ -34,7 +36,7 @@ class TransferTokens extends SaloonRequest
      */
     public function defineEndpoint(): string
     {
-        return '/api/transfer';
+        return '/api/trc20/transfer';
     }
 
     public function defaultData(): array

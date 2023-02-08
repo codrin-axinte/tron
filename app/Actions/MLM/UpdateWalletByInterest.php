@@ -20,7 +20,7 @@ class UpdateWalletByInterest
 
         $interest = $this->calculator->compoundInterest($principal, $rate) - $principal;
 
-        return $wallet->update(['amount' => number_format($principal + $interest, 2)]);
+        return $wallet->update(['amount' => $principal + $interest]);
     }
 
 

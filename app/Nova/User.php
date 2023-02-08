@@ -100,7 +100,7 @@ class User extends Resource
                 ->exceptOnForms(),
 
             HasOne::make(__('Referral Link'), 'referralLink', ReferralLink::class)->exceptOnForms(),
-            BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
+            //BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
             HasOne::make(__('Team'), 'ownedTeam', Team::class)->exceptOnForms(),
 
 

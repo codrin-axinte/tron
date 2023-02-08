@@ -36,6 +36,8 @@ return [
     ],
     'tron' => [
         'url' => env('TRON_API_URL', 'http://localhost:3000'),
-        'token' => env('TRON_TOKEN'),
+        //'token' => env('TRON_TOKEN'),
+        'default_contract' => env('TRON_DEFAULT_CONTRACT', 'TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj') // NILE USDT token
+
     ],
 ];

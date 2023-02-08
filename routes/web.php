@@ -20,3 +20,14 @@ Route::get('/compound', function (\Illuminate\Http\Request $request) {
 
     return view('compound-simulation', ['data' => $calculator->simulate($principal, $rate, $time, $days)]);
 })->name('compound-simulation');
+
+Route::get('/test', function () {
+
+    $request = \App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest::make();
+    $request->addData('address', 'TRGr2qUpJAuA4JtQVzd1CYhJVogwWpXfq6');
+
+    $data = $request->send()->json();
+
+    dd($data);
+
+});

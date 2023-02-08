@@ -11,7 +11,11 @@ use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Panel;
 use Modules\Payments\Settings\PaymentsSettings;
+use NormanHuth\SecretField\SecretField;
 
 class Wallet extends Resource
 {
@@ -21,7 +25,7 @@ class Wallet extends Resource
 
     public static $search = ['user.email', 'amount'];
 
-    public static $displayInNavigation = false;
+    //public static $displayInNavigation = false;
 
     public static $globallySearchable = false;
 
@@ -34,8 +38,16 @@ class Wallet extends Resource
                 ->sortable()
                 ->required(),
 
-            Currency::make(__('Amount'), 'amount')
-                ->symbol('TRX')
+            Text::make(__('Address'), 'address')->nullable(),
+
+            Currency::make(__('Blockchain Balance'), 'blockchain_amount')
+                ->symbol('USDT')
+                ->filterable()
+                ->sortable()
+                ->required(),
+
+            Currency::make(__('Virtual Amount'), 'amount')
+                ->symbol('USD')
                 ->filterable()
                 ->sortable()
                 ->required(),
@@ -43,12 +55,17 @@ class Wallet extends Resource
             DateTime::make(__('Created At'), 'created_at')->onlyOnDetail(),
             DateTime::make(__('Updated At'), 'updated_at')->onlyOnDetail(),
 
+            Panel::make(__('Security'), [
+                SecretField::make(__('Private Key'), 'private_key')->hideFromIndex()->nullable(),
+                KeyValue::make(__('Mnemonic'), 'mnemonic')->nullable(),
+            ]),
+
             HasMany::make(__('Transactions'), 'transactions', WalletTransaction::class),
         ];
     }
 
     public function title(): string
     {
-        return $this->amount.' TRX';
+        return '$' . $this->amount;
     }
 }

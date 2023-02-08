@@ -29,14 +29,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::put('/language', \App\Http\Controllers\UpdateLocaleController::class);
 Route::get('/welcome', \App\Http\Controllers\LandingController::class);
-Route::get('/test', function () {
-
-    $request = \App\Http\Integrations\Tron\Requests\GetAccountBalanceRequest::make();
-    $request->addData('account_identifier', [
-
-    ]);
-
-    $response = $request->send();
-
-    return new \Illuminate\Http\JsonResponse($response->json());
-});
