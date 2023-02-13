@@ -19,5 +19,13 @@ class Pool extends Model
         'mnemonic' => 'array',
     ];
 
+    public function scopeWhereCentral($query)
+    {
+        return $query->where('is_central', true);
+    }
 
+    public function scopeWhereNotCentral($query)
+    {
+        return $query->where('is_central', true);
+    }
 }

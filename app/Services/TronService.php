@@ -3,13 +3,15 @@
 namespace App\Services;
 
 use App\Actions\Package\ChangePackage;
-use App\Enums\ChatHooks;
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Events\UserActivated;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
+use App\Models\TronTransaction;
 use App\Models\User;
 use App\Telegram\Traits\HasMessageTemplates;
 use GuzzleHttp\Exception\GuzzleException;
@@ -60,10 +62,9 @@ class TronService
 
         User::query()
             ->with(['wallet', 'chat', 'pricingPlans'])
-            //->doesntHave('roles')
             ->lazy()
             ->each(
-                fn(User $user) => $this->upgradeOrDowngradeAccount($user, $plans)
+                fn(User $user) => $this->syncAccount($user, $plans)
             );
 
         return $this;
@@ -75,7 +76,7 @@ class TronService
      * @return bool
      * @throws \Throwable
      */
-    public function upgradeOrDowngradeAccount(User $user, Collection $plans): bool
+    public function syncAccount(User $user, Collection $plans): bool
     {
 
         // We should skip if the user is admin
@@ -89,7 +90,7 @@ class TronService
         $balance = $wallet->amount;
 
         $plansReversed = $plans->sortByDesc('price');
-        $currentPlan = $user->subscribedPlan();
+        $currentPlan = $user->pricingPlans->first();
         $changePlan = app(ChangePackage::class);
 
         /**
@@ -134,9 +135,40 @@ class TronService
      * @throws GuzzleException
      * @throws SaloonException
      */
-    public function transfer(TransferTokensData $data): \GuzzleHttp\Promise\PromiseInterface
+    public function transfer(TransferTokensData $data, $sender = null, $receiver = null)
     {
-        return TransferTokensRequest::make($data)->sendAsync();
+        $response = TransferTokensRequest::make($data)->send();
+
+        return TronTransaction::create([
+            'from' => $data->from,
+            'to' => $data->to,
+            'amount' => $data->amount,
+            'blockchain_reference_id' => $response->json(),
+            'type' => TransactionType::In,
+            'status' => TransactionStatus::Approved,
+        ]);
+    }
+
+    public function withdraw(TransferTokensData $data)
+    {
+        // TODO: Should use one or more pools to fulfill the transaction.
+        // TODO: If there is not enough balance in the pool we should set the transaction to wait for manual approval.
+        // TODO: If method is set to automatic then we set it to retry
+
+        return TronTransaction::create([
+            'from' => $data->from,
+            'to' => $data->to,
+            'amount' => $data->amount,
+            'type' => TransactionType::Out,
+            'status' => TransactionStatus::AwaitingConfirmation,
+        ]);
+    }
+
+    public function approveTransaction(TronTransaction $transaction)
+    {
+        //$response = TransferTokensRequest::make($data)->send();
+
+        // $transaction/
     }
 
     public function fetchBalance(string $address): int

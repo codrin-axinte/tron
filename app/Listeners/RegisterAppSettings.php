@@ -2,10 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Nova\Settings\ContactsSettingsPage;
 use App\Nova\Settings\GeneralSettingsPage;
-use App\Nova\Settings\MLMSettingsPage;
-use App\Nova\Settings\SMSOSettingsPage;
+use App\Nova\Settings\TronSettingsPage;
 
 class RegisterAppSettings
 {
@@ -29,7 +27,7 @@ class RegisterAppSettings
     {
         return [
             new GeneralSettingsPage(),
-            new MLMSettingsPage(),
+            new TronSettingsPage()
         ];
     }
 }

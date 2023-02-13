@@ -11,6 +11,7 @@ use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 class TransferTokensRequest extends SaloonRequest
 {
     use HasJsonBody;
+
     /**
      * The connector class.
      *
@@ -25,7 +26,7 @@ class TransferTokensRequest extends SaloonRequest
      */
     protected ?string $method = Saloon::POST;
 
-    public function __construct(protected TransferTokensData $data)
+    public function __construct(protected ?TransferTokensData $data = null)
     {
     }
 
@@ -41,6 +42,6 @@ class TransferTokensRequest extends SaloonRequest
 
     public function defaultData(): array
     {
-        return $this->data->toArray();
+        return $this->data?->toArray() ?? [];
     }
 }

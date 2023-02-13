@@ -8,21 +8,21 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
-class SyncAccountsCommand extends Command
+class TronSyncCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tron:sync-accounts';
+    protected $signature = 'tron:sync';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Sync all wallets with the blockchain data.';
+    protected $description = 'Syncs all wallets, accounts and pools with the blockchain data.';
 
     /**
      * Execute the console command.

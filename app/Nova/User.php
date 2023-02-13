@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\TransferTokensAction;
 use App\Nova\Filters\FilterByRole;
 use Eminiarts\Tabs\Tabs;
 use Eminiarts\Tabs\Traits\HasTabs;
@@ -112,6 +113,13 @@ class User extends Resource
     {
         return [
             FilterByRole::make(),
+        ];
+    }
+
+    public function actions(NovaRequest $request): array
+    {
+        return [
+            TransferTokensAction::make(),
         ];
     }
 

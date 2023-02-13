@@ -2,6 +2,7 @@
 
 namespace Modules\Wallet\Nova\Resources;
 
+use App\Nova\Actions\TransferTokensAction;
 use App\Nova\Resource;
 use App\Nova\User;
 use App\Nova\WalletTransaction;
@@ -13,6 +14,7 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use Modules\Payments\Settings\PaymentsSettings;
 use NormanHuth\SecretField\SecretField;
@@ -21,13 +23,25 @@ class Wallet extends Resource
 {
     public static string $model = \Modules\Wallet\Models\Wallet::class;
 
-    public static $title = 'amount';
+    public static $title = 'user.email';
 
     public static $search = ['user.email', 'amount'];
 
     //public static $displayInNavigation = false;
 
     public static $globallySearchable = false;
+
+    public static $with = ['user'];
+
+    public function title(): string
+    {
+        return $this->amount . ' USDT';
+    }
+
+    public function subtitle()
+    {
+        return $this->amount . ' | ' . $this->blockchain_amount;
+    }
 
     public function fields(Request $request): array
     {
@@ -40,14 +54,14 @@ class Wallet extends Resource
 
             Text::make(__('Address'), 'address')->nullable(),
 
-            Currency::make(__('Blockchain Balance'), 'blockchain_amount')
-                ->symbol('USDT')
+            Currency::make(__('Virtual Amount'), 'amount')
+                ->symbol('USD')
                 ->filterable()
                 ->sortable()
                 ->required(),
 
-            Currency::make(__('Virtual Amount'), 'amount')
-                ->symbol('USD')
+            Currency::make(__('Blockchain Balance'), 'blockchain_amount')
+                ->symbol('USDT')
                 ->filterable()
                 ->sortable()
                 ->required(),
@@ -65,8 +79,17 @@ class Wallet extends Resource
         ];
     }
 
-    public function title(): string
+    public function actions(NovaRequest $request)
     {
-        return '$' . $this->amount;
+        return [
+            TransferTokensAction::make(),
+        ];
     }
+
+    public static function authorizedToCreate(Request $request)
+    {
+        return false;
+    }
+
+
 }

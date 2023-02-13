@@ -23,7 +23,7 @@ class WalletTool extends Tool
     {
         $menu = MenuSection::resource(PricingPlan::class)
             ->icon('credit-card')
-            ->withBadge(Badge::make('PREVIEW', Badge::INFO_TYPE))
+          // ->withBadge(Badge::make('PREVIEW', Badge::INFO_TYPE))
             ->canSee(fn () => true);
 
         //$menu->name = __('Credits Plans');
