@@ -12,7 +12,9 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Modules\Acl\Enums\BasePermission;
+use Modules\Acl\Enums\RolePermission;
 use Modules\Acl\Nova\Actions\AttachPermissions;
+use Outl1ne\MultiselectField\Multiselect;
 
 class Role extends Resource
 {
@@ -34,9 +36,12 @@ class Role extends Resource
             ID::make()->sortable(),
             Text::make('Name'),
             Text::make('Guard Name'),
+            Multiselect::make(__('Permissions'))
+                ->belongsToMany(Permission::class)
+                ->canSee(fn() => $request->user()->can(RolePermission::Attach->value)),
 
             Tabs::make(__('Relations'), [
-                BelongsToMany::make('Permissions', 'permissions', Permission::class)->searchable()->showCreateRelationButton(),
+              //  BelongsToMany::make('Permissions', 'permissions', Permission::class)->searchable()->showCreateRelationButton(),
                 BelongsToMany::make('Users', 'users', User::class)->searchable()->showCreateRelationButton(),
             ]),
         ];

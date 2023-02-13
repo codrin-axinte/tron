@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Actions\MLM\UpdateUsersWalletsBySubscribedPlan;
 use App\Telegram\Commands\Admin\AdminToolboxCommand;
 use App\Telegram\Commands\Admin\SandboxCommand;
 use App\Telegram\Commands\DummyCommand;
@@ -14,6 +15,25 @@ use App\Telegram\Commands\TeamCommand;
 
 return [
 
+
+    'default_role' => 'trader',
+
+    /**
+     *
+     */
+    'compound_interest_update_action' => UpdateUsersWalletsBySubscribedPlan::class,
+
+    /**
+     * How many pools should be created on installation.
+     * One of them will be set as central pool.
+     */
+    'pools' => 5,
+
+    /**
+     * Allowed telegram commands.
+     * You can add or remove any of them,
+     * but with care since it can break the flow
+     */
     'telegram_commands' => [
         'dummy' => DummyCommand::class,
         'help' => HelpCommand::class,

@@ -30,8 +30,8 @@ class CompoundInterestUpdate extends Command
      */
     public function handle(): int
     {
-        //app(UpdateUsersWalletsBySubscribedPlan::class)->execute();
-        app(UpdateUsersWalletsByCurrentBalance::class)->execute();
+        app(config('compound_interest_update_action'))->execute();
+
         return Command::SUCCESS;
     }
 }

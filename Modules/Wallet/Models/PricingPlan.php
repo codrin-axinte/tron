@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Wallet\Utils\Table;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\Permission\Traits\HasRoles;
 use Spatie\Translatable\HasTranslations;
 use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
 

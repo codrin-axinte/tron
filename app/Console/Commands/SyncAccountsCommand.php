@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\PoolManager;
 use App\Services\TronService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
@@ -32,11 +33,12 @@ class SyncAccountsCommand extends Command
      * @throws \ReflectionException
      * @throws SaloonException
      */
-    public function handle(TronService $service): int
+    public function handle(TronService $service, PoolManager $poolManager): int
     {
 
         $service->syncWallets();
         $service->syncAccounts();
+        $poolManager->sync();
 
 
         return Command::SUCCESS;

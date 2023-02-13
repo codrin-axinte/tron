@@ -6,10 +6,16 @@ namespace App\Actions\Onboarding;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Models\User;
+use App\Services\TronService;
 use DefStudio\Telegraph\Models\TelegraphChat;
 
 class CreateUserFromTelegram
 {
+
+    public function __construct(protected TronService $tronService)
+    {
+    }
+
     /**
      * @throws \Throwable
      */
@@ -25,7 +31,7 @@ class CreateUserFromTelegram
 
             $affiliate->ownedTeam->members()->attach($user);
 
-            $response = GenerateWalletResponseData::from(GenerateRandomWalletRequest::make()->send()->json());
+            $response = $this->tronService->generateWallet();
 
             $user->wallet->update([
                 'private_key' => $response->privateKey,

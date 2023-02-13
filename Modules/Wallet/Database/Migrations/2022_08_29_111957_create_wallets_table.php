@@ -16,7 +16,7 @@ return new class extends Migration {
         Schema::create(Table::wallets(), function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class);
-            $table->string('address')->nullable();
+            $table->string('address')->index()->nullable();
             $table->text('private_key')->nullable();
             $table->text('public_key')->nullable();
             $table->json('mnemonic')->nullable();

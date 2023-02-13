@@ -188,6 +188,6 @@ return [
     */
 
     'actions' => [
-        'resource' => ActionResource::class,
+        'resource' => null,
     ],
 ];

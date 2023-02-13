@@ -57,10 +57,11 @@ class Wallet extends Resource
 
             Panel::make(__('Security'), [
                 SecretField::make(__('Private Key'), 'private_key')->hideFromIndex()->nullable(),
+                SecretField::make(__('Public Key'), 'public_key')->hideFromIndex()->nullable(),
                 KeyValue::make(__('Mnemonic'), 'mnemonic')->nullable(),
             ]),
 
-            HasMany::make(__('Transactions'), 'transactions', WalletTransaction::class),
+            // HasMany::make(__('Transactions'), 'transactions', WalletTransaction::class),
         ];
     }
 

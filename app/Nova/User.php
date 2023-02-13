@@ -100,30 +100,12 @@ class User extends Resource
                 ->exceptOnForms(),
 
             HasOne::make(__('Referral Link'), 'referralLink', ReferralLink::class)->exceptOnForms(),
-            //BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
+            BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
             HasOne::make(__('Team'), 'ownedTeam', Team::class)->exceptOnForms(),
 
 
             SanctumTokens::make()->canSeeWhen(GenericPermission::ManageTokens->value),
         ];
-    }
-
-    private function makeRolesField(): BooleanGroup
-    {
-        $roles = $this->model()->getRoleNames();
-
-        $labels = ['none' => __('No Role')];
-        $values = ['none' => false];
-
-        if ($roles->isNotEmpty()) {
-            $labels = $roles->mapWithKeys(fn(string $role) => [$role => Str::headline($role)])->toArray();
-            $values = $roles->mapWithKeys(fn(string $role) => [$role => true])->toArray();
-        }
-
-        return BooleanGroup::make(__('Roles'), fn() => $values)
-            ->options($labels)
-            ->exceptOnForms()
-            ->canSeeWhen(RolePermission::ViewAny->value);
     }
 
     public function filters(NovaRequest $request): array
