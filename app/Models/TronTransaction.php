@@ -20,13 +20,4 @@ class TronTransaction extends Model
         'amount' => 'float',
     ];
 
-
-    public function toData()
-    {
-        return new TransferTokensData(
-            to: $this->to,
-            amount: $this->amount,
-
-        );
-    }
 }
