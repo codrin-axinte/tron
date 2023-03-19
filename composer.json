@@ -109,7 +109,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "joshbrw/laravel-module-installer": true,
+            "joshbrw/laravel-module-installer": false,
             "pestphp/pest-plugin": true
         }
     },

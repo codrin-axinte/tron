@@ -1,0 +1,24 @@
+{
+    "name": "Acl",
+    "alias": "acl",
+    "description": "Roles and Permissions management for Morph CMS.",
+    "keywords": [
+        "morph CMS",
+        "roles",
+        "permissions",
+        "acl"
+    ],
+    "priority": 0,
+    "providers": [
+        "Modules\\Acl\\Providers\\AclServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": [
+        "morphling"
+    ],
+    "minimumCoreVersion": "",
+    "title": "Access Control List (ACL)",
+    "version": "0.0.0",
+    "author": "Binome Way"
+}
