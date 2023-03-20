@@ -11,8 +11,7 @@ class AfterInstallAction implements InstallPipeContract
 
     public function handle($payload, \Closure $next)
     {
-        $this->acl()->create('trader');
-
+        //
         return $next($payload);
     }
 }

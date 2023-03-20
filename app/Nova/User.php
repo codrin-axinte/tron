@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\TransferTokensAction;
 use App\Nova\Filters\FilterByRole;
 use Eminiarts\Tabs\Tabs;
 use Eminiarts\Tabs\Traits\HasTabs;
@@ -108,28 +109,17 @@ class User extends Resource
         ];
     }
 
-    private function makeRolesField(): BooleanGroup
-    {
-        $roles = $this->model()->getRoleNames();
-
-        $labels = ['none' => __('No Role')];
-        $values = ['none' => false];
-
-        if ($roles->isNotEmpty()) {
-            $labels = $roles->mapWithKeys(fn(string $role) => [$role => Str::headline($role)])->toArray();
-            $values = $roles->mapWithKeys(fn(string $role) => [$role => true])->toArray();
-        }
-
-        return BooleanGroup::make(__('Roles'), fn() => $values)
-            ->options($labels)
-            ->exceptOnForms()
-            ->canSeeWhen(RolePermission::ViewAny->value);
-    }
-
     public function filters(NovaRequest $request): array
     {
         return [
             FilterByRole::make(),
+        ];
+    }
+
+    public function actions(NovaRequest $request): array
+    {
+        return [
+            TransferTokensAction::make(),
         ];
     }
 

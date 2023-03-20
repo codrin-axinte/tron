@@ -3,10 +3,16 @@
 namespace App\Providers;
 
 use App\Services\CompoundInterestCalculator;
+use App\Services\PoolManager;
+use App\Services\TronService;
+use App\Telegram\DefaultWebhookHandler;
+use App\Telegram\GuestWebhookHandler;
+use App\Telegram\TelegramWebhookHandler;
 use App\Updater\Updater;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
+use Modules\Acl\Services\AclService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
+        $this->app->singleton(TronService::class);;
+        $this->app->singleton(PoolManager::class);;
         $this->app->singleton(CompoundInterestCalculator::class);
 
         $this->app->singleton(Updater::class, function ($app) {
@@ -36,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // JsonResource::withoutWrapping();
         // Carbon::setLocale('ro_RO');
+        AclService::macro('trader', fn() => config('tron.default_role'));
     }
 
     public function provides()

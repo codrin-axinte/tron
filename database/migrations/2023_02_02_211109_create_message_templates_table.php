@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chat_user', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\User::class);
-            $table->foreignIdFor(\DefStudio\Telegraph\Models\TelegraphChat::class);
+        Schema::create('message_templates', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('help')->nullable();
+            $table->text('content')->nullable();
+            $table->json('hooks')->nullable(); // If null the message is not hooked anywhere
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chat_user');
+        Schema::dropIfExists('message_templates');
     }
 };

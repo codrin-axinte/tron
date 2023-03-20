@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasPendingActions;
 use App\Traits\HasReferralLinks;
 use App\Traits\HasTeam;
 use DefStudio\Telegraph\Models\TelegraphChat;
@@ -29,7 +30,8 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
         HasWallet,
         HasSettingsTable,
         HasTeam,
-        HasReferralLinks;
+        HasReferralLinks,
+        HasPendingActions;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +42,9 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
         'name',
         'email',
         'password',
+        'telegram_id',
+        'username',
+        'chat_id',
     ];
 
     /**
@@ -95,16 +100,16 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
 
     public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user')->latest();
+        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user')->withTimestamps();
     }
 
     public function subscribedPlan(): ?PricingPlan
     {
-        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user')->latest()->first();
+        return $this->pricingPlans()->first();
     }
 
-    public function chats(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function chat(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsToMany(TelegraphChat::class, 'chat_user')->withTimestamps();
+        return $this->belongsTo(TelegraphChat::class);
     }
 }

@@ -9,6 +9,9 @@ enum WalletTransactionType: string
 {
     use HasValues, HasSelectOptions;
 
+    case Pending = 'pending';
+    case Cancelled = 'cancelled';
+    case Expired = 'expired';
     case Out = 'out';
     case In = 'in';
 }

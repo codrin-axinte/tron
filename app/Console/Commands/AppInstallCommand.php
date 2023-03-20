@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Actions\Installation\AfterInstallAction;
+use App\Actions\Installation\BeforeInstallAction;
+use App\Actions\Installation\CreateMessageTemplates;
+use App\Actions\Installation\CreateRandomPools;
 use App\Actions\Installation\CreateTelegraphBot;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -56,7 +59,10 @@ class AppInstallCommand extends Command
         app(Pipeline::class)
             ->send($payload)
             ->through([
+                BeforeInstallAction::class,
+                CreateMessageTemplates::class,
                 CreateTelegraphBot::class,
+                CreateRandomPools::class,
                 AfterInstallAction::class,
             ])
             ->thenReturn();

@@ -3,12 +3,14 @@
 namespace Modules\Wallet\Models;
 
 use App\Traits\HasPricingPlanSettings;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Wallet\Utils\Table;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\Permission\Traits\HasRoles;
 use Spatie\Translatable\HasTranslations;
 use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
 
@@ -32,6 +34,11 @@ class PricingPlan extends Model implements Sortable
         'credits' => 'double',
     ];
 
+    public function title(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->name . ' (' . $this->price . ' TRX)');
+    }
+
     public function featuresList(): Attribute
     {
         return new Attribute(get: fn() => $this->features);
@@ -50,5 +57,10 @@ class PricingPlan extends Model implements Sortable
     public function getTable(): string
     {
         return Table::creditsPlans();
+    }
+
+    public function scopeEnabled($query)
+    {
+        return $query->where('enabled', true);
     }
 }

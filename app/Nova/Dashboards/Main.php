@@ -2,6 +2,8 @@
 
 namespace App\Nova\Dashboards;
 
+use App\Nova\Metrics\MostValuablePool;
+use App\Nova\Metrics\TotalBalance;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Dashboards\Main as Dashboard;
 use Modules\Acl\Enums\UserPermission;
@@ -17,6 +19,7 @@ class Main extends Dashboard
     public function cards()
     {
         return [
+            TotalBalance::make(),
             UsersPerDay::make()->canSeeWhen(UserPermission::ViewAny->value),
         ];
     }

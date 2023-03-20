@@ -2,8 +2,12 @@
 
 namespace Modules\Acl\Services;
 
+use Illuminate\Support\Traits\Macroable;
+
 class AclService
 {
+    use Macroable;
+
     public static function defaultRoles()
     {
         return array_filter(config('acl.roles', []));

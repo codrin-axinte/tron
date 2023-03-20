@@ -17,3 +17,4 @@ auth.json
 morphcms
 packages
 .DS_STORE
+auth.sh

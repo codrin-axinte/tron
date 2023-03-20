@@ -10,6 +10,7 @@ use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 use Modules\Acl\Enums\GenericPermission;
 use Modules\Morphling\Events\BootUserMenu;
+use Modules\Morphling\Nova\MorphTool;
 use Modules\Morphling\Services\Morphling;
 use Nwidart\Modules\Facades\Module;
 
@@ -80,7 +81,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function dashboards()
     {
-        return Morphling::getNovaDashboards([
+        return MorphTool::getNovaDashboards([
             new \App\Nova\Dashboards\Main,
         ]);
     }
@@ -92,7 +93,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function tools()
     {
-        return Morphling::getNovaTools([
+        return MorphTool::getNovaTools([
             //
         ]);
     }

@@ -3,6 +3,9 @@
 namespace App\Console;
 
 use App\Console\Commands\CompoundInterestUpdate;
+use App\Console\Commands\TronSyncCommand;
+use App\Jobs\ActivatePendingAccounts;
+use App\Jobs\SyncWallets;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,6 +30,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('telescope:prune')->daily();
         $schedule->command(CompoundInterestUpdate::class)->daily();
+        $schedule->command(TronSyncCommand::class)->hourly();
         // Referral
     }
 

@@ -15,6 +15,7 @@ return new class extends Migration {
         Schema::create('pricing_plan_user', function (Blueprint $table) {
             $table->foreignIdFor(\Modules\Wallet\Models\PricingPlan::class);
             $table->foreignIdFor(\App\Models\User::class);
+            $table->timestamps();
         });
     }
 

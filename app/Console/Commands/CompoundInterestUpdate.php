@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\MLM\UpdateUsersWalletsBySubscribedPlan;
-use App\Actions\MLM\UpdateWalletByInterest;
-use App\Models\User;
+use App\Actions\MLM\UpdateUsersWalletsByCurrentBalance;
+
 use Illuminate\Console\Command;
 
 class CompoundInterestUpdate extends Command
@@ -31,7 +30,7 @@ class CompoundInterestUpdate extends Command
      */
     public function handle(): int
     {
-        app(UpdateUsersWalletsBySubscribedPlan::class)->execute();
+        app(config('tron.compound_interest_update_action'))->execute();
 
         return Command::SUCCESS;
     }

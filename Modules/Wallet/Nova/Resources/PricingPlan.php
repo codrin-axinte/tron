@@ -48,7 +48,7 @@ class PricingPlan extends Resource
 
             Currency::make(__('Price'), 'price')
                 ->placeholder('5.00')
-                ->symbol('TRX')
+                ->symbol('USDT')
                 ->sortable()
                 ->filterable()
                 ->required(),
