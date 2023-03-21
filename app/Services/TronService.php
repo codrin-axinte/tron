@@ -119,7 +119,7 @@ class TronService
                 //$user->syncRoles($role);
                 //$changePlan->handle($user, $plan, force: true);
                 if ($user->pricingPlans->count() > 0) {
-                    $user->pricingPlans()->delete();
+                    $user->pricingPlans()->detach();
                 }
 
                 break;
