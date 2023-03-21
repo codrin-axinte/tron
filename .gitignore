@@ -16,4 +16,5 @@ yarn-error.log
 auth.json
 morphcms
 packages
+.DS_STORE
 auth.sh

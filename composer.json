@@ -72,7 +72,7 @@
         "psr-4": {
             "Tests\\": "tests/",
             "App\\": "app/",
-            "Modules\\": "modules/",
+            "Modules\\": "Modules/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
