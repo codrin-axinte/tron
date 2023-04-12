@@ -13,20 +13,26 @@ class PackagesCommand extends TelegramCommand
     public function __invoke()
     {
         $user = $this->currentUser;
-
-        $plans = PricingPlan::query()->ordered()->get();
-        $currentPlan = $user->subscribedPlan();
-        $message = '';
-        $renderer = app(PricingPlanRenderer::class);
-
-        $this->chat->action(ChatActions::TYPING)->send();
-
-        foreach ($plans as $plan) {
-            $message .= $renderer->render($plan, $currentPlan);
-            $message .= "\n\n";
+        if (!$user) {
+            return $this->error();
         }
 
-        $keyboard = $this->plansMenu($plans, $currentPlan);
+        $this->sendTyping();
+
+        $tradingPlan = $user->tradingPlan;
+
+        if ($tradingPlan) {
+            return $this->chat
+                ->markdown('You are already trading. Please, wait to finish the current trading in order to trade again.')
+                ->dispatch();
+        }
+
+        $plans = PricingPlan::query()->ordered()->get();
+
+        $message = $this->makeMessage($plans);
+
+        //$keyboard = $this->plansMenu($plans, $currentPlan);
+        $keyboard = $this->confirmMenu($user);
 
         $this->chat
             ->markdown($message)
@@ -34,12 +40,37 @@ class PackagesCommand extends TelegramCommand
             ->dispatch();
     }
 
+    protected function makeMessage($plans)
+    {
+        // $currentPlan = $user->subscribedPlan();
+        $message = '';
+        $currentPlan = null;
+        $renderer = app(PricingPlanRenderer::class);
+        foreach ($plans as $plan) {
+            $message .= $renderer->render($plan, $currentPlan);
+            $message .= "\n\n";
+        }
+
+        return $message;
+    }
+
+    protected function confirmMenu($user): Keyboard
+    {
+        return Keyboard::make()
+            ->buttons([
+                Button::make('🤑 Yes, let\'s trade')
+                    ->action('trade')
+                    ->param('user', $user->id),
+                Button::make('⬅️ No, I am still thinking')->action('start'),
+            ]);
+    }
+
     protected function plansMenu($plans, $currentPlan): Keyboard
     {
 
         $buttons = $plans->map(
-            fn($plan) => $plan->id !== $currentPlan?->id ? Button::make("➡️ Change to " . $plan->title)
-                ->action('upgrade')
+            fn($plan) => $plan->id !== $currentPlan?->id ? Button::make("➡️ Trade using " . $plan->title)
+                ->action('trade')
                 ->param('package', $plan->id) : null
         )->filter()->toArray();
 

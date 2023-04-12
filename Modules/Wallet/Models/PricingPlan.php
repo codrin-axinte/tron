@@ -2,8 +2,12 @@
 
 namespace Modules\Wallet\Models;
 
+use App\Models\PricingPlanUser;
+use App\Models\TradingPlan;
+use App\Models\User;
 use App\Traits\HasPricingPlanSettings;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,7 +40,7 @@ class PricingPlan extends Model implements Sortable
 
     public function title(): Attribute
     {
-        return Attribute::make(get: fn() => $this->name . ' (' . $this->price . ' TRX)');
+        return Attribute::make(get: fn() => $this->name . ' (' . $this->price . ' USDT)');
     }
 
     public function featuresList(): Attribute
@@ -52,6 +56,17 @@ class PricingPlan extends Model implements Sortable
     public function interestPercentageDecimal(): Attribute
     {
         return new Attribute(get: fn() => $this->interest_percentage / 100);
+    }
+
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class)
+            ->withTimestamps();
+    }
+
+    public function tradingPlans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(TradingPlan::class);
     }
 
     public function getTable(): string

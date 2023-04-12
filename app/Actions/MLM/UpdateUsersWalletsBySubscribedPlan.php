@@ -4,6 +4,9 @@ namespace App\Actions\MLM;
 
 use App\Models\User;
 
+/**
+ * @deprecated use trading plan update
+ */
 class UpdateUsersWalletsBySubscribedPlan
 {
     public function __construct(protected UpdateWalletByInterest $updateWalletByInterest)
@@ -13,8 +16,11 @@ class UpdateUsersWalletsBySubscribedPlan
     public function execute()
     {
         User::query()
-            ->with(['wallet', 'pricingPlans', 'pricingPlans.planSettings'])
-            ->whereHas('pricingPlans')
+            ->withWhereHas('pricingPlans', function($query) {
+                $hours = now()->subHours(6);
+                return $query->wherePivot('created_at', '>=', $hours);
+            })
+            ->with(['wallet', 'pricingPlans.planSettings'])
             ->role('trader')
             ->cursor()
             ->each(function (User $user) {

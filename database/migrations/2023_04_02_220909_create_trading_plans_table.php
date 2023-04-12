@@ -12,9 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('pricing_plan_user', function (Blueprint $table) {
-            $table->foreignIdFor(\Modules\Wallet\Models\PricingPlan::class);
+        Schema::create('trading_plans', function (Blueprint $table) {
+            $table->id();
             $table->foreignIdFor(\App\Models\User::class);
+            $table->foreignIdFor(\Modules\Wallet\Models\PricingPlan::class);
             $table->unsignedFloat('amount')->default(0);
             $table->timestamps();
         });
@@ -27,7 +28,6 @@ return new class extends Migration {
      */
     public function down()
     {
-
-        Schema::dropIfExists('pricing_plan_user');
+        Schema::dropIfExists('trading_plans');
     }
 };

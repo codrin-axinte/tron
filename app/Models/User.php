@@ -98,15 +98,35 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
         return true;
     }
 
-    public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function tradingPlans(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user')->withTimestamps();
+        return $this->hasMany(TradingPlan::class);
     }
 
+    public function tradingPlan(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(TradingPlan::class)->latestOfMany();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @deprecated Use trading plan instead
+     */
+    public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(PricingPlan::class, 'pricing_plan_user')
+            ->withTimestamps();
+    }
+
+    /**
+     * @return PricingPlan|null
+     * @deprecated Use trading plan instead
+     */
     public function subscribedPlan(): ?PricingPlan
     {
         return $this->pricingPlans()->first();
     }
+
 
     public function chat(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

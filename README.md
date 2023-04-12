@@ -7,7 +7,7 @@
 - [ ] Proxy transactions
 - [ ] Pool Feature
   - [ ] Should use one or more pools to fulfill the transaction.
-  - [ ] If there is not enough balance in the pool we should set the transaction to wait for manual approval.
+  - [X] If there is not enough balance in the pool we should set the transaction to wait for manual approval.
   - [ ] If method is set to automatic then we set it to retry
 - [ ] Team members show based on the pricing plan depth
 - [ ] Withdraw Feature

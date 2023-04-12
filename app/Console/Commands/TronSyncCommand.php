@@ -37,7 +37,7 @@ class TronSyncCommand extends Command
     {
 
         $service->syncWallets();
-        $service->syncAccounts();
+       // $service->syncAccounts();
         $poolManager->sync();
 
 

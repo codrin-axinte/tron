@@ -8,6 +8,9 @@ use DefStudio\Telegraph\Keyboard\Button;
 use DefStudio\Telegraph\Keyboard\Keyboard;
 use Modules\Wallet\Models\PricingPlan;
 
+/**
+ * @deprecated Not in use anymore
+ */
 class UpgradePackageCommand extends TelegramCommand
 {
 

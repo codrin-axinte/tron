@@ -15,7 +15,7 @@ class ShowWalletCommand extends TelegramCommand
     {
         $this->chat
             ->markdown(
-                $this->walletRenderer->render($this->currentUser->wallet, true)
+                $this->walletRenderer->render($this->currentUser->wallet)
             )
             ->send();
     }

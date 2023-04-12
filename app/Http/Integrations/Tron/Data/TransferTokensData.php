@@ -12,5 +12,8 @@ class TransferTokensData extends \Spatie\LaravelData\Data
         public ?string   $contract = null,
     )
     {
+        if (empty($this->contract)) {
+            $this->contract = env('USDT_CONTRACT');
+        }
     }
 }

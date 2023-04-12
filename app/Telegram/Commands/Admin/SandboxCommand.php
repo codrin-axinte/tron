@@ -11,4 +11,9 @@ class SandboxCommand extends TelegramCommand
         // Debug
         //$this->chat->message('Test')->forceReply('Input your pin card')->send();
     }
+
+    public function authorized(): bool
+    {
+        return app()->environment('local');
+    }
 }

@@ -49,6 +49,7 @@
         "spatie/laravel-medialibrary": "^10.4",
         "spatie/laravel-permission": "^5.5.4",
         "spatie/laravel-responsecache": "^7.3",
+        "spatie/php-structure-discoverer": "^1.1",
         "stancl/jobpipeline": "^1.6",
         "tailflow/laravel-orion": "^2.13",
         "whitecube/nova-flexible-content": "^v1.0.0"
@@ -84,7 +85,10 @@
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi",
-            "@php artisan nova:publish"
+            "@php artisan nova:publish",
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta",
+            "@php artisan ide-helper:models -N"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

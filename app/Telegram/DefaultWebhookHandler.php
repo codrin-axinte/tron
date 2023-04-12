@@ -13,12 +13,14 @@ use App\Telegram\Commands\ShowReferralCodeCommand;
 use App\Telegram\Commands\ShowWalletCommand;
 use App\Telegram\Commands\StartCommand;
 use App\Telegram\Commands\TeamCommand;
-use App\Telegram\Commands\UpgradePackageCommand;
+use App\Telegram\Commands\TelegramCommand;
+use App\Telegram\Commands\TradeCommand;
 use App\Telegram\Data\SetHandlerData;
 use App\Telegram\Traits\ExtendsSetupChat;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
 use ReflectionMethod;
+use Spatie\StructureDiscoverer\Discover;
 
 /**
  * @method start()
@@ -30,12 +32,15 @@ class DefaultWebhookHandler extends WebhookHandler
     protected int $messageId = 0;
     protected int $callbackQueryId = 0;
 
+    /**
+     * @var array|\Spatie\StructureDiscoverer\Data\DiscoveredStructure[]|string[]
+     */
     protected array $commands = [];
 
-    public function __construct()
+    public function __construct(array $commands = [])
     {
         parent::__construct();
-        $this->commands = config('tron.telegram_commands', []);
+        $this->commands = $commands;
     }
 
     /**

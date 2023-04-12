@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->json('commissions')->nullable();
             $table->unsignedDouble('interest_percentage')->default(0);
             $table->string('interest_frequency')->default('daily');
+            $table->unsignedInteger('expiration_hours')->default(3);
             $table->json('meta')->nullable();
             $table->timestamps();
         });

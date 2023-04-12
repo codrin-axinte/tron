@@ -6,4 +6,5 @@ enum TransactionType: string
 {
     case Out = 'out';
     case In = 'in';
+    case None = 'none';
 }

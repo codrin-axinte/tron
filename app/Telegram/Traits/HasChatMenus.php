@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Traits;
 
+use App\ValueObjects\USDT;
 use DefStudio\Telegraph\Keyboard\Button;
 use DefStudio\Telegraph\Keyboard\Keyboard;
 use Modules\Acl\Enums\GenericPermission;
@@ -17,8 +18,8 @@ trait HasChatMenus
 
         $wallet = $this->currentUser->wallet;
         // $planName = $plan ? $plan->name : 'No Plan';
-
-        $this->chat->message("Wallet: {$wallet->amount} USD")->keyboard($menu)->send();
+        $balance = USDT::make($wallet->amount);
+        $this->chat->message("Wallet: {$balance} USD")->keyboard($menu)->send();
 
         return $this;
     }
@@ -54,13 +55,13 @@ trait HasChatMenus
                         Button::make('💵 Withdraw')->action('dummy'),
                         Button::make('🔗 Referral code')->action('myCode'),
                         Button::make('👥 My team')->action('team'),
-                        Button::make('👑 Leaderboard')->action('dummy'),
-                       // Button::make('📈 Stats')->action('dummy'),
+                        // Button::make('👑 Leaderboard')->action('dummy'),
+                        // Button::make('📈 Stats')->action('dummy'),
+                        Button::make('⚡ Trade')->action('packages'),
                     ]);
             })
             ->buttons([
-              //  Button::make('⚡ Upgrade package')->action('packages'),
-                Button::make('ℹ️ Support')->action('help'),
+                // Button::make('ℹ️ Support')->action('help'),
             ])
             ->when(
                 $this->currentUser->can(GenericPermission::ViewAdmin->value),

@@ -3,13 +3,17 @@
 namespace App\Services;
 
 use App\Actions\Package\ChangePackage;
-use App\Enums\TransactionStatus;
-use App\Enums\TransactionType;
+use App\Actions\Tron\ApproveTransaction;
+use App\Actions\Tron\CreateTransaction;
+use App\Actions\Tron\FetchBalance;
+use App\Actions\Tron\RejectTransaction;
+use App\Actions\Tron\SyncWallet;
+use App\Actions\Tron\Withdraw;
 use App\Events\UserActivated;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
+use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
-use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
 use App\Models\TronTransaction;
 use App\Models\User;
@@ -25,7 +29,13 @@ class TronService
 {
     use HasMessageTemplates;
 
-
+    /**
+     *   * @return GenerateWalletResponseData
+     * @throws GuzzleException
+     * @throws SaloonException
+     * @throws \ReflectionException
+     * @deprecated Use the action class
+     */
     public function generateWallet(): GenerateWalletResponseData
     {
         return GenerateWalletResponseData::from(GenerateRandomWalletRequest::make()->send()->json());
@@ -33,22 +43,24 @@ class TronService
 
 
     /**
+     * Syncs the blockchain amount and the virtual one
+     * If the account is not activated with a trader role
+     * then it will be activated once it has the minimum amount
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
      */
     public function syncWallets(): static
     {
-        $wallets = Wallet::query()->select(['id', 'address'])->whereNotNull('address')->lazy();
+        $wallets = Wallet::query()
+            ->with('user')
+            ->whereNotNull('address')
+            ->lazy();
 
-        $request = GetAccountBalanceRequest::make();
+        $syncWalletAction = app(SyncWallet::class);
 
         foreach ($wallets as $wallet) {
-            $request->addData('address', $wallet->address);
-            $response = $request
-                ->send();
-
-            $wallet->update(['blockchain_amount' => $response->json()]);
+            $syncWalletAction->sync($wallet);
         }
 
         return $this;
@@ -71,6 +83,9 @@ class TronService
     }
 
     /**
+     * @deprecated We're using active trading instead of passive.
+     * Now users has to actively select which package they want to trade with
+     *
      * @param User $user
      * @param Collection<PricingPlan> $plans
      * @return bool
@@ -79,8 +94,8 @@ class TronService
     public function syncAccount(User $user, Collection $plans): bool
     {
 
-        // We should skip if the user is admin
-        if ($user->hasAnyRole([AclService::adminRole(), AclService::superAdminRole()])) {
+        // We should skip if the user is not a trader
+        if (!$user->hasAnyRole([AclService::trader()])) {
             return true;
         }
 
@@ -130,52 +145,73 @@ class TronService
         return true;
     }
 
+
+    /**
+     *
+     * @throws \ReflectionException
+     * @throws GuzzleException
+     * @throws SaloonException
+     * @deprecated  Use Transfer action
+     */
+    public function transfer(TransferTokensData $data)
+    {
+        $response = TransferTokensRequest::make($data)->send();
+        $transactionData = new TransactionData($data, referenceId: $response->json());
+        return $this->transaction($transactionData);
+    }
+
+    /**
+     * @param TransactionData $transactionData
+     * @return mixed
+     * @deprecated  Use create transaction action
+     */
+    public function transaction(TransactionData $transactionData)
+    {
+        return app(CreateTransaction::class)($transactionData);
+    }
+
     /**
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     * @deprecated Use withdraw action
      */
-    public function transfer(TransferTokensData $data, $sender = null, $receiver = null)
+    public function withdraw(Wallet $wallet, $amount)
     {
-        $response = TransferTokensRequest::make($data)->send();
-
-        return TronTransaction::create([
-            'from' => $data->from,
-            'to' => $data->to,
-            'amount' => $data->amount,
-            'blockchain_reference_id' => $response->json(),
-            'type' => TransactionType::In,
-            'status' => TransactionStatus::Approved,
-        ]);
+        return app(Withdraw::class)($wallet, $amount);
     }
 
-    public function withdraw(TransferTokensData $data)
+    /**
+     * Approves a transaction
+     * @throws \ReflectionException
+     * @throws GuzzleException
+     * @throws SaloonException
+     * @deprecated Use the action class
+     */
+    public function approve(TronTransaction $transaction): TronTransaction
     {
-        // TODO: Should use one or more pools to fulfill the transaction.
-        // TODO: If there is not enough balance in the pool we should set the transaction to wait for manual approval.
-        // TODO: If method is set to automatic then we set it to retry
-
-        return TronTransaction::create([
-            'from' => $data->from,
-            'to' => $data->to,
-            'amount' => $data->amount,
-            'type' => TransactionType::Out,
-            'status' => TransactionStatus::AwaitingConfirmation,
-        ]);
+        return app(ApproveTransaction::class)($transaction);
     }
 
-    public function approveTransaction(TronTransaction $transaction)
+    /**
+     * Rejects a transaction
+     *  * @param TronTransaction $transaction
+     * @return TronTransaction
+     * @deprecated Use the action class
+     */
+    public function reject(TronTransaction $transaction): TronTransaction
     {
-        //$response = TransferTokensRequest::make($data)->send();
-
-        // $transaction/
+        return app(RejectTransaction::class)($transaction);
     }
 
+    /**
+     *   * @throws \ReflectionException
+     * @throws GuzzleException
+     * @throws SaloonException
+     * @deprecated Use the action class
+     */
     public function fetchBalance(string $address): int
     {
-        return GetAccountBalanceRequest::make()
-            ->setData(compact('address'))
-            ->send()
-            ->json();
+        return app(FetchBalance::class)($address);
     }
 }

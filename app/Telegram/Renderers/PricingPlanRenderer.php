@@ -13,7 +13,10 @@ class PricingPlanRenderer
         $isCurrentText = $plan->id === $currentPlan?->id ? ' (Current)' : '';
         $isBest = $plan->is_best ? '☀️' : '👉';
 
-        $message = $isBest . ' *' . $plan->name . ' Package*' . $isCurrentText . "\n\n" . $plan->description . "\n";
+
+        $message = $isBest . ' *' . $plan->name . ' Package*' . $isCurrentText;
+        $message .= "\n\nPrice: *" . $plan->price . ' USDT*';
+        $message .= "\n\n" . $plan->description . "\n";
 
         if ($plan->features) {
             $message .= "\nFeatures:\n\n";

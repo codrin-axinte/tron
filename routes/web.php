@@ -13,21 +13,29 @@ Route::middleware(['auth', 'can:viewSwagger'])->group(function () {
 Route::get('/compound', function (\Illuminate\Http\Request $request) {
     $calculator = app(\App\Services\CompoundInterestCalculator::class);
 
-    $principal = $request->get('principal', 100);
+    $principal = $request->get('principal', 1000);
     $rate = $request->get('rate', 0.01);
     $time = $request->get('time', 1);
     $days = $request->get('days', 30);
 
-    return view('compound-simulation', ['data' => $calculator->simulate($principal, $rate, $time, $days)]);
+    $data = $calculator->simulate($principal, $rate, $time, $days);
+
+    return view('compound-simulation', ['data' => $data]);
+})->name('compound-simulation');
+
+Route::get('/compound-hour', function (\Illuminate\Http\Request $request) {
+    $calculator = app(\App\Services\CompoundInterestCalculator::class);
+
+    $principal = $request->get('principal', 1000);
+    $rate = $request->get('rate', 0.00125);
+
+    $data = $calculator->simulateHourly($principal, $rate, 24);
+    dd($data);
+    return response()->json($data);
 })->name('compound-simulation');
 
 Route::get('/test', function () {
 
-    $request = \App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest::make();
-    $request->addData('address', 'TRGr2qUpJAuA4JtQVzd1CYhJVogwWpXfq6');
-
-    $data = $request->send()->json();
-
-    dd($data);
+    return [];
 
 });

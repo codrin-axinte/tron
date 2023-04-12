@@ -22,8 +22,8 @@ class TeamCommand extends TelegramCommand
         $message = "⭐ **Your team score is: $team->score ({$team->members->count()} members)** \n\n";
 
         foreach ($members as $member) {
-            //$plan = $member->pricingPlans->first()->name ?? 'No plan';
-            $message .= '- ' . $member->name . "\n";
+            $plan = $member->pricingPlans->first()->name ?? 'No plan';
+            $message .= '|_ ' . $member->name . "($plan}) \n";
         }
 
 

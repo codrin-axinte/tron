@@ -58,7 +58,7 @@ class PricingPlanSettings extends Resource
             Select::make(__('Commission Strategy'), 'commission_strategy')
                 ->options([
                     'default' => __('Direct Amount'),
-                 //   'package_percentage' => __('Package Interest Percentage'),
+                    //   'package_percentage' => __('Package Interest Percentage'),
                 ])->displayUsingLabels(),
 
             // Number::make(__('Plan Interest'), 'plan_interest')->min(0),
@@ -73,6 +73,10 @@ class PricingPlanSettings extends Resource
                     'weekly' => __('Weekly'),
                     'monthly' => __('Monthly'),
                 ])->displayUsingLabels(),
+
+//            Number::make(__('Expiration hours'), 'expiration_hours')
+//                ->help('After how many hours this package will expire? Minimum 1 hour.')
+//                ->min(1),
 
             KeyValue::make(__('Meta'), 'meta')->nullable(),
         ];

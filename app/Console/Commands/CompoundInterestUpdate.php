@@ -30,7 +30,7 @@ class CompoundInterestUpdate extends Command
      */
     public function handle(): int
     {
-        app(config('tron.compound_interest_update_action'))->execute();
+        app(\App\Actions\MLM\UpdateUsersWalletsByTradingPlan::class)->execute();
 
         return Command::SUCCESS;
     }

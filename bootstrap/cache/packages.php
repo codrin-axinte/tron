@@ -403,6 +403,13 @@
       0 => 'Spatie\\Translatable\\TranslatableServiceProvider',
     ),
   ),
+  'spatie/php-structure-discoverer' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\StructureDiscoverer\\StructureDiscovererServiceProvider',
+    ),
+  ),
   'tailflow/laravel-orion' => 
   array (
     'providers' => 

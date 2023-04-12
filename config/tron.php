@@ -1,17 +1,20 @@
 <?php
 
 
-use App\Actions\MLM\UpdateUsersWalletsBySubscribedPlan;
 use App\Telegram\Commands\Admin\AdminToolboxCommand;
 use App\Telegram\Commands\Admin\SandboxCommand;
 use App\Telegram\Commands\DummyCommand;
 use App\Telegram\Commands\HelpCommand;
 use App\Telegram\Commands\JoinCommand;
 use App\Telegram\Commands\MeCommand;
+use App\Telegram\Commands\PackagesCommand;
 use App\Telegram\Commands\ShowReferralCodeCommand;
 use App\Telegram\Commands\ShowWalletCommand;
 use App\Telegram\Commands\StartCommand;
 use App\Telegram\Commands\TeamCommand;
+use App\Telegram\Commands\TelegramCommand;
+use App\Telegram\Commands\TradeCommand;
+use Spatie\StructureDiscoverer\Discover;
 
 return [
 
@@ -21,7 +24,7 @@ return [
     /**
      *
      */
-    'compound_interest_update_action' => UpdateUsersWalletsBySubscribedPlan::class,
+   // 'compound_interest_update_action' => \App\Actions\MLM\UpdateUsersWalletsByTradingPlan::class,
 
     /**
      * How many pools should be created on installation.
@@ -34,12 +37,16 @@ return [
      * You can add or remove any of them,
      * but with care since it can break the flow
      */
+
+    //**
+//    $commands = Discover::in(app_path('Telegram/Commands'))
+//        ->classes()
+//        ->extending(TelegramCommand::class)
+//        ->get()
     'telegram_commands' => [
         'dummy' => DummyCommand::class,
         'help' => HelpCommand::class,
         'join' => JoinCommand::class,
-        //  'packages' => PackagesCommand::class,
-        // 'upgrade' => UpgradePackageCommand::class,
         'team' => TeamCommand::class,
         'myCode' => ShowReferralCodeCommand::class,
         'test' => SandboxCommand::class,
@@ -47,5 +54,7 @@ return [
         'wallet' => ShowWalletCommand::class,
         'me' => MeCommand::class,
         'admin' => AdminToolboxCommand::class,
+        'packages' => PackagesCommand::class,
+        'trade' => TradeCommand::class,
     ],
 ];

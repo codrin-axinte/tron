@@ -2,6 +2,7 @@
 
 namespace App\Nova\Settings;
 
+use App\Enums\WithdrawMethod;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\Number;
@@ -28,9 +29,9 @@ class TronSettingsPage extends Page
 
             Panel::make(__('Withdraw'), [
                 Select::make(__('Withdraw method'), 'withdraw_method')->options([
-                    'approval' => __('Approval'),
-                    'semi' => __('Semi Automatic'),
-                    'automatic' => __('Automatic')
+                    WithdrawMethod::Approval->value => __('Approval'),
+                    WithdrawMethod::Semi->value => __('Semi Automatic'),
+                    WithdrawMethod::Automatic->value => __('Automatic')
                 ])->displayUsingLabels(),
 
                 Number::make(__('Withdraw approval amount'), 'withdraw_approval_amount')

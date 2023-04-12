@@ -7,6 +7,9 @@ use App\Models\PendingAction;
 use App\Models\User;
 use Modules\Wallet\Models\PricingPlan;
 
+/**
+ * @deprecated
+ */
 class ChangePackage
 {
     /**

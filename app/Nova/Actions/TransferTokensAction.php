@@ -2,9 +2,12 @@
 
 namespace App\Nova\Actions;
 
+use App\Actions\Tron\TransferTokens;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Nova\User;
 use App\Services\TronService;
+use App\ValueObjects\USDT;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -16,6 +19,7 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Modules\Wallet\Models\Wallet;
 use Outl1ne\MultiselectField\Multiselect;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class TransferTokensAction extends Action
 {
@@ -29,24 +33,26 @@ class TransferTokensAction extends Action
     /**
      * Perform the action on the given models.
      *
-     * @param \Laravel\Nova\Fields\ActionFields $fields
-     * @param \Illuminate\Support\Collection $models
+     * @param ActionFields $fields
+     * @param Collection $models
      * @return mixed
+     * @throws GuzzleException
+     * @throws \ReflectionException
+     * @throws SaloonException
      */
-    public function handle(ActionFields $fields, Collection $models)
+    public function handle(ActionFields $fields, Collection $models): mixed
     {
-        $tron = app(TronService::class);
-
         $to = \App\Models\User::with(['wallet'])->findOrFail($fields->get('to'))->wallet;
         $from = \App\Models\User::with(['wallet'])->findOrFail($fields->get('from'))->wallet;
-        $amount = $fields->get('amount');
+        $amount = USDT::make($fields->get('amount', 1));
 
+        $transfer = app(TransferTokens::class);
 
-        $tron->transfer(new TransferTokensData(
+        $transfer(new TransferTokensData(
             to: $to->address,
+            amount: $amount->toSun(),
             from: $from->address,
-            privateKey: $from->private_key,
-            amount: $amount
+            privateKey: $from->private_key
         ));
 
         return Action::message('Transfer initiated');

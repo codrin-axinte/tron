@@ -22,6 +22,11 @@ class UserPolicy
         return $user->can(UserPermission::ViewAny->value);
     }
 
+    public function trade(User $user): bool
+    {
+        return $user->hasRole(AclService::trader());
+    }
+
     /**
      * Determine whether the user can view the model.
      *

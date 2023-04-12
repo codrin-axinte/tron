@@ -16,8 +16,10 @@ class JoinCommand extends TelegramCommand
 
     public function __invoke($code)
     {
+        $this->sendTyping();
+
         if ($this->isAuth()) {
-            $this->message('🎩 You are already a member of a team. Use the /help command if you are lost.')->send();
+            $this->message('🎩 You are already a member of a team. Use the /help command if you are lost.')->dispatch();
             $this->start();
             return;
         }
@@ -27,23 +29,23 @@ class JoinCommand extends TelegramCommand
 
         try {
             $affiliate = $verifyInvitationCode->handle($code);
-            $this->sendTyping();
+
         } catch (ModelNotFoundException $exception) {
-            $this->message("❌ The code '$code' is invalid. Please, try again.")->send();
+            $this->message("❌ The code '$code' is invalid. Please, try again.")->dispatch();
             return;
         }
 
-        $this->message("✅ The code '$code' is valid. Please, wait...")->send();
-        $this->sendTyping();
+        $this->message("✅ The code '$code' is valid. Please, wait...")->dispatch();
 
         try {
 
             $user = $createUser->create($this->chat, $affiliate, $this->message->from());
-            $this->markdown("🎉Great, I have created your account. Now let's invest! 📈")->send();
-            $this->markdown($this->walletRenderer->render($user->wallet))->send();
+            $this->markdown("🎉Great, I have created your account. Now let's invest! 📈")->dispatch();
+            $this->markdown($this->walletRenderer->render($user->wallet))->dispatch();
+            $this->start();
 
         } catch (\Throwable $exception) {
-            $this->chat->message('💀 Something went wrong on our side. I could not create your account.')->send();
+            $this->chat->message('💀 Something went wrong on our side. I could not create your account.')->dispatch();
             \Log::error($exception->getMessage(), $exception->getTrace());
             return;
         }

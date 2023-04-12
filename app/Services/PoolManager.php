@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Actions\Tron\GenerateWallet;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
@@ -48,7 +49,7 @@ class PoolManager
                         amount: $wallet->blockchain_amount,
                         from: $wallet->address,
                         privateKey: $wallet->private_key
-                    ), $wallet, $pool);
+                    ));
                 }
 
                 $except->push($pool->id);
@@ -56,15 +57,31 @@ class PoolManager
 
     }
 
-    public function getRandomPool(): Pool
+    public function aggregateAmountFor(Pool $currentPool, float $tokensAmount)
     {
-        return Pool::query()->inRandomOrder()->whereNotCentral()->first();
+        $pools = Pool::query()
+            ->whereNot('id', $currentPool->id)
+            ->where('balance', '>', 0)
+            ->whereNotCentral()
+            ->get();
+
+
+    }
+
+    public function getRandomPool(?float $tokensAmount = null): ?Pool
+    {
+        return Pool::query()
+            ->when(!is_null($tokensAmount), fn($query) => $query->where('balance', '>=', $tokensAmount))
+            ->inRandomOrder()
+            ->whereNotCentral()
+            ->first();
     }
 
     public function sync(): static
     {
         $pools = Pool::query()->select(['id', 'address'])->whereNotNull('address')->lazy();
         // TODO: Improve performance with promises - https://medium.com/@ardanirohman/how-to-handle-async-request-concurrency-with-promise-in-guzzle-6-cac10d76220e
+        // Dispatch jobs for each pool
         $request = GetAccountBalanceRequest::make();
 
         foreach ($pools as $pool) {
