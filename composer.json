@@ -13,7 +13,6 @@
         "codezero/laravel-unique-translation": "^3.5",
         "defstudio/telegraph": "^1.28",
         "eminiarts/nova-tabs": "^2.0.3",
-        "filament/filament": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
         "glorand/laravel-model-settings": "^5.0",
         "guzzlehttp/guzzle": "^7.4.1",
