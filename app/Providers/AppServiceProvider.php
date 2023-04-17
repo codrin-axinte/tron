@@ -48,9 +48,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-
-
         // JsonResource::withoutWrapping();
         // Carbon::setLocale('ro_RO');
         AclService::macro('trader', fn() => config('tron.default_role'));

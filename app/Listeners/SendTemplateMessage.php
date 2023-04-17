@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Contracts\SendsMessageTemplates;
+use App\Events\TelegramHook;
 use App\Telegram\Traits\HasMessageTemplates;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -29,6 +30,8 @@ class SendTemplateMessage
      */
     public function handle(SendsMessageTemplates $event)
     {
+        // TODO: Implement variable binding using Feather
+
         $this->sendTemplate($event->hooks(), $event->chat());
     }
 }

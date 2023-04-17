@@ -2,28 +2,15 @@
 
 namespace App\Telegram;
 
-use App\Telegram\Commands\Admin\AdminToolboxCommand;
-use App\Telegram\Commands\Admin\SandboxCommand;
-use App\Telegram\Commands\DummyCommand;
-use App\Telegram\Commands\HelpCommand;
-use App\Telegram\Commands\JoinCommand;
-use App\Telegram\Commands\MeCommand;
-use App\Telegram\Commands\PackagesCommand;
-use App\Telegram\Commands\ShowReferralCodeCommand;
-use App\Telegram\Commands\ShowWalletCommand;
-use App\Telegram\Commands\StartCommand;
-use App\Telegram\Commands\TeamCommand;
-use App\Telegram\Commands\TelegramCommand;
-use App\Telegram\Commands\TradeCommand;
+use App\Models\User;
 use App\Telegram\Data\SetHandlerData;
 use App\Telegram\Traits\ExtendsSetupChat;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
 use ReflectionMethod;
-use Spatie\StructureDiscoverer\Discover;
 
 /**
- * @method start()
+ * @method start(?User $user = null)
  */
 class DefaultWebhookHandler extends WebhookHandler
 {
@@ -33,7 +20,7 @@ class DefaultWebhookHandler extends WebhookHandler
     protected int $callbackQueryId = 0;
 
     /**
-     * @var array|\Spatie\StructureDiscoverer\Data\DiscoveredStructure[]|string[]
+     * @var array|string[]
      */
     protected array $commands = [];
 
@@ -73,7 +60,7 @@ class DefaultWebhookHandler extends WebhookHandler
         if ($command->authorized()) {
             $command(...$arguments);
         } else {
-            $this->chat->message('👮‍ You are not authorized to use this command.')->send();
+            $this->chat->message('👮‍ You are not authorized to use this command.')->dispatch();
         }
 
     }

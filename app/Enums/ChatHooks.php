@@ -12,10 +12,9 @@ enum ChatHooks: string
     case Start = 'start';
     case Joined = 'joined';
     case Activated = 'activated';
-    case Upgraded = 'upgraded';
-    case Downgraded = 'downgraded';
-    case MemberJoined = 'member_joined';
-    case MemberLeft = 'member_left';
-    case WalletUpdated = 'wallet_updated';
+    case WalletUpdated = 'wallet::updated';
     case Help = 'help';
+
+    case TradingFinished = 'trading::finished';
+    case TradingStarted = 'trading::started';
 }

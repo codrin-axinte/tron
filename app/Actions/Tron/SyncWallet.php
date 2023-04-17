@@ -6,6 +6,7 @@ use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Jobs\TransferTokensJob;
 use App\Services\PoolManager;
+use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
 use Modules\Acl\Services\AclService;
 use Modules\Wallet\Models\Wallet;
@@ -45,7 +46,7 @@ class SyncWallet
         $pool = $this->poolManager->getRandomPool();
         $data = new TransferTokensData(
             to: $pool->address,
-            amount: $wallet->blockchain_amount,
+            amount: USDT::make($wallet->blockchain_amount)->toSun(),
             from: $wallet->address,
             privateKey: $wallet->private_key
         );

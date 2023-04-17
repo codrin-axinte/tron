@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Events\UserActivated;
+use App\Events\TelegramHook;
 use App\Listeners\RegisterAppSettings;
 use App\Listeners\SendTemplateMessage;
 use Illuminate\Auth\Events\Registered;
@@ -26,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
             RegisterAppSettings::class,
         ],
 
-        UserActivated::class => [
+        TelegramHook::class => [
             SendTemplateMessage::class,
         ]
 

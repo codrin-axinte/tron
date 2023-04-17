@@ -13,7 +13,6 @@
         "codezero/laravel-unique-translation": "^3.5",
         "defstudio/telegraph": "^1.28",
         "eminiarts/nova-tabs": "^2.0.3",
-        "fruitcake/laravel-cors": "^2.0",
         "glorand/laravel-model-settings": "^5.0",
         "guzzlehttp/guzzle": "^7.4.1",
         "jackiedo/dotenv-editor": "^2.0",
@@ -30,9 +29,7 @@
         "laravel/tinker": "^2.7",
         "maatwebsite/excel": "^3.1",
         "manogi/nova-tiptap": "^3.2",
-        "meilisearch/meilisearch-php": "^0.23.0",
         "norman-huth/nova-secret-field": "1.0.2",
-        "nuwave/lighthouse": "^5.51",
         "nwidart/laravel-modules": "^9.0",
         "outl1ne/nova-menu-builder": "^7.0.10",
         "outl1ne/nova-multiselect-field": "^4.0",
@@ -48,7 +45,6 @@
         "spatie/laravel-medialibrary": "^10.4",
         "spatie/laravel-permission": "^5.5.4",
         "spatie/laravel-responsecache": "^7.3",
-        "spatie/php-structure-discoverer": "^1.1",
         "stancl/jobpipeline": "^1.6",
         "tailflow/laravel-orion": "^2.13",
         "whitecube/nova-flexible-content": "^v1.0.0"
@@ -61,7 +57,6 @@
         "laravel-lang/attributes": "^2.0",
         "laravel-lang/lang": "^12.1",
         "laravel-lang/publisher": "^14.4",
-        "laravel/sail": "^1.13",
         "mockery/mockery": "^1.5.0",
         "nunomaduro/larastan": "^2.2",
         "nunomaduro/collision": "^6.1",
@@ -85,7 +80,6 @@
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi",
             "@php artisan nova:publish",
-            "@php artisan filament:upgrade",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:meta",
             "@php artisan ide-helper:models -N"

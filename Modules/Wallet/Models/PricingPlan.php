@@ -69,6 +69,13 @@ class PricingPlan extends Model implements Sortable
         return $this->hasMany(TradingPlan::class);
     }
 
+    public function scopeHighestPlan($query, $amount)
+    {
+        return $query->enabled()
+            ->where('price', '<=', $amount)
+            ->orderByDesc('price');
+    }
+
     public function getTable(): string
     {
         return Table::creditsPlans();

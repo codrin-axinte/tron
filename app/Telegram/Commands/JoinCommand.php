@@ -42,7 +42,9 @@ class JoinCommand extends TelegramCommand
             $user = $createUser->create($this->chat, $affiliate, $this->message->from());
             $this->markdown("🎉Great, I have created your account. Now let's invest! 📈")->dispatch();
             $this->markdown($this->walletRenderer->render($user->wallet))->dispatch();
-            $this->start();
+            //
+            //$this->runCommand('')
+
 
         } catch (\Throwable $exception) {
             $this->chat->message('💀 Something went wrong on our side. I could not create your account.')->dispatch();

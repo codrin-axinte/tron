@@ -10,7 +10,7 @@ use App\Telegram\DefaultWebhookHandler;
  */
 trait ExtendsSetupChat
 {
-    protected ?\App\Models\User $currentUser = null;
+    protected ?User $currentUser = null;
 
 
     protected function setupChat(): void
@@ -20,11 +20,18 @@ trait ExtendsSetupChat
         $this->currentUser = $this->getCurrentUser();
     }
 
-
-    private function getCurrentUser(): ?\App\Models\User
+    private function getCurrentUser(): ?User
     {
         return User::query()->with(['wallet'])->firstWhere('chat_id', $this->chat->id);
     }
 
+    protected function currentUser(): ?User
+    {
+        if (!$this->currentUser) {
+            $this->currentUser = $this->getCurrentUser();
+        }
+
+        return $this->currentUser;
+    }
 
 }

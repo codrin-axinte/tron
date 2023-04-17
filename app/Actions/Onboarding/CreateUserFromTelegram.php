@@ -3,6 +3,7 @@
 namespace App\Actions\Onboarding;
 
 
+use App\Actions\Tron\GenerateWallet;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Models\User;
@@ -31,7 +32,7 @@ class CreateUserFromTelegram
 
             $affiliate->ownedTeam->members()->attach($user);
 
-            $response = $this->tronService->generateWallet();
+            $response = app(GenerateWallet::class)();
 
             $user->wallet->update([
                 'private_key' => $response->privateKey,

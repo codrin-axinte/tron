@@ -9,7 +9,8 @@ use App\Actions\Tron\FetchBalance;
 use App\Actions\Tron\RejectTransaction;
 use App\Actions\Tron\SyncWallet;
 use App\Actions\Tron\Withdraw;
-use App\Events\UserActivated;
+use App\Enums\ChatHooks;
+use App\Events\TelegramHook;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
@@ -124,7 +125,7 @@ class TronService
                     $user->assignRole($defaultRole);
                     $wallet->amount = $wallet->blockchain_amount;
                     $wallet->save();
-                    event(new UserActivated($user));
+                    event(new TelegramHook($user, ChatHooks::Activated));
                 }
 
                 break;

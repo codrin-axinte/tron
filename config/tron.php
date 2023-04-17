@@ -12,9 +12,7 @@ use App\Telegram\Commands\ShowReferralCodeCommand;
 use App\Telegram\Commands\ShowWalletCommand;
 use App\Telegram\Commands\StartCommand;
 use App\Telegram\Commands\TeamCommand;
-use App\Telegram\Commands\TelegramCommand;
 use App\Telegram\Commands\TradeCommand;
-use Spatie\StructureDiscoverer\Discover;
 
 return [
 
@@ -24,13 +22,13 @@ return [
     /**
      *
      */
-   // 'compound_interest_update_action' => \App\Actions\MLM\UpdateUsersWalletsByTradingPlan::class,
+    // 'compound_interest_update_action' => \App\Actions\MLM\UpdateUsersWalletsByTradingPlan::class,
 
     /**
      * How many pools should be created on installation.
      * One of them will be set as central pool.
      */
-    'pools' => 5,
+    'pools' => 1,
 
     /**
      * Allowed telegram commands.
@@ -38,11 +36,6 @@ return [
      * but with care since it can break the flow
      */
 
-    //**
-//    $commands = Discover::in(app_path('Telegram/Commands'))
-//        ->classes()
-//        ->extending(TelegramCommand::class)
-//        ->get()
     'telegram_commands' => [
         'dummy' => DummyCommand::class,
         'help' => HelpCommand::class,

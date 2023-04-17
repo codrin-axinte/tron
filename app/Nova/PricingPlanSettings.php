@@ -67,16 +67,16 @@ class PricingPlanSettings extends Resource
             ]),
 
             Number::make(__('Interest Percentage'), 'interest_percentage')->min(0)->step(0.01),
-            Select::make(__('Interest Frequency'), 'interest_frequency')
-                ->options([
-                    'daily' => __('Daily'),
-                    'weekly' => __('Weekly'),
-                    'monthly' => __('Monthly'),
-                ])->displayUsingLabels(),
+//            Select::make(__('Interest Frequency'), 'interest_frequency')
+//                ->options([
+//                    'daily' => __('Daily'),
+//                    'weekly' => __('Weekly'),
+//                    'monthly' => __('Monthly'),
+//                ])->displayUsingLabels(),
 
-//            Number::make(__('Expiration hours'), 'expiration_hours')
-//                ->help('After how many hours this package will expire? Minimum 1 hour.')
-//                ->min(1),
+            Number::make(__('Expiration hours'), 'expiration_hours')
+                ->help('After how many hours this package will expire? Minimum 1 hour.')
+                ->min(1),
 
             KeyValue::make(__('Meta'), 'meta')->nullable(),
         ];

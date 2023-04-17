@@ -2,7 +2,8 @@
 
 namespace App\Actions\Tron;
 
-use App\Events\UserActivated;
+use App\Enums\ChatHooks;
+use App\Events\TelegramHook;
 use App\Models\User;
 use Modules\Acl\Services\AclService;
 use Modules\Wallet\Models\PricingPlan;
@@ -24,6 +25,6 @@ class ActivateUser
         }
 
         $user->assignRole(AclService::trader());
-        event(new UserActivated($user));
+        event(new TelegramHook($user, ChatHooks::Activated));
     }
 }

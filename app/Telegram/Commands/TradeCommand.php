@@ -22,13 +22,9 @@ class TradeCommand extends TelegramCommand
             return $this->error()->dispatch();
         }
 
-        $plan = PricingPlan::query()
-            ->where('price', '<=', $user->wallet->amount)
-            ->orderByDesc('price')
-            ->first();
+        $plan = PricingPlan::query()->highestPlan($user->wallet->amount)->first();
 
         if (!$plan) {
-
             return $this->message('You do not have enough funds to trade.')->dispatch();
         }
 

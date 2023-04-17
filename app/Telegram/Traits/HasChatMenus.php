@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Traits;
 
+use App\Models\User;
 use App\ValueObjects\USDT;
 use DefStudio\Telegraph\Keyboard\Button;
 use DefStudio\Telegraph\Keyboard\Keyboard;
@@ -13,10 +14,9 @@ trait HasChatMenus
     protected function showMenu(): static
     {
         // $plan = $this->currentUser->subscribedPlan();
-
         $menu = $this->mainMenu();
 
-        $wallet = $this->currentUser->wallet;
+        $wallet =  $this->currentUser->wallet;
         // $planName = $plan ? $plan->name : 'No Plan';
         $balance = USDT::make($wallet->amount);
         $this->chat->message("Wallet: {$balance} USD")->keyboard($menu)->send();

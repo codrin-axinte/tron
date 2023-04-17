@@ -29,11 +29,20 @@ class TransferTokens
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     * @throws \Exception
      */
     public function run(TransferTokensData $data): \Illuminate\Database\Eloquent\Model|\App\Models\TronTransaction
     {
         $response = TransferTokensRequest::make($data)->send();
-        $transactionData = new TransactionData($data, referenceId: $response->json());
+        $reference = $response->json();
+
+        if (is_array($reference)) {
+            if ($reference['code'] === 'NUMERIC_FAULT') {
+                throw new \Exception('Transfer failed');
+            }
+        }
+
+        $transactionData = new TransactionData($data, referenceId: $reference);
         $createTransaction = $this->createTransaction;
 
         return $createTransaction($transactionData);

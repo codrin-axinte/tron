@@ -38,13 +38,6 @@
       0 => 'Eminiarts\\Tabs\\TabsServiceProvider',
     ),
   ),
-  'fruitcake/laravel-cors' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Fruitcake\\Cors\\CorsServiceProvider',
-    ),
-  ),
   'glorand/laravel-model-settings' => 
   array (
     'providers' => 
@@ -145,13 +138,6 @@
       0 => 'Laravel\\Nova\\LogViewer\\ToolServiceProvider',
     ),
   ),
-  'laravel/sail' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Sail\\SailServiceProvider',
-    ),
-  ),
   'laravel/sanctum' => 
   array (
     'providers' => 
@@ -238,25 +224,6 @@
     'providers' => 
     array (
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    ),
-  ),
-  'nuwave/lighthouse' => 
-  array (
-    'aliases' => 
-    array (
-      'graphql' => 'Nuwave\\Lighthouse\\GraphQL',
-    ),
-    'providers' => 
-    array (
-      0 => 'Nuwave\\Lighthouse\\LighthouseServiceProvider',
-      1 => 'Nuwave\\Lighthouse\\Auth\\AuthServiceProvider',
-      2 => 'Nuwave\\Lighthouse\\Cache\\CacheServiceProvider',
-      3 => 'Nuwave\\Lighthouse\\GlobalId\\GlobalIdServiceProvider',
-      4 => 'Nuwave\\Lighthouse\\OrderBy\\OrderByServiceProvider',
-      5 => 'Nuwave\\Lighthouse\\Pagination\\PaginationServiceProvider',
-      6 => 'Nuwave\\Lighthouse\\Scout\\ScoutServiceProvider',
-      7 => 'Nuwave\\Lighthouse\\SoftDeletes\\SoftDeletesServiceProvider',
-      8 => 'Nuwave\\Lighthouse\\Validation\\ValidationServiceProvider',
     ),
   ),
   'nwidart/laravel-modules' => 
@@ -394,13 +361,6 @@
     'providers' => 
     array (
       0 => 'Spatie\\Translatable\\TranslatableServiceProvider',
-    ),
-  ),
-  'spatie/php-structure-discoverer' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Spatie\\StructureDiscoverer\\StructureDiscovererServiceProvider',
     ),
   ),
   'tailflow/laravel-orion' => 
