@@ -14,7 +14,7 @@ class PackagesCommand extends TelegramCommand
     {
         $user = $this->currentUser;
         if (!$user) {
-            return $this->error();
+            return $this->error()->dispatch();
         }
 
         $this->sendTyping();

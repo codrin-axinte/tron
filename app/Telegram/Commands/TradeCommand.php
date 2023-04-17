@@ -19,7 +19,7 @@ class TradeCommand extends TelegramCommand
         $user = User::query()->find($this->data->get('user', $userId)) ?? $this->currentUser;
 
         if (!$user) {
-            return $this->error();
+            return $this->error()->dispatch();
         }
 
         $plan = PricingPlan::query()
@@ -32,7 +32,7 @@ class TradeCommand extends TelegramCommand
             return $this->message('You do not have enough funds to trade.')->dispatch();
         }
 
-        if ($this->currentUser->tradingPlan()->doesntExist()) {
+        if ($user->tradingPlan()->doesntExist()) {
             return $this->trade($user, $plan);
         }
 
