@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\MLM\UpdateUsersWalletsByCurrentBalance;
-
+use App\Actions\MLM\UpdateTradingPlans;
 use Illuminate\Console\Command;
 
 class CompoundInterestUpdate extends Command
@@ -28,9 +27,9 @@ class CompoundInterestUpdate extends Command
      *
      * @return int
      */
-    public function handle(): int
+    public function handle(UpdateTradingPlans $action): int
     {
-        app(\App\Actions\MLM\UpdateUsersWalletsByTradingPlan::class)->execute();
+        $action->execute();
 
         return Command::SUCCESS;
     }

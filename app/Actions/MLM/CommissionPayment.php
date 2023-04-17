@@ -37,6 +37,7 @@ class CommissionPayment
     {
         if (!$owner) return false;
 
+        //FIXME: Should determine the amount based on the current plan
         $plan = $owner->pricingPlans()->with('planSettings')->first();
 
         $settings = $plan->planSettings;

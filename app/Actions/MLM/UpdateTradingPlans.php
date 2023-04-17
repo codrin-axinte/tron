@@ -8,7 +8,7 @@ use App\Models\PricingPlanSettings;
 use App\Models\TradingPlan;
 use App\Services\CompoundInterestCalculator;
 
-class UpdateUsersWalletsByTradingPlan
+class UpdateTradingPlans
 {
     public function __construct(protected CompoundInterestCalculator $calculator)
     {
@@ -27,7 +27,7 @@ class UpdateUsersWalletsByTradingPlan
 
     }
 
-    private function updateExpiredPlans($settings)
+    private function updateExpiredPlans($settings): void
     {
         $query = TradingPlan::query()
             ->with(['user']);
@@ -56,7 +56,7 @@ class UpdateUsersWalletsByTradingPlan
     }
 
 
-    private function updateActivePlans($settings)
+    private function updateActivePlans($settings): void
     {
         $rates = $settings->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage / 100]);
 
