@@ -13,6 +13,7 @@
         "codezero/laravel-unique-translation": "^3.5",
         "defstudio/telegraph": "^1.28",
         "eminiarts/nova-tabs": "^2.0.3",
+        "filament/filament": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
         "glorand/laravel-model-settings": "^5.0",
         "guzzlehttp/guzzle": "^7.4.1",
@@ -31,7 +32,6 @@
         "maatwebsite/excel": "^3.1",
         "manogi/nova-tiptap": "^3.2",
         "meilisearch/meilisearch-php": "^0.23.0",
-        "mll-lab/laravel-graphql-playground": "^2.6",
         "norman-huth/nova-secret-field": "1.0.2",
         "nuwave/lighthouse": "^5.51",
         "nwidart/laravel-modules": "^9.0",
@@ -86,6 +86,7 @@
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi",
             "@php artisan nova:publish",
+            "@php artisan filament:upgrade",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:meta",
             "@php artisan ide-helper:models -N"

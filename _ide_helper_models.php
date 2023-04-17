@@ -102,6 +102,7 @@ namespace App\Models{
  * @property array|null $commissions
  * @property float $interest_percentage
  * @property string $interest_frequency
+ * @property int $expiration_hours
  * @property array|null $meta
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -112,6 +113,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlanSettings whereCommissionStrategy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlanSettings whereCommissions($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlanSettings whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PricingPlanSettings whereExpirationHours($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlanSettings whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlanSettings whereInterestFrequency($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlanSettings whereInterestPercentage($value)
@@ -185,6 +187,12 @@ namespace App\Models{
 /**
  * App\Models\TradingPlan
  *
+ * @property int $id
+ * @property int $user_id
+ * @property int $pricing_plan_id
+ * @property float $amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\Wallet\Models\PricingPlan|null $pricingPlan
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan active(int $hours = 1)
@@ -192,6 +200,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan wherePricingPlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereUserId($value)
  */
 	class TradingPlan extends \Eloquent {}
 }
@@ -376,6 +390,8 @@ namespace Modules\Wallet\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\PricingPlanSettings|null $planSettings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TradingPlan> $tradingPlans
+ * @property-read int|null $trading_plans_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan enabled()

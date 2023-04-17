@@ -1,4 +1,11 @@
 <?php return array (
+  'akaunting/laravel-money' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Akaunting\\Money\\Provider',
+    ),
+  ),
   'barryvdh/laravel-ide-helper' => 
   array (
     'providers' => 
@@ -11,6 +18,20 @@
     'providers' => 
     array (
       0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
+    ),
+  ),
+  'blade-ui-kit/blade-heroicons' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'BladeUI\\Heroicons\\BladeHeroiconsServiceProvider',
+    ),
+  ),
+  'blade-ui-kit/blade-icons' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'BladeUI\\Icons\\BladeIconsServiceProvider',
     ),
   ),
   'codezero/laravel-unique-translation' => 
@@ -36,6 +57,41 @@
     'providers' => 
     array (
       0 => 'Eminiarts\\Tabs\\TabsServiceProvider',
+    ),
+  ),
+  'filament/filament' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Filament\\FilamentServiceProvider',
+    ),
+  ),
+  'filament/forms' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Filament\\Forms\\FormsServiceProvider',
+    ),
+  ),
+  'filament/notifications' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Filament\\Notifications\\NotificationsServiceProvider',
+    ),
+  ),
+  'filament/support' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Filament\\Support\\SupportServiceProvider',
+    ),
+  ),
+  'filament/tables' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Filament\\Tables\\TablesServiceProvider',
     ),
   ),
   'fruitcake/laravel-cors' => 
@@ -187,6 +243,17 @@
       0 => 'Laravel\\Ui\\UiServiceProvider',
     ),
   ),
+  'livewire/livewire' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Livewire\\LivewireServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Livewire' => 'Livewire\\Livewire',
+    ),
+  ),
   'maatwebsite/excel' => 
   array (
     'providers' => 
@@ -203,13 +270,6 @@
     'providers' => 
     array (
       0 => 'Manogi\\Tiptap\\FieldServiceProvider',
-    ),
-  ),
-  'mll-lab/laravel-graphql-playground' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'MLL\\GraphQLPlayground\\GraphQLPlaygroundServiceProvider',
     ),
   ),
   'nesbot/carbon' => 
@@ -333,6 +393,17 @@
     'providers' => 
     array (
       0 => 'Rap2hpoutre\\FastExcel\\Providers\\FastExcelServiceProvider',
+    ),
+  ),
+  'ryangjchandler/blade-capture-directive' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'BladeCaptureDirective' => 'RyanChandler\\BladeCaptureDirective\\Facades\\BladeCaptureDirective',
     ),
   ),
   'sammyjo20/saloon-laravel' => 
