@@ -3,7 +3,6 @@
 namespace App\Telegram\Commands;
 
 use DefStudio\Telegraph\Enums\ChatActions;
-use Illuminate\Support\Stringable;
 
 class ShowReferralCodeCommand extends TelegramCommand
 {

@@ -3,7 +3,6 @@
 namespace App\Telegram\Commands;
 
 use DefStudio\Telegraph\Enums\ChatActions;
-use Illuminate\Support\Stringable;
 
 class TeamCommand extends TelegramCommand
 {
@@ -23,9 +22,8 @@ class TeamCommand extends TelegramCommand
 
         foreach ($members as $member) {
             $plan = $member->pricingPlans->first()->name ?? 'No plan';
-            $message .= '|_ ' . $member->name . "($plan}) \n";
+            $message .= '|_ '.$member->name."($plan}) \n";
         }
-
 
         $this->chat->markdown($message)->send();
         $this->start();

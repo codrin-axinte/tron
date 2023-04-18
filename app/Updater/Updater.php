@@ -45,9 +45,6 @@ class Updater
 
     /**
      * Safely print out comments.
-     *
-     * @param  string  $command
-     * @return void
      */
     protected function comment(string $command): void
     {

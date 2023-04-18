@@ -15,6 +15,7 @@ class CompoundInterestCalculator
         $hourly_rate = $annual_rate / 365 / 24;
         // Calculate final amount with hourly compounding
         $final_amount = $principal * pow(1 + $hourly_rate, 365 * 24 * $time_in_years);
+
         return $final_amount;
     }
 

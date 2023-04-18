@@ -19,8 +19,9 @@ class ActivateUser
             // We wait for more money. Should send a telegram message.
             $diff = $plan->price - $wallet->amount;
             $user->chat
-                ->markown('You have to deposit at least ' . $diff . ' USDT in order to activate your account. You have ' . $wallet->amount . ' USDT in your wallet.')
+                ->markown('You have to deposit at least '.$diff.' USDT in order to activate your account. You have '.$wallet->amount.' USDT in your wallet.')
                 ->send();
+
             return;
         }
 

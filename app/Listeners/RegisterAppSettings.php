@@ -20,14 +20,13 @@ class RegisterAppSettings
     /**
      * Handle the event.
      *
-     * @param object $event
-     * @return array
+     * @param  object  $event
      */
     public function handle($event): array
     {
         return [
             new GeneralSettingsPage(),
-            new TronSettingsPage()
+            new TronSettingsPage(),
         ];
     }
 }

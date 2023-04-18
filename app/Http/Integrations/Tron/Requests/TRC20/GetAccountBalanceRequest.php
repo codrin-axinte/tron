@@ -13,26 +13,19 @@ class GetAccountBalanceRequest extends SaloonRequest
 
     /**
      * The connector class.
-     *
-     * @var string|null
      */
     protected ?string $connector = TronConnector::class;
 
     /**
      * The HTTP verb the request will use.
-     *
-     * @var string|null
      */
     protected ?string $method = Saloon::POST;
 
-
     /**
      * The endpoint of the request.
-     *
-     * @return string
      */
     public function defineEndpoint(): string
     {
-        return "/api/trc20/balance";
+        return '/api/trc20/balance';
     }
 }

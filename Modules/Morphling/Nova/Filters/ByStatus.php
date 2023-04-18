@@ -35,7 +35,6 @@ class ByStatus extends Filter
      * Get the filter's available options.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
     public function options(NovaRequest $request): array
     {

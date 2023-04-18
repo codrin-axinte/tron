@@ -3,7 +3,6 @@
 namespace App\Nova;
 
 use App\Nova\Actions\CreateRandomPoolAction;
-use Illuminate\Http\Request;
 use Laravel\Nova\Actions\ExportAsCsv;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
@@ -37,13 +36,12 @@ class Pool extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'address'
+        'id', 'address',
     ];
 
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
     public function fields(NovaRequest $request)

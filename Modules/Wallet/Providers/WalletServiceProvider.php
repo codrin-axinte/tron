@@ -6,14 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 class WalletServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string
-     */
     protected string $moduleName = 'Wallet';
 
-    /**
-     * @var string
-     */
     protected string $moduleNameLower = 'wallet';
 
     /**

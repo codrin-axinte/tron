@@ -3,7 +3,6 @@
 namespace Modules\Wallet\Models;
 
 use App\Models\User;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Wallet\Traits\HasWalletTransactions;

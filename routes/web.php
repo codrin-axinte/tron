@@ -9,8 +9,7 @@ Route::middleware(['auth', 'can:viewSwagger'])->group(function () {
     Route::get('/wallet', \App\Http\Controllers\TronWalletController::class);
 });
 
-
-Route::get('/compound', function (\Illuminate\Http\Request $request) {
+Route::get('/compound', function (Illuminate\Http\Request $request) {
     $calculator = app(\App\Services\CompoundInterestCalculator::class);
 
     $principal = $request->get('principal', 1000);
@@ -23,7 +22,7 @@ Route::get('/compound', function (\Illuminate\Http\Request $request) {
     return view('compound-simulation', ['data' => $data]);
 })->name('compound-simulation');
 
-Route::get('/compound-hour', function (\Illuminate\Http\Request $request) {
+Route::get('/compound-hour', function (Illuminate\Http\Request $request) {
     $calculator = app(\App\Services\CompoundInterestCalculator::class);
 
     $principal = $request->get('principal', 1000);
@@ -31,6 +30,7 @@ Route::get('/compound-hour', function (\Illuminate\Http\Request $request) {
 
     $data = $calculator->simulateHourly($principal, $rate, 24);
     dd($data);
+
     return response()->json($data);
 })->name('compound-simulation');
 

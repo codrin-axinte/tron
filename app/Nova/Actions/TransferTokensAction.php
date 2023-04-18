@@ -5,19 +5,15 @@ namespace App\Nova\Actions;
 use App\Actions\Tron\TransferTokens;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Nova\User;
-use App\Services\TronService;
 use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Currency;
-use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Modules\Wallet\Models\Wallet;
 use Outl1ne\MultiselectField\Multiselect;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
@@ -27,15 +23,11 @@ class TransferTokensAction extends Action
 
     public $standalone = true;
 
-
     protected bool $toPool = false;
 
     /**
      * Perform the action on the given models.
      *
-     * @param ActionFields $fields
-     * @param Collection $models
-     * @return mixed
      * @throws GuzzleException
      * @throws \ReflectionException
      * @throws SaloonException
@@ -58,7 +50,6 @@ class TransferTokensAction extends Action
         return Action::message('Transfer initiated');
     }
 
-
     public function toPool(): static
     {
         $this->toPool = true;
@@ -69,7 +60,6 @@ class TransferTokensAction extends Action
     /**
      * Get the fields available on the action.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return array
      */
     public function fields(NovaRequest $request)

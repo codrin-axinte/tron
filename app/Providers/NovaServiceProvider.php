@@ -11,7 +11,6 @@ use Laravel\Nova\NovaApplicationServiceProvider;
 use Modules\Acl\Enums\GenericPermission;
 use Modules\Morphling\Events\BootUserMenu;
 use Modules\Morphling\Nova\MorphTool;
-use Modules\Morphling\Services\Morphling;
 use Nwidart\Modules\Facades\Module;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider

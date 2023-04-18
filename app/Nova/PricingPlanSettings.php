@@ -3,7 +3,6 @@
 namespace App\Nova;
 
 use App\Nova\Actions\SimulateInterestRate;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
@@ -43,7 +42,6 @@ class PricingPlanSettings extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return array
      */
     public function fields(NovaRequest $request)
@@ -67,12 +65,12 @@ class PricingPlanSettings extends Resource
             ]),
 
             Number::make(__('Interest Percentage'), 'interest_percentage')->min(0)->step(0.01),
-//            Select::make(__('Interest Frequency'), 'interest_frequency')
-//                ->options([
-//                    'daily' => __('Daily'),
-//                    'weekly' => __('Weekly'),
-//                    'monthly' => __('Monthly'),
-//                ])->displayUsingLabels(),
+            //            Select::make(__('Interest Frequency'), 'interest_frequency')
+            //                ->options([
+            //                    'daily' => __('Daily'),
+            //                    'weekly' => __('Weekly'),
+            //                    'monthly' => __('Monthly'),
+            //                ])->displayUsingLabels(),
 
             Number::make(__('Expiration hours'), 'expiration_hours')
                 ->help('After how many hours this package will expire? Minimum 1 hour.')

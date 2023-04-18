@@ -10,14 +10,8 @@ use Outl1ne\NovaSettings\Models\Settings;
 
 class SettingsServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string
-     */
     protected string $moduleName = 'Settings';
 
-    /**
-     * @var string
-     */
     protected string $moduleNameLower = 'settings';
 
     /**

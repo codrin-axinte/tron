@@ -21,7 +21,6 @@ class SyncWallet
     /**
      * @throws \ReflectionException
      * @throws GuzzleException
-     *
      * @throws SaloonException
      */
     public function sync(Wallet $wallet): void
@@ -38,7 +37,7 @@ class SyncWallet
         $wallet->save();
 
         // Activate account if not active
-        if (!$wallet->user->hasAnyRole([AclService::trader()])) {
+        if (! $wallet->user->hasAnyRole([AclService::trader()])) {
             app(ActivateUser::class)->activate($wallet->user);
         }
 

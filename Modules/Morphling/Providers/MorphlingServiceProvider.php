@@ -8,14 +8,8 @@ use Modules\Morphling\Observer\ModuleObserver;
 
 class MorphlingServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string
-     */
     protected string $moduleName = 'Morphling';
 
-    /**
-     * @var string
-     */
     protected string $moduleNameLower = 'morphling';
 
     /**

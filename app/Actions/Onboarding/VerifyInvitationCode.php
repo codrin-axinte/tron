@@ -4,7 +4,6 @@ namespace App\Actions\Onboarding;
 
 use App\Models\ReferralLink;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class VerifyInvitationCode
 {

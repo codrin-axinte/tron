@@ -3,7 +3,6 @@
 namespace App\Nova\Actions;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
@@ -22,8 +21,6 @@ class SimulateInterestRate extends Action
     /**
      * Perform the action on the given models.
      *
-     * @param \Laravel\Nova\Fields\ActionFields $fields
-     * @param \Illuminate\Support\Collection $models
      * @return mixed
      */
     public function handle(ActionFields $fields, Collection $models)
@@ -31,7 +28,6 @@ class SimulateInterestRate extends Action
         /**
          * @var PricingPlan $plan
          */
-
         $settings = $this->isPlan ? $models->first()->planSettings : $models->first();
 
         return Action::openInNewTab(route('compound-simulation', [
@@ -44,20 +40,20 @@ class SimulateInterestRate extends Action
     public function isPlan(): static
     {
         $this->isPlan = true;
+
         return $this;
     }
 
     /**
      * Get the fields available on the action.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return array
      */
     public function fields(NovaRequest $request)
     {
         return [
-            Currency::make(__('Starting Amount'), 'amount')->default(fn() => 100),
-            Number::make(__('Days'), 'days')->default(fn() => 365),
+            Currency::make(__('Starting Amount'), 'amount')->default(fn () => 100),
+            Number::make(__('Days'), 'days')->default(fn () => 365),
         ];
     }
 }

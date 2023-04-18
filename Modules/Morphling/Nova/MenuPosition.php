@@ -27,18 +27,11 @@ class MenuPosition implements Arrayable
         $this->name = $name ?? Str::headline($id);
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @param  string  $id
-     * @return MenuPosition
-     */
     public function setId(string $id): MenuPosition
     {
         $this->id = $id;
@@ -46,18 +39,11 @@ class MenuPosition implements Arrayable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param  string  $name
-     * @return MenuPosition
-     */
     public function setName(string $name): MenuPosition
     {
         $this->name = $name;
@@ -65,18 +51,11 @@ class MenuPosition implements Arrayable
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isUnique(): bool
     {
         return $this->unique;
     }
 
-    /**
-     * @param  bool  $unique
-     * @return MenuPosition
-     */
     public function setUnique(bool $unique): MenuPosition
     {
         $this->unique = $unique;
@@ -84,18 +63,11 @@ class MenuPosition implements Arrayable
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDepth(): int
     {
         return $this->depth;
     }
 
-    /**
-     * @param  int  $depth
-     * @return MenuPosition
-     */
     public function setDepth(int $depth): MenuPosition
     {
         $this->depth = $depth;
@@ -103,18 +75,11 @@ class MenuPosition implements Arrayable
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getItemTypes(): array
     {
         return $this->itemTypes;
     }
 
-    /**
-     * @param  array  $itemTypes
-     * @return MenuPosition
-     */
     public function setItemTypes(array $itemTypes): MenuPosition
     {
         $this->itemTypes = $itemTypes;

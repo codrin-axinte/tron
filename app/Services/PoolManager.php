@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use App\Actions\Tron\GenerateWallet;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
-use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
 use App\Models\Pool;
-use App\Models\User;
 use Modules\Wallet\Models\Wallet;
 
 class PoolManager
@@ -16,13 +13,11 @@ class PoolManager
     {
     }
 
-
     /**
      * Aggregate all the wallets into pools
      *
-     * @param $minAmountToTransfer
-     * @param $chunks
      * @return void
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
@@ -38,7 +33,7 @@ class PoolManager
         // Aggregate all wallets into a random pool
         Wallet::query()
             ->where('blockchain_amount', '>', $minAmountToTransfer)
-            ->chunk($chunkByPools, function ($wallets) use ($except, $minAmountToTransfer) {
+            ->chunk($chunkByPools, function ($wallets) use ($except) {
 
                 $pool = Pool::query()->inRandomOrder()->whereNotCentral()->whereNotIn('id', $except->toArray())->first();
 
@@ -65,13 +60,12 @@ class PoolManager
             ->whereNotCentral()
             ->get();
 
-
     }
 
     public function getRandomPool(?float $tokensAmount = null): ?Pool
     {
         return Pool::query()
-            ->when(!is_null($tokensAmount), fn($query) => $query->where('balance', '>=', $tokensAmount))
+            ->when(! is_null($tokensAmount), fn ($query) => $query->where('balance', '>=', $tokensAmount))
             ->inRandomOrder()
             ->whereNotCentral()
             ->first();

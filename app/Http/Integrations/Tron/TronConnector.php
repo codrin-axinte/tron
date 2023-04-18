@@ -11,8 +11,6 @@ class TronConnector extends SaloonConnector
 
     /**
      * The Base URL of the API.
-     *
-     * @return string
      */
     public function defineBaseUrl(): string
     {

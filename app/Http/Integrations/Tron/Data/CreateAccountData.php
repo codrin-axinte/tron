@@ -8,7 +8,6 @@ class CreateAccountData extends Data
 {
     public function __construct(
         public string $address
-    )
-    {
+    ) {
     }
 }

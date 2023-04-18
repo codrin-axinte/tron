@@ -21,11 +21,8 @@ class CompoundInterestUpdate extends Command
      */
     protected $description = 'Updates the wallets based on the subscribed plan.';
 
-
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(UpdateTradingPlans $action): int
     {

@@ -11,6 +11,7 @@ class MessageTemplate extends Model
     use HasFactory, HasTranslations;
 
     public array $translatable = ['content'];
+
     protected $casts = [
         'hooks' => 'array',
     ];

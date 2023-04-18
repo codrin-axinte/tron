@@ -8,7 +8,7 @@ trait HasPricingPlanSettings
 {
     protected static function bootHasPricingPlanSettings(): void
     {
-        static::created(fn($model) => $model->planSettings()->create());
+        static::created(fn ($model) => $model->planSettings()->create());
 
         static::deleting(fn ($model) => $model->planSettings->delete());
     }

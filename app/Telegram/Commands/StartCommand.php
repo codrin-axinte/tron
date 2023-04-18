@@ -3,7 +3,6 @@
 namespace App\Telegram\Commands;
 
 use App\Enums\ChatHooks;
-use App\Models\User;
 use App\Telegram\Traits\HasChatMenus;
 use App\Telegram\Traits\HasMessageTemplates;
 
@@ -15,6 +14,7 @@ class StartCommand extends TelegramCommand
     {
         if ($this->isAuth()) {
             $this->showMenu();
+
             return;
         }
 

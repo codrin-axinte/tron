@@ -11,11 +11,15 @@ class CommissionPayment
     {
         //FIXME: needs a bit of working.
 
-        if ($depth >= $maxDepth) return;
+        if ($depth >= $maxDepth) {
+        return;
+        }
 
         $owner = $this->findOwner($user);
 
-        if (!$owner) return;
+        if (! $owner) {
+        return;
+        }
 
         $this->payOwner($owner, $depth);
 
@@ -24,7 +28,9 @@ class CommissionPayment
 
     private function findOwner(?User $user)
     {
-        if (!$user) return null;
+        if (! $user) {
+        return null;
+        }
 
         $memberOfTeam = $user->memberOfTeams()
             ->with(['owner', 'owner.wallet'])
@@ -35,7 +41,9 @@ class CommissionPayment
 
     private function payOwner(?User $owner, int $depth = 0): bool
     {
-        if (!$owner) return false;
+        if (! $owner) {
+        return false;
+        }
 
         //FIXME: Should determine the amount based on the current plan
         $plan = $owner->pricingPlans()->with('planSettings')->first();

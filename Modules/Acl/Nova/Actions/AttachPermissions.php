@@ -13,9 +13,6 @@ class AttachPermissions extends BulkAction
 {
     /**
      * Get the fields available on the action.
-     *
-     * @param  NovaRequest  $request
-     * @return array
      */
     public function fields(NovaRequest $request): array
     {

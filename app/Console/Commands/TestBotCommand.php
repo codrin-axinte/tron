@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use DefStudio\Telegraph\Models\TelegraphChat;
 use DefStudio\Telegraph\Models\TelegraphBot;
+use Illuminate\Console\Command;
+
 class TestBotCommand extends Command
 {
     /**

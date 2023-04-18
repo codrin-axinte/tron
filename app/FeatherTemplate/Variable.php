@@ -47,9 +47,6 @@ class Variable implements Arrayable, Jsonable
         return ! empty($this->alias);
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -57,17 +54,12 @@ class Variable implements Arrayable, Jsonable
 
     /**
      * Returns name, but priorities the alias if exists.
-     *
-     * @return string
      */
     public function getKey(): string
     {
         return $this->hasAlias() ? $this->getAlias() : $this->getName();
     }
 
-    /**
-     * @return string
-     */
     public function getAlias(): string
     {
         return $this->alias;

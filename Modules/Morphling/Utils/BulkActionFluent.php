@@ -116,10 +116,6 @@ class BulkActionFluent
         call_user_func_array($this->actionCallback, [$model]);
     }
 
-    /**
-     * @param  int  $strategy
-     * @return BulkActionFluent
-     */
     public function setStrategy(int $strategy): BulkActionFluent
     {
         $this->strategy = $strategy;
@@ -195,10 +191,6 @@ class BulkActionFluent
         }
     }
 
-    /**
-     * @param  Closure  $successCallback
-     * @return BulkActionFluent
-     */
     public function onSuccess(Closure $successCallback): BulkActionFluent
     {
         $this->successCallback = $successCallback;
@@ -206,10 +198,6 @@ class BulkActionFluent
         return $this;
     }
 
-    /**
-     * @param  Closure  $failCallback
-     * @return BulkActionFluent
-     */
     public function onFail(Closure $failCallback): BulkActionFluent
     {
         $this->failCallback = $failCallback;
@@ -217,9 +205,6 @@ class BulkActionFluent
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->resourceName;

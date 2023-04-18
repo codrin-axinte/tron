@@ -13,7 +13,6 @@ use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
-use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
 use App\Models\TronTransaction;
 use App\Telegram\Traits\HasMessageTemplates;
 use GuzzleHttp\Exception\GuzzleException;
@@ -26,9 +25,11 @@ class TronService
 
     /**
      *   * @return GenerateWalletResponseData
+     *
      * @throws GuzzleException
      * @throws SaloonException
      * @throws \ReflectionException
+     *
      * @deprecated Use the action class
      */
     public function generateWallet(): GenerateWalletResponseData
@@ -36,11 +37,11 @@ class TronService
         return GenerateWalletResponseData::from(GenerateRandomWalletRequest::make()->send()->json());
     }
 
-
     /**
      * Syncs the blockchain amount and the virtual one
      * If the account is not activated with a trader role
      * then it will be activated once it has the minimum amount
+     *
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
@@ -62,10 +63,10 @@ class TronService
     }
 
     /**
-     *
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     *
      * @deprecated  Use Transfer action
      */
     public function transfer(TransferTokensData $data)
@@ -74,8 +75,8 @@ class TronService
     }
 
     /**
-     * @param TransactionData $transactionData
      * @return mixed
+     *
      * @deprecated  Use create transaction action
      */
     public function transaction(TransactionData $transactionData)
@@ -87,6 +88,7 @@ class TronService
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     *
      * @deprecated Use withdraw action
      */
     public function withdraw(Wallet $wallet, $amount)
@@ -96,9 +98,11 @@ class TronService
 
     /**
      * Approves a transaction
+     *
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     *
      * @deprecated Use the action class
      */
     public function approve(TronTransaction $transaction): TronTransaction
@@ -108,8 +112,9 @@ class TronService
 
     /**
      * Rejects a transaction
-     *  * @param TronTransaction $transaction
-     * @return TronTransaction
+     *
+     *  * @param  TronTransaction  $transaction
+     *
      * @deprecated Use the action class
      */
     public function reject(TronTransaction $transaction): TronTransaction
@@ -121,6 +126,7 @@ class TronService
      *   * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     *
      * @deprecated Use the action class
      */
     public function fetchBalance(string $address): int

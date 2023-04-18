@@ -10,14 +10,8 @@ use Spatie\Permission\Models\Role;
 
 class AclServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string
-     */
     protected string $moduleName = 'Acl';
 
-    /**
-     * @var string
-     */
     protected string $moduleNameLower = 'acl';
 
     protected array $policies = [

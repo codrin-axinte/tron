@@ -12,7 +12,6 @@ use App\Services\PoolManager;
 use App\Services\TronService;
 use GuzzleHttp\Exception\GuzzleException;
 use Modules\Wallet\Models\Wallet;
-use PHPUnit\Util\Exception;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class Withdraw
@@ -47,7 +46,7 @@ class Withdraw
             $method = $amount >= $settings->approvalAmount ? WithdrawMethod::Approval : WithdrawMethod::Automatic;
         }
 
-        if (!$pool) {
+        if (! $pool) {
             // If there is no money in a pool we must aggregate in one pool the necessary amount
             // $poolManager->aggregateAmountFor($pool, $amount);
             // FIXME: For now we set the pool to approval until we solve the aggregation
@@ -71,9 +70,6 @@ class Withdraw
         );
     }
 
-    /**
-     * @return WithdrawSettings
-     */
     private function getSettings(): WithdrawSettings
     {
         return WithdrawSettings::from(nova_get_settings([
@@ -82,7 +78,7 @@ class Withdraw
             'withdraw_approval_amount',
             'withdraw_maximum_amount_allowed',
             'withdraw_minimum_amount_allowed',
-            'block_withdraws'
+            'block_withdraws',
         ]));
     }
 }

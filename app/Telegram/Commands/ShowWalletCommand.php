@@ -6,7 +6,6 @@ use App\Telegram\Renderers\WalletRenderer;
 
 class ShowWalletCommand extends TelegramCommand
 {
-
     public function __construct(private WalletRenderer $walletRenderer)
     {
     }

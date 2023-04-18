@@ -22,14 +22,23 @@ abstract class TelegramCommand
     use ForwardsCalls;
 
     protected TelegraphBot $bot;
+
     protected TelegraphChat $chat;
+
     protected ?int $messageId = null;
+
     protected ?int $callbackQueryId = null;
+
     protected DefaultWebhookHandler $handler;
+
     protected Request $request;
+
     protected Message|null $message = null;
+
     protected CallbackQuery|null $callbackQuery = null;
+
     protected Collection $data;
+
     protected Keyboard $originalKeyboard;
 
     protected ?\App\Models\User $currentUser = null;
@@ -67,12 +76,12 @@ abstract class TelegramCommand
 
     protected function isAuth(): bool
     {
-        return (bool)$this->currentUser;
+        return (bool) $this->currentUser;
     }
 
     protected function isGuest(): bool
     {
-        return !$this->currentUser;
+        return ! $this->currentUser;
     }
 
     protected function message(string $message): \DefStudio\Telegraph\Telegraph
@@ -87,17 +96,17 @@ abstract class TelegramCommand
 
     protected function success($message): \DefStudio\Telegraph\Telegraph
     {
-        return $this->chat->markdown('🎉' . $message);
+        return $this->chat->markdown('🎉'.$message);
     }
 
     protected function error($message = 'I am sorry, I could not do that. Something went wrong.'): \DefStudio\Telegraph\Telegraph
     {
-        return $this->chat->markdown('💀' . $message);
+        return $this->chat->markdown('💀'.$message);
     }
 
     protected function ask($question): \DefStudio\Telegraph\Telegraph
     {
-        return $this->chat->markdown('❓' . $question);
+        return $this->chat->markdown('❓'.$question);
     }
 
     protected function sendTyping(): static

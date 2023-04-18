@@ -24,7 +24,6 @@ class TradingPlan extends Model
         return $this->belongsTo(PricingPlan::class);
     }
 
-
     public function scopeActive(Builder $query, int $hours = 1): Builder
     {
         return $query->where('created_at', '>=', now()->subHours($hours));

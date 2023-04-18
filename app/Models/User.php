@@ -68,8 +68,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
 
     /**
      * Determine if the user can impersonate another user.
-     *
-     * @return bool
      */
     public function canImpersonate(): bool
     {
@@ -78,8 +76,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
 
     /**
      * Determine if the user can be impersonated.
-     *
-     * @return bool
      */
     public function canBeImpersonated(): bool
     {
@@ -109,7 +105,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      * @deprecated Use trading plan instead
      */
     public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -119,14 +114,12 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
     }
 
     /**
-     * @return PricingPlan|null
      * @deprecated Use trading plan instead
      */
     public function subscribedPlan(): ?PricingPlan
     {
         return $this->pricingPlans()->first();
     }
-
 
     public function chat(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

@@ -8,18 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class CreateMessageTemplates implements InstallPipeContract
 {
-
     public function handle($payload, \Closure $next)
     {
         Model::unguard();
 
         $data = [
-            ChatHooks::Start->value => "Hello trader,
+            ChatHooks::Start->value => 'Hello trader,
 Welcome to TRON the best trading app.
 
 To join a team please use the command:
 
-/join {code}",
+/join {code}',
             ChatHooks::Joined->value => "🎉Great, I have created your account. Now let's invest! 📈",
         ];
 

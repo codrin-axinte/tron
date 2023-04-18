@@ -9,7 +9,6 @@ class GenerateWalletResponseData extends \Spatie\LaravelData\Data
         public string $publicKey,
         public string $address,
         public array $mnemonic
-    )
-    {
+    ) {
     }
 }

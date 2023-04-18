@@ -396,6 +396,7 @@ namespace Modules\Wallet\Models{
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan enabled()
  * @method static \Modules\Wallet\Database\Factories\PricingPlanFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan highestPlan($amount)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan ordered(string $direction = 'asc')

@@ -21,7 +21,6 @@ class OnPaymentSuccessListener
     /**
      * Handle the event.
      *
-     * @param  PaymentSuccess  $event
      * @return void
      */
     public function handle(PaymentSuccess $event)

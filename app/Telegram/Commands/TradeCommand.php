@@ -8,19 +8,18 @@ use Modules\Wallet\Models\PricingPlan;
 
 class TradeCommand extends TelegramCommand
 {
-
     public function __invoke(?string $userId = null): \DefStudio\Telegraph\Telegraph|\Illuminate\Foundation\Bus\PendingDispatch
     {
         $this->sendTyping();
         $user = User::query()->find($this->data->get('user', $userId)) ?? $this->currentUser;
 
-        if (!$user) {
+        if (! $user) {
             return $this->error()->dispatch();
         }
 
         $plan = PricingPlan::query()->highestPlan($user->wallet->amount)->first();
 
-        if (!$plan) {
+        if (! $plan) {
             return $this->message('You do not have enough funds to trade.')->dispatch();
         }
 

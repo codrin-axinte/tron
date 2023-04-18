@@ -12,7 +12,6 @@ trait ExtendsSetupChat
 {
     protected ?User $currentUser = null;
 
-
     protected function setupChat(): void
     {
         parent::setupChat();
@@ -27,11 +26,10 @@ trait ExtendsSetupChat
 
     protected function currentUser(): ?User
     {
-        if (!$this->currentUser) {
+        if (! $this->currentUser) {
             $this->currentUser = $this->getCurrentUser();
         }
 
         return $this->currentUser;
     }
-
 }

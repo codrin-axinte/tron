@@ -4,10 +4,6 @@ namespace App\Telegram\Commands\Admin;
 
 use App\Telegram\Commands\TelegramCommand;
 use DefStudio\Telegraph\Exceptions\KeyboardException;
-use DefStudio\Telegraph\Keyboard\Button;
-use DefStudio\Telegraph\Keyboard\Keyboard;
-use DefStudio\Telegraph\Keyboard\ReplyButton;
-use DefStudio\Telegraph\Keyboard\ReplyKeyboard;
 
 class SandboxCommand extends TelegramCommand
 {

@@ -2,9 +2,7 @@
 
 namespace App\Nova\Dashboards;
 
-use App\Nova\Metrics\MostValuablePool;
 use App\Nova\Metrics\TotalBalance;
-use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Dashboards\Main as Dashboard;
 use Modules\Acl\Enums\UserPermission;
 use Modules\Morphling\Nova\Metrics\UsersPerDay;

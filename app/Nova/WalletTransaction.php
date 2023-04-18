@@ -11,7 +11,6 @@ use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Modules\Payments\Settings\PaymentsSettings;
 use Modules\Wallet\Enums\WalletTransactionType;
 use Modules\Wallet\Nova\Resources\Wallet;
 
@@ -58,9 +57,6 @@ class WalletTransaction extends Resource
 
     /**
      * Get the fields displayed by the resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
      */
     public function fields(NovaRequest $request): array
     {

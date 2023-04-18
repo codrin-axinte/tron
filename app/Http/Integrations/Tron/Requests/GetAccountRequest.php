@@ -10,15 +10,11 @@ class GetAccountRequest extends SaloonRequest
 {
     /**
      * The connector class.
-     *
-     * @var string|null
      */
     protected ?string $connector = TronConnector::class;
 
     /**
      * The HTTP verb the request will use.
-     *
-     * @var string|null
      */
     protected ?string $method = Saloon::GET;
 
@@ -29,11 +25,9 @@ class GetAccountRequest extends SaloonRequest
 
     /**
      * The endpoint of the request.
-     *
-     * @return string
      */
     public function defineEndpoint(): string
     {
-        return '/api/accounts/' . $this->address;
+        return '/api/accounts/'.$this->address;
     }
 }

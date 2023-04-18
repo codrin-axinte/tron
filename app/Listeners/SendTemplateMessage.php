@@ -3,10 +3,7 @@
 namespace App\Listeners;
 
 use App\Contracts\SendsMessageTemplates;
-use App\Events\TelegramHook;
 use App\Telegram\Traits\HasMessageTemplates;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class SendTemplateMessage
 {
@@ -25,7 +22,6 @@ class SendTemplateMessage
     /**
      * Handle the event.
      *
-     * @param SendsMessageTemplates $event
      * @return void
      */
     public function handle(SendsMessageTemplates $event)

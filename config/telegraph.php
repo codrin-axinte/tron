@@ -22,7 +22,7 @@ return [
      * For reference, see https://defstudio.github.io/telegraph/webhooks/overview
      */
     //'webhook_handler' => DefStudio\Telegraph\Handlers\EmptyWebhookHandler::class,
-     'webhook_handler' => App\Telegram\DefaultWebhookHandler::class,
+    'webhook_handler' => App\Telegram\DefaultWebhookHandler::class,
     /*
      * Sets a custom domain when registering a webhook. This will allow a loca telegram bot api server
      * to reach the webhook. Disabled by default

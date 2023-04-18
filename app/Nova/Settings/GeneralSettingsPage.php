@@ -3,26 +3,16 @@
 namespace App\Nova\Settings;
 
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Currency;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Select;
-
 use Laravel\Nova\Panel;
-
 use Modules\Settings\Contracts\SyncEnv;
 use Modules\Settings\Pages\Page;
-use Modules\Wallet\Models\PricingPlan;
 use NormanHuth\SecretField\SecretField;
-use Outl1ne\MultiselectField\Multiselect;
-use Outl1ne\NovaSimpleRepeatable\SimpleRepeatable;
-use Spatie\Permission\Models\Role;
 
 class GeneralSettingsPage extends Page implements SyncEnv
 {
-
     protected array $fillable = [
         'TELEGRAM_API_KEY',
-        'NOVA_LICENSE_KEY'
+        'NOVA_LICENSE_KEY',
     ];
 
     public function fields(): array

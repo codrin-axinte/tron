@@ -28,7 +28,7 @@ class EventServiceProvider extends ServiceProvider
 
         TelegramHook::class => [
             SendTemplateMessage::class,
-        ]
+        ],
 
     ];
 

@@ -27,8 +27,6 @@ class TronSyncCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param TronService $service
-     * @return int
      * @throws GuzzleException
      * @throws \ReflectionException
      * @throws SaloonException
@@ -39,7 +37,6 @@ class TronSyncCommand extends Command
         $service->syncWallets();
        // $service->syncAccounts();
         $poolManager->sync();
-
 
         return Command::SUCCESS;
     }

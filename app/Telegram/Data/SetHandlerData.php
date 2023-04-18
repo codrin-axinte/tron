@@ -15,18 +15,17 @@ use Spatie\LaravelData\Data;
 class SetHandlerData extends Data
 {
     public function __construct(
-        public TelegraphBot          $bot,
-        public TelegraphChat         $chat,
-        public int                   $messageId,
-        public int                   $callbackQueryId,
+        public TelegraphBot $bot,
+        public TelegraphChat $chat,
+        public int $messageId,
+        public int $callbackQueryId,
         public DefaultWebhookHandler $handler,
-        public Request               $request,
-        public Collection            $data,
-        public Keyboard              $originalKeyboard,
-        public Message|null          $message = null,
-        public CallbackQuery|null    $callbackQuery = null,
-        public ?\App\Models\User     $currentUser = null
-    )
-    {
+        public Request $request,
+        public Collection $data,
+        public Keyboard $originalKeyboard,
+        public Message|null $message = null,
+        public CallbackQuery|null $callbackQuery = null,
+        public ?\App\Models\User $currentUser = null
+    ) {
     }
 }

@@ -6,11 +6,8 @@ use App\Contracts\SendsMessageTemplates;
 use App\Enums\ChatHooks;
 use App\Models\User;
 use DefStudio\Telegraph\Models\TelegraphChat;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -20,8 +17,8 @@ class TelegramHook implements SendsMessageTemplates
 
     /**
      * Create a new event instance.
-     * @param ChatHooks|array<ChatHooks> $hooks
-     * @param User $user
+     *
+     * @param  ChatHooks|array<ChatHooks>  $hooks
      * @return void
      */
     public function __construct(public User $user, public ChatHooks|string|array $hooks, public array $payload = [])

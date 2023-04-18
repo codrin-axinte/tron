@@ -9,11 +9,11 @@ use Modules\Wallet\Models\PricingPlan;
 
 class PricingPlanSettings extends Model
 {
-
     protected $casts = [
         'meta' => 'array',
         'commissions' => 'array',
     ];
+
     protected $guarded = [];
 
     public function pricingPlan(): BelongsTo
@@ -23,6 +23,6 @@ class PricingPlanSettings extends Model
 
     public function commissionsByDepth(): Attribute
     {
-        return new Attribute(get: fn() => collect($this->commissions)->flatten());
+        return new Attribute(get: fn () => collect($this->commissions)->flatten());
     }
 }

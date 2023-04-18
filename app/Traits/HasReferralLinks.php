@@ -3,13 +3,9 @@
 namespace App\Traits;
 
 use App\Models\ReferralLink;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 trait HasReferralLinks
 {
-
-
     protected static function bootHasReferralLinks(): void
     {
         static::created(function ($model) {
@@ -19,7 +15,7 @@ trait HasReferralLinks
         });
 
         static::deleting(function ($model) {
-            $model->referralLinks()->cursor()->each(fn($link) => $link->delete());
+            $model->referralLinks()->cursor()->each(fn ($link) => $link->delete());
         });
     }
 
@@ -32,5 +28,4 @@ trait HasReferralLinks
     {
         return $this->hasMany(ReferralLink::class);
     }
-
 }

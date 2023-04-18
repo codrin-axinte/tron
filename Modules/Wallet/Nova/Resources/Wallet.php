@@ -16,7 +16,6 @@ use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use Modules\Payments\Settings\PaymentsSettings;
 use NormanHuth\SecretField\SecretField;
 
 class Wallet extends Resource
@@ -35,12 +34,12 @@ class Wallet extends Resource
 
     public function title(): string
     {
-        return $this->amount . ' USDT';
+        return $this->amount.' USDT';
     }
 
     public function subtitle()
     {
-        return $this->amount . ' | ' . $this->blockchain_amount;
+        return $this->amount.' | '.$this->blockchain_amount;
     }
 
     public function fields(Request $request): array
@@ -90,6 +89,4 @@ class Wallet extends Resource
     {
         return false;
     }
-
-
 }

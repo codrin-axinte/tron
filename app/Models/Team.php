@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Team extends Model implements Renderable
 {
-
     public function owner(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -26,7 +24,7 @@ class Team extends Model implements Renderable
 
         foreach ($members as $member) {
             //$plan = $member->pricingPlans->first()->name ?? 'No plan';
-            $message->append('- ' . $member->name)->newLine();
+            $message->append('- '.$member->name)->newLine();
         }
 
         return $message->toString();

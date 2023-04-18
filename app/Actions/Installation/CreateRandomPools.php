@@ -6,7 +6,6 @@ use App\Services\PoolManager;
 
 class CreateRandomPools implements InstallPipeContract
 {
-
     public function __construct(protected PoolManager $poolManager)
     {
     }

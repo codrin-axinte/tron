@@ -3,7 +3,6 @@
 namespace App\Telegram\Commands;
 
 use App\Telegram\Renderers\PricingPlanRenderer;
-use DefStudio\Telegraph\Enums\ChatActions;
 use DefStudio\Telegraph\Keyboard\Button;
 use DefStudio\Telegraph\Keyboard\Keyboard;
 use Modules\Wallet\Models\PricingPlan;
@@ -13,7 +12,7 @@ class PackagesCommand extends TelegramCommand
     public function __invoke()
     {
         $user = $this->currentUser;
-        if (!$user) {
+        if (! $user) {
             return $this->error()->dispatch();
         }
 
@@ -69,7 +68,7 @@ class PackagesCommand extends TelegramCommand
     {
 
         $buttons = $plans->map(
-            fn($plan) => $plan->id !== $currentPlan?->id ? Button::make("➡️ Trade using " . $plan->title)
+            fn ($plan) => $plan->id !== $currentPlan?->id ? Button::make('➡️ Trade using '.$plan->title)
                 ->action('trade')
                 ->param('package', $plan->id) : null
         )->filter()->toArray();

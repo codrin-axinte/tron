@@ -59,10 +59,6 @@ class SettingsService
     /**
      * Returns an array with the correct casted values.
      * We have to do this because NovaSettings doesn't fully support FlexibleCast.
-     *
-     * @param  array  $settings
-     * @param  array|null  $casts
-     * @return Collection
      */
     private function solveFlexibleCasts(array $settings, array $casts = null): Collection
     {
@@ -77,10 +73,6 @@ class SettingsService
 
     /**
      * Determines if the setting is in the casts array and is set to FlexibleCast.
-     *
-     * @param $settingName
-     * @param  array  $casts
-     * @return bool
      */
     #[Pure]
     private function isFlexible($settingName, array $casts = []): bool

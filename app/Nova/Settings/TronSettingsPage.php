@@ -4,19 +4,10 @@ namespace App\Nova\Settings;
 
 use App\Enums\WithdrawMethod;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
-
 use Laravel\Nova\Panel;
-
-use Modules\Settings\Contracts\SyncEnv;
 use Modules\Settings\Pages\Page;
-use Modules\Wallet\Models\PricingPlan;
-use NormanHuth\SecretField\SecretField;
-use Outl1ne\MultiselectField\Multiselect;
-use Outl1ne\NovaSimpleRepeatable\SimpleRepeatable;
-use Spatie\Permission\Models\Role;
 
 class TronSettingsPage extends Page
 {
@@ -26,12 +17,11 @@ class TronSettingsPage extends Page
             Number::make(__('Max pool proxying'), 'max_pool_proxy')
                 ->help(__('Through how many pools should proxy a withdraw transaction. This helps to fuzzy the transactions history and makes each transaction harder to be traced. However the many the proxies, the more will cost. Set it to 0 or leave it empty to send directly.')),
 
-
             Panel::make(__('Withdraw'), [
                 Select::make(__('Withdraw method'), 'withdraw_method')->options([
                     WithdrawMethod::Approval->value => __('Approval'),
                     WithdrawMethod::Semi->value => __('Semi Automatic'),
-                    WithdrawMethod::Automatic->value => __('Automatic')
+                    WithdrawMethod::Automatic->value => __('Automatic'),
                 ])->displayUsingLabels(),
 
                 Number::make(__('Withdraw approval amount'), 'withdraw_approval_amount')

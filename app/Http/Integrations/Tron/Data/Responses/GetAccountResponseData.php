@@ -2,8 +2,6 @@
 
 namespace App\Http\Integrations\Tron\Data\Responses;
 
-use Carbon\Carbon;
-
 class GetAccountResponseData extends \Spatie\LaravelData\Data
 {
     public function __construct(
@@ -12,8 +10,7 @@ class GetAccountResponseData extends \Spatie\LaravelData\Data
             public int $create_time,
             public int $latest_opration_time,
 
-    )
-    {
+    ) {
     }
 
     /**

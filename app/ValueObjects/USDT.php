@@ -2,7 +2,6 @@
 
 namespace App\ValueObjects;
 
-use App\Services\TronService;
 use Laravel\Nova\Makeable;
 
 class USDT
@@ -10,7 +9,6 @@ class USDT
     use Makeable;
 
     public const SUN_UNIT = 1000000;
-
 
     public function __construct(private readonly float|int $amount)
     {

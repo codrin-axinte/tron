@@ -9,7 +9,7 @@ class RejectTransaction
 {
     public function __invoke(TronTransaction $transaction): TronTransaction
     {
-        $transaction->status = TransactionStatus::Rejected;;
+        $transaction->status = TransactionStatus::Rejected;
         $transaction->save();
 
         return $transaction;

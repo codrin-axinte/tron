@@ -26,6 +26,4 @@ trait HasTeam
     {
         return $this->belongsToMany(Team::class, 'team_member')->latest();
     }
-
-
 }

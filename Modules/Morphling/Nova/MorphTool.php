@@ -22,7 +22,7 @@ use Outl1ne\MenuBuilder\MenuBuilder;
 class MorphTool extends Tool
 {
     protected static array $resources = [
-       // Module::class,
+        // Module::class,
     ];
 
     public function boot()
@@ -58,9 +58,6 @@ class MorphTool extends Tool
 
     /**
      *  Collect all module tools.
-     *
-     * @param  array  $tools
-     * @return array
      */
     public static function getNovaTools(array $tools = []): array
     {

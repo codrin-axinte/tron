@@ -8,16 +8,12 @@ use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
-use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use Modules\Payments\Settings\PaymentsSettings;
 use Outl1ne\NovaSimpleRepeatable\SimpleRepeatable;
 use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
@@ -71,11 +67,10 @@ class PricingPlan extends Resource
                 ]),
             ]),
 
-            HasOne::make('Plan Settings', 'planSettings',PricingPlanSettings::class)
-                ->hideWhenCreating()
+            HasOne::make('Plan Settings', 'planSettings', PricingPlanSettings::class)
+                ->hideWhenCreating(),
         ];
     }
-
 
     public function actions(NovaRequest $request)
     {

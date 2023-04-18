@@ -4,19 +4,14 @@ namespace App\Nova;
 
 use App\Nova\Actions\TransferTokensAction;
 use App\Nova\Filters\FilterByRole;
-use Eminiarts\Tabs\Tabs;
 use Eminiarts\Tabs\Traits\HasTabs;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Jeffbeltran\SanctumTokens\SanctumTokens;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphedByMany;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\UiAvatar;
@@ -24,7 +19,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Modules\Acl\Enums\GenericPermission;
 use Modules\Acl\Enums\RolePermission;
 use Modules\Acl\Enums\UserPermission;
-use Modules\Acl\Nova\Actions\AssignRole;
 use Modules\Acl\Nova\Resources\Role;
 use Modules\Acl\Services\AclService;
 use Modules\Wallet\Nova\Resources\PricingPlan;
@@ -62,9 +56,6 @@ class User extends Resource
 
     /**
      * Get the fields displayed by the resource.
-     *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
-     * @return array
      */
     public function fields(NovaRequest $request): array
     {
@@ -72,7 +63,7 @@ class User extends Resource
             ID::make()->sortable(),
 
             UiAvatar::make(__('Avatar'))
-                ->resolveUsing(fn() => $this->name ?? implode(' ', explode('@', $this->email))),
+                ->resolveUsing(fn () => $this->name ?? implode(' ', explode('@', $this->email))),
 
             Text::make('Name')
                 ->sortable()
@@ -86,7 +77,7 @@ class User extends Resource
 
             Multiselect::make(__('Roles'))
                 ->belongsToMany(Role::class)
-                ->canSee(fn() => $request->user()->can(RolePermission::Attach->value)),
+                ->canSee(fn () => $request->user()->can(RolePermission::Attach->value)),
 
             Password::make('Password')
                 ->onlyOnForms()
@@ -103,7 +94,6 @@ class User extends Resource
             HasOne::make(__('Referral Link'), 'referralLink', ReferralLink::class)->exceptOnForms(),
             BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
             HasOne::make(__('Team'), 'ownedTeam', Team::class)->exceptOnForms(),
-
 
             SanctumTokens::make()->canSeeWhen(GenericPermission::ManageTokens->value),
         ];

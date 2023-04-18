@@ -10,7 +10,6 @@ use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class TransferTokens
 {
-
     public function __construct(protected CreateTransaction $createTransaction)
     {
     }

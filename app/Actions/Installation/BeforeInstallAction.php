@@ -3,7 +3,6 @@
 namespace App\Actions\Installation;
 
 use Modules\Acl\Services\AclService;
-use Modules\Acl\Utils\AclBuilder;
 use Modules\Acl\Utils\AclSeederHelper;
 
 class BeforeInstallAction implements InstallPipeContract

@@ -21,9 +21,6 @@ class Morphling
 {
     /**
      * @deprecated Use MorphTool instead
-     *
-     * @param $path
-     * @return string
      */
     public static function clientUrl($path = '/'): string
     {
@@ -32,9 +29,6 @@ class Morphling
 
     /**
      * @deprecated Use MorphTool Instead
-     *
-     * @param  array  $dashboards
-     * @return array
      */
     public static function getNovaDashboards(array $dashboards = []): array
     {
@@ -48,9 +42,6 @@ class Morphling
      *  Collect all module tools.
      *
      * @deprecated Use MorphTool Instead
-     *
-     * @param  array  $tools
-     * @return array
      */
     public static function getNovaTools(array $tools = []): array
     {
@@ -91,7 +82,6 @@ class Morphling
     }
 
     /**
-     * @param  string  $package
      * @return void
      *
      * @throws \Exception

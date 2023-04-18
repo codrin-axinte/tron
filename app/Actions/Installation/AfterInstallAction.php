@@ -2,7 +2,6 @@
 
 namespace App\Actions\Installation;
 
-use Modules\Acl\Utils\AclBuilder;
 use Modules\Acl\Utils\AclSeederHelper;
 
 class AfterInstallAction implements InstallPipeContract

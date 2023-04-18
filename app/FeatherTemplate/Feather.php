@@ -13,7 +13,6 @@ class Feather
     const VAR_REGEX = '/{(\w+)}/m';
 
     /**
-     * @param  string|array  $variable
      * @param  mixed  $value
      * @return $this
      */

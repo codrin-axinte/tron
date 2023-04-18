@@ -3,7 +3,6 @@
 namespace App\Nova;
 
 use App\Enums\ChatHooks;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Fields\MultiSelect;
@@ -33,13 +32,12 @@ class MessageTemplate extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'content', 'hooks'
+        'id', 'name', 'content', 'hooks',
     ];
 
     /**
      * Get the fields displayed by the resource.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return array
      */
     public function fields(NovaRequest $request)

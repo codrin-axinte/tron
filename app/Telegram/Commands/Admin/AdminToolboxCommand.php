@@ -9,7 +9,6 @@ use Modules\Acl\Enums\GenericPermission;
 
 class AdminToolboxCommand extends TelegramCommand
 {
-
     public function authorized(): bool
     {
         return $this->currentUser?->can(GenericPermission::ViewAdmin->value);
@@ -19,7 +18,6 @@ class AdminToolboxCommand extends TelegramCommand
     {
         $this->chat->message('Admin menu')->keyboard($this->menu())->send();
     }
-
 
     private function menu()
     {
