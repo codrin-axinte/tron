@@ -7,6 +7,7 @@ use App\Actions\Tron\CreateTransaction;
 use App\Actions\Tron\FetchBalance;
 use App\Actions\Tron\RejectTransaction;
 use App\Actions\Tron\SyncWallet;
+use App\Actions\Tron\TransferTokens;
 use App\Actions\Tron\Withdraw;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Data\TransactionData;
@@ -69,9 +70,7 @@ class TronService
      */
     public function transfer(TransferTokensData $data)
     {
-        $response = TransferTokensRequest::make($data)->send();
-        $transactionData = new TransactionData($data, referenceId: $response->json());
-        return app(CreateTransaction::class)($transactionData);
+        return app(TransferTokens::class)($data);
     }
 
     /**

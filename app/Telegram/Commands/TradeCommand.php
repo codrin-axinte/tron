@@ -39,8 +39,7 @@ class TradeCommand extends TelegramCommand
 
             app(Trade::class)->run($user, $plan);
 
-            $message = "🎉 *Great*! You have started trading using the $plan->name with the amount of $plan->price USDT.
-            The trade will expire after {$plan->planSettings->expiration_hours} hours.";
+            $message = "🎉 *Great*! You have started trading using the $plan->name package. The trade will expire after {$plan->planSettings->expiration_hours} hours.";
 
             $this->markdown($message)->dispatch();
 

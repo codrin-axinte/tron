@@ -45,7 +45,7 @@ class UpdateTradingPlans
         $query
             ->cursor()
             ->each(function (TradingPlan $tradingPlan) {
-                $result = $tradingPlan->user->wallet()->update(['amount' => $tradingPlan->amount]);
+                $result = $tradingPlan->user->wallet()->increment('amount', $tradingPlan->amount);
 
                 event(new TelegramHook($tradingPlan->user, ChatHooks::TradingFinished));
 

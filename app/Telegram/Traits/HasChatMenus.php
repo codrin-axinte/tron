@@ -52,7 +52,7 @@ trait HasChatMenus
             ->when($this->currentUser->hasRole('trader'), function (Keyboard $keyboard) {
                 return $keyboard
                     ->buttons([
-                        Button::make('💵 Withdraw')->action('dummy'),
+                        Button::make('💵 Withdraw')->action('withdraw'),
                         Button::make('🔗 Referral code')->action('myCode'),
                         Button::make('👥 My team')->action('team'),
                         // Button::make('👑 Leaderboard')->action('dummy'),
