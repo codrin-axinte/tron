@@ -39,6 +39,8 @@ class Pool extends Resource
         'id', 'address',
     ];
 
+    public static $group =  'tron network';
+
     /**
      * Get the fields displayed by the resource.
      *

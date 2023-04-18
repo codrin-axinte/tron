@@ -37,7 +37,7 @@ class DefaultWebhookHandler extends WebhookHandler
      */
     public function __call(string $name, array $arguments)
     {
-        if (! array_key_exists($name, $this->commands)) {
+        if (!array_key_exists($name, $this->commands)) {
             $this->handleUnknownCommand(new Stringable($name));
 
             return;
@@ -70,15 +70,6 @@ class DefaultWebhookHandler extends WebhookHandler
 
     protected function handleChatMessage(Stringable $text): void
     {
-        if (! $this->currentUser) {
-        return;
-        }
-
-        $id = $this->chat->chat_id;
-
-        $wizardModel = Wizard::firstWhere('chat_id', $id);
-        $wizardModel?->resolve()?->handle();
-
         // Do nothing
     }
 
@@ -88,7 +79,7 @@ class DefaultWebhookHandler extends WebhookHandler
             return false;
         }
 
-        if (! method_exists($this, $action)) {
+        if (!method_exists($this, $action)) {
             if (array_key_exists($action, $this->commands)) {
                 return true;
             }
@@ -97,7 +88,7 @@ class DefaultWebhookHandler extends WebhookHandler
         }
 
         $reflector = new ReflectionMethod($this::class, $action);
-        if (! $reflector->isPublic()) {
+        if (!$reflector->isPublic()) {
             return false;
         }
 

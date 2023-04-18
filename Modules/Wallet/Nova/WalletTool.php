@@ -21,10 +21,12 @@ class WalletTool extends Tool
 
     public function menu(Request $request)
     {
+        return null;
+
         $menu = MenuSection::resource(PricingPlan::class)
             ->icon('credit-card')
-          // ->withBadge(Badge::make('PREVIEW', Badge::INFO_TYPE))
-            ->canSee(fn () => true);
+            // ->withBadge(Badge::make('PREVIEW', Badge::INFO_TYPE))
+            ->canSee(fn() => true);
 
         //$menu->name = __('Credits Plans');
 

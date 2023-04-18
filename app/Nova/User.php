@@ -54,6 +54,8 @@ class User extends Resource
 
     public static $with = ['roles', 'wallet'];
 
+    public static $group =  'mlm';
+
     /**
      * Get the fields displayed by the resource.
      */

@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Traits\ResourceIsReadonly;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -9,6 +10,8 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ReferralLink extends Resource
 {
+    use ResourceIsReadonly;
+
     /**
      * The model the resource corresponds to.
      *
@@ -31,6 +34,8 @@ class ReferralLink extends Resource
     public static $search = [
         'id', 'code',
     ];
+
+    public static $group =  'mlm';
 
     /**
      * Get the fields displayed by the resource.

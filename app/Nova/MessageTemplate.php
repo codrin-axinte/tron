@@ -26,6 +26,8 @@ class MessageTemplate extends Resource
      */
     public static $title = 'name';
 
+    public static $group =  'system';
+
     /**
      * The columns that should be searched.
      *

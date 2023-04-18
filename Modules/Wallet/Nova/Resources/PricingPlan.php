@@ -24,8 +24,14 @@ class PricingPlan extends Resource
     public static string $model = \Modules\Wallet\Models\PricingPlan::class;
 
     public static $title = 'name';
+    public static $group = 'mlm';
 
-    public static $displayInNavigation = false;
+    public static function label()
+    {
+        return 'Packages';
+    }
+
+    public static $displayInNavigation = true;
 
     public static $search = [
         'name', 'description', 'features',

@@ -10,6 +10,7 @@ use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Data\WithdrawSettings;
 use App\Services\PoolManager;
 use App\Services\TronService;
+use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
 use Modules\Wallet\Models\Wallet;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
@@ -25,28 +26,28 @@ class Withdraw
      * @throws GuzzleException
      * @throws SaloonException
      */
-    public function __invoke(Wallet $wallet, $amount)
+    public function __invoke(Wallet $wallet, USDT $amount)
     {
 
         $settings = $this->getSettings();
 
-        $settings->canWithdraw($amount);
+        $settings->canWithdraw($amount->value());
 
         $method = $settings->method;
-        $pool = $this->poolManager->getRandomPool($amount);
+        $pool = $this->poolManager->getRandomPool($amount->value());
 
         $data = new TransferTokensData(
             to: $wallet->address,
-            amount: $amount,
+            amount: $amount->toSun(),
             from: $pool->address,
             privateKey: $pool->private_key
         );
 
         if ($method === WithdrawMethod::Semi) {
-            $method = $amount >= $settings->approvalAmount ? WithdrawMethod::Approval : WithdrawMethod::Automatic;
+            $method = $amount->value() >= $settings->approvalAmount ? WithdrawMethod::Approval : WithdrawMethod::Automatic;
         }
 
-        if (! $pool) {
+        if (!$pool) {
             // If there is no money in a pool we must aggregate in one pool the necessary amount
             // $poolManager->aggregateAmountFor($pool, $amount);
             // FIXME: For now we set the pool to approval until we solve the aggregation
@@ -57,17 +58,17 @@ class Withdraw
             return app(TransferTokens::class)($data);
         }
 
+
         // Anything else needs approval
-        return $this->tron->transaction(
-            new TransactionData(
-                $data,
-                status: TransactionStatus::AwaitingConfirmation,
-                type: TransactionType::Out,
-                meta: [
-                    'payload' => $data->toArray(),
-                ]
-            )
-        );
+        return app(CreateTransaction::class)(new TransactionData(
+            $data,
+            status: TransactionStatus::AwaitingConfirmation,
+            type: TransactionType::Out,
+            meta: [
+                'payload' => $data->toArray(),
+            ]
+        ));
+
     }
 
     private function getSettings(): WithdrawSettings

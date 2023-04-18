@@ -38,4 +38,9 @@ class USDT
     {
         return $this->formatted();
     }
+
+    public function percentage($of): USDT
+    {
+        return USDT::make(Percentage::make($this->amount)->of($of));
+    }
 }

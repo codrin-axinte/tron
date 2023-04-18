@@ -68,7 +68,7 @@ class MorphTool extends Tool
                 LogViewer::make()->canSeeWhen(GenericPermission::ViewLogs->value),
             ],
             mergeBefore: [
-                MenuBuilder::make()->canSeeWhen(MenuPermission::ViewAny->value),
+               // MenuBuilder::make()->canSeeWhen(MenuPermission::ViewAny->value),
                 ...$tools,
             ]
         )->toArray();

@@ -32,6 +32,8 @@ class Wallet extends Resource
 
     public static $with = ['user'];
 
+    public static $group =  'tron network';
+
     public function title(): string
     {
         return $this->amount.' USDT';
