@@ -55,7 +55,7 @@ class Withdraw
         }
 
         if ($method === WithdrawMethod::Automatic) {
-            return $this->tron->transfer($data);
+            return app(TransferTokens::class)($data);
         }
 
         // Anything else needs approval
