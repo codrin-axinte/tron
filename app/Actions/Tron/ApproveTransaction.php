@@ -19,6 +19,13 @@ class ApproveTransaction
      */
     public function __invoke(TronTransaction $transaction): TronTransaction
     {
+        // FIXME: Error Numeric fault
+        //   reason: 'underflow',
+        //  code: 'NUMERIC_FAULT',
+        //  fault: 'underflow',
+        //  operation: 'BigNumber.from',
+        //  value: 22376139000.000004
+        //}
 
         $response = TransferTokensRequest::make(
             TransferTokensData::from($transaction->meta['payload'])
