@@ -2,8 +2,10 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\ApproveTransaction;
 use App\Nova\Traits\ResourceIsReadonly;
 use Illuminate\Http\Request;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
@@ -62,6 +64,9 @@ class TronTransaction extends Resource
     {
         return [
             //ID::make()->sortable(),
+            Text::make(__('Status'), 'status')
+                ->filterable(),
+
             Text::make(__('From'), 'from')
                 ->sortable()
                 ->filterable(),
@@ -80,9 +85,7 @@ class TronTransaction extends Resource
                 ->filterable()
                 ->hideFromIndex(),
 
-            Text::make(__('Status'), 'status')
-                ->filterable()
-                ->hideFromIndex(),
+
 
             Text::make(__('Contract'), 'contract')
                 ->filterable()
@@ -91,4 +94,13 @@ class TronTransaction extends Resource
             DateTime::make('created_at')->filterable()->sortable(),
         ];
     }
+
+    public function actions(NovaRequest $request): array
+    {
+        return [
+            ApproveTransaction::make()->showInline(),
+        ];
+    }
+
+
 }

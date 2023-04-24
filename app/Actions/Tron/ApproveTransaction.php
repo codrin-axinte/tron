@@ -15,6 +15,7 @@ class ApproveTransaction
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     * @throws \Exception
      */
     public function __invoke(TronTransaction $transaction): TronTransaction
     {
@@ -22,6 +23,14 @@ class ApproveTransaction
         $response = TransferTokensRequest::make(
             TransferTokensData::from($transaction->meta['payload'])
         )->send();
+
+        $data = $response->json();
+
+        if (is_array($data)) {
+            if ($data['code'] === 'NUMERIC_FAULT') {
+                throw new \Exception('Transfer failed');
+            }
+        }
 
         $transaction->status = TransactionStatus::Approved;
         $transaction->blockchain_reference_id = $response->json();

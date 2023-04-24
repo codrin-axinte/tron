@@ -26,7 +26,7 @@ class Withdraw
      * @throws GuzzleException
      * @throws SaloonException
      */
-    public function __invoke(Wallet $wallet, USDT $amount)
+    public function __invoke(Wallet $ownerWallet, string $walletToAddress, USDT $amount)
     {
 
         $settings = $this->getSettings();
@@ -37,7 +37,7 @@ class Withdraw
         $pool = $this->poolManager->getRandomPool($amount->value());
 
         $data = new TransferTokensData(
-            to: $wallet->address,
+            to: $walletToAddress,
             amount: $amount->toSun(),
             from: $pool->address,
             privateKey: $pool->private_key

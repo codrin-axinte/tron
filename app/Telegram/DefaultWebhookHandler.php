@@ -2,11 +2,14 @@
 
 namespace App\Telegram;
 
+use App\Enums\PendingActionType;
 use App\Models\User;
 use App\Telegram\Data\SetHandlerData;
 use App\Telegram\Traits\ExtendsSetupChat;
 use DefStudio\Telegraph\DTO\InlineQuery;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
+use DefStudio\Telegraph\Keyboard\Button;
+use DefStudio\Telegraph\Keyboard\Keyboard;
 use Illuminate\Support\Stringable;
 use ReflectionMethod;
 
@@ -70,6 +73,39 @@ class DefaultWebhookHandler extends WebhookHandler
 
     protected function handleChatMessage(Stringable $text): void
     {
+        $user = $this->currentUser;
+
+        if (!$user) {
+            \Log::error('User not found', ['user' => $user, 'message' => $text->value()]);
+            return;
+        }
+
+        $pendingTransaction = $user
+            ->pendingActions()
+            ->where('type', PendingActionType::Withdraw)
+            ->latest()
+            ->first();
+
+        if ($pendingTransaction) {
+            $pendingTransaction->meta = array_merge($pendingTransaction->meta, [
+                'address' => $text->value(),
+            ]);
+            $pendingTransaction->save();
+
+            $this->chat
+                ->markdown('Is this the correct address? ' . $text)
+                ->keyboard(Keyboard::make()->buttons([
+                    Button::make('✅ Yes, that is correct')
+                        ->action('withdraw')
+                        ->param('user', $user->id),
+                    // ->param('user', $user->id),
+                    Button::make('❌ No, cancel transaction')
+                        ->action('withdraw')
+                        ->param('reset', $pendingTransaction->id),
+                    //  ->param('user', $user->id),
+                ]))->dispatch();
+        }
+
         // Do nothing
     }
 
