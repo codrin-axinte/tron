@@ -26,7 +26,7 @@ class USDT
 
     public function toSun(): float|int
     {
-        return $this->amount * self::SUN_UNIT;
+        return (int)$this->amount * self::SUN_UNIT;
     }
 
     public function formatted(int $decimals = 2, string $decimalSeparator = '.', string $thousandsSeparator = ','): string
