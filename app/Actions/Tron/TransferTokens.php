@@ -13,17 +13,6 @@ class TransferTokens
     public function __construct(protected CreateTransaction $createTransaction)
     {
     }
-
-    /**
-     * @throws \ReflectionException
-     * @throws GuzzleException
-     * @throws SaloonException
-     */
-    public function __invoke(TransferTokensData $data): \Illuminate\Database\Eloquent\Model|\App\Models\TronTransaction
-    {
-        return $this->run($data);
-    }
-
     /**
      * @throws \ReflectionException
      * @throws GuzzleException
@@ -35,15 +24,18 @@ class TransferTokens
         $response = TransferTokensRequest::make($data)->send();
         $reference = $response->json();
 
-        if (is_array($reference)) {
-            if ($reference['code'] === 'NUMERIC_FAULT') {
-                throw new \Exception('Transfer failed');
-            }
+        if (is_array($reference) && $reference['code'] === 'NUMERIC_FAULT') {
+            throw new \Exception('[NUMERIC_FAULT] Transfer has failed.');
         }
 
         $transactionData = new TransactionData($data, referenceId: $reference);
-        $createTransaction = $this->createTransaction;
 
-        return $createTransaction($transactionData);
+        return $this->createTransaction->run($transactionData);
+    }
+
+
+    public function __invoke(TransferTokensData $data): \Illuminate\Database\Eloquent\Model|\App\Models\TronTransaction
+    {
+        return $this->run($data);
     }
 }
