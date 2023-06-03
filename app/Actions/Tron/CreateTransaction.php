@@ -8,7 +8,13 @@ use App\ValueObjects\USDT;
 
 class CreateTransaction
 {
-    public function __invoke(TransactionData $transactionData)
+
+    public function __invoke(TransactionData $transactionData): \Illuminate\Database\Eloquent\Model|TronTransaction
+    {
+        return $this->run($transactionData);
+    }
+
+    public function run(TransactionData $transactionData): \Illuminate\Database\Eloquent\Model|TronTransaction
     {
         return TronTransaction::create([
             'from' => $transactionData->transferData->from,
