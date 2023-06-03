@@ -17,5 +17,6 @@ class TronTransaction extends Model
         'status' => TransactionStatus::class,
         'type' => TransactionType::class,
         'amount' => 'float',
+        'meta' => 'array',
     ];
 }

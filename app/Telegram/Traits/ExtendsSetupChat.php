@@ -19,14 +19,18 @@ trait ExtendsSetupChat
         $this->currentUser = $this->getCurrentUser();
     }
 
-    private function getCurrentUser(): ?User
+    protected function getCurrentUser(string|int|null $userId = null): ?User
     {
+        if ($userId) {
+            return User::with(['wallet'])->find($userId);
+        }
+
         return User::query()->with(['wallet'])->firstWhere('chat_id', $this->chat->id);
     }
 
     protected function currentUser(): ?User
     {
-        if (! $this->currentUser) {
+        if (!$this->currentUser) {
             $this->currentUser = $this->getCurrentUser();
         }
 

@@ -101,7 +101,7 @@ abstract class TelegramCommand
 
     protected function error($message = 'I am sorry, I could not do that. Something went wrong.'): \DefStudio\Telegraph\Telegraph
     {
-        return $this->chat->markdown('💀'.$message);
+        return $this->chat->markdown('💀 [ERROR] '.$message);
     }
 
     protected function ask($question): \DefStudio\Telegraph\Telegraph

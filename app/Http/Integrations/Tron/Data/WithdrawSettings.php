@@ -14,7 +14,7 @@ class WithdrawSettings extends Data
     public function __construct(
 
         #[MapInputName('max_pool_proxy')]
-        public int $maxPoolProxy = 0,
+        public int            $maxPoolProxy = 0,
         #[WithCast(EnumCast::class)]
         #[MapInputName('withdraw_method')]
         public WithdrawMethod $method = WithdrawMethod::Approval,
@@ -25,32 +25,33 @@ class WithdrawSettings extends Data
         #[MapInputName('withdraw_minimum_amount_allowed')]
         public float|int|null $minimumAmountAllowed = null,
         #[MapInputName('block_withdraws')]
-        public bool $blockWithdraws = false,
-    ) {
+        public bool           $blockWithdraws = false,
+    )
+    {
     }
 
     public function canWithdraw(float|int $amount, bool $safe = false): bool
     {
         if ($this->blockWithdraws) {
             if ($safe) {
-            return false;
+                return false;
             }
             throw new Exception('Withdraws are blocked');
         }
 
-        if ($amount < $this->minimumAmountAllowed) {
+        if (!empty($this->minimumAmountAllowed) && $amount < $this->minimumAmountAllowed) {
             if ($safe) {
-            return false;
+                return false;
             }
-            throw new Exception('The withdraw amount must be greater than '.$this->minimumAmountAllowed);
+            throw new Exception('The withdraw amount must be greater than ' . $this->minimumAmountAllowed);
         }
 
-        if ($amount > $this->maximumAmountAllowed) {
+        if (!empty($this->maximumAmountAllowedx) && $amount > $this->maximumAmountAllowed) {
             if ($safe) {
-            return false;
+                return false;
             }
 
-            throw new Exception('The withdraw amount must be lesser than '.$this->maximumAmountAllowed);
+            throw new Exception('The withdraw amount must be lesser than ' . $this->maximumAmountAllowed);
         }
 
         return true;
