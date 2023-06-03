@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('telescope:prune')->daily();
         $schedule->command(CompoundInterestUpdate::class)->hourly();
-        $schedule->command(TronSyncCommand::class)->hourly();
+        $schedule->command(TronSyncCommand::class)->everyMinute();
         // Referral
     }
 
