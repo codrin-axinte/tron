@@ -53,16 +53,16 @@ class PricingPlanSettings extends Resource
                 ->sortable()
                 ->filterable(),
 
-            Select::make(__('Commission Strategy'), 'commission_strategy')
-                ->options([
-                    'default' => __('Direct Amount'),
-                    //   'package_percentage' => __('Package Interest Percentage'),
-                ])->displayUsingLabels(),
+//            Select::make(__('Commission Strategy'), 'commission_strategy')
+//                ->options([
+//                    'default' => __('Direct Amount'),
+//                    //   'package_percentage' => __('Package Interest Percentage'),
+//                ])->displayUsingLabels(),
 
             // Number::make(__('Plan Interest'), 'plan_interest')->min(0),
-            SimpleRepeatable::make(__('Commissions/Depth'), 'commissions', [
-                Number::make(__('Percentage/Depth'), 'percentage')->min(0)->step(0.01),
-            ]),
+//            SimpleRepeatable::make(__('Commissions/Depth'), 'commissions', [
+//                Number::make(__('Percentage/Depth'), 'percentage')->min(0)->step(0.01),
+//            ]),
 
             Number::make(__('Interest Percentage'), 'interest_percentage')->min(0)->step(0.01),
             //            Select::make(__('Interest Frequency'), 'interest_frequency')

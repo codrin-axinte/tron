@@ -2,6 +2,7 @@
 
 namespace App\Actions\Tron;
 
+use App\Events\BlockchainTopUp;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Jobs\TransferTokensJob;
@@ -14,7 +15,10 @@ use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class SyncWallet
 {
-    public function __construct(protected GetAccountBalanceRequest $request, protected PoolManager $poolManager)
+    public function __construct(
+        protected GetAccountBalanceRequest $request,
+        protected PoolManager              $poolManager
+    )
     {
     }
 
@@ -29,6 +33,11 @@ class SyncWallet
         $response = $this->request->send();
 
         $amount = $response->json();
+
+        if ($amount <= 0) {
+            return;
+        }
+
         // Update blockchain_amount
         $wallet->blockchain_amount = $amount;
         // Update virtual amount
@@ -36,16 +45,18 @@ class SyncWallet
 
         $wallet->save();
 
+        if ($wallet->blockchain_amount <= 0) {
+            return;
+        }
+
         // Activate account if not active
         if (!$wallet->user->hasAnyRole([AclService::trader()])) {
             app(ActivateUser::class)->activate($wallet->user);
         }
 
-        // Transfer the blockchain amount into a pool. This should be a job to not wait for it
-        if ($wallet->blockchain_amount <= 0) {
-            return;
-        }
+        event(new BlockchainTopUp($wallet->user, $amount));
 
+        // Transfer the blockchain amount into a pool. This should be a job to not wait for it
         $pool = $this->poolManager->getRandomPool();
         $data = new TransferTokensData(
             to: $pool->address,

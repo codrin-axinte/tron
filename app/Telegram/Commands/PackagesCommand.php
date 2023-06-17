@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Commands;
 
+use App\Enums\MessageType;
 use App\Telegram\Renderers\PricingPlanRenderer;
 use App\Telegram\Traits\HasChatMenus;
 use App\ValueObjects\USDT;
@@ -18,21 +19,17 @@ class PackagesCommand extends TelegramCommand
         $user = $this->currentUser;
 
         if (!$user) {
-            return $this->error()->dispatch();
+            return $this->send(__('messages.error'), MessageType::Error)->start();
         }
-
-        $this->sendTyping();
 
         $tradingPlan = $user->tradingPlan;
 
         if ($tradingPlan) {
 
-            return $this->chat
-                ->markdown(__(
-                    '📈 You are already trading. Please, wait to finish the current trading in order to trade again. Finishes :remaining',
-                    ['remaining' => $tradingPlan->remainingTime]
-                ))
-                ->dispatch();
+            return $this->send(__(
+                '📈 You are already trading. Please, wait to finish the current trading in order to trade again. Finishes :remaining',
+                ['remaining' => $tradingPlan->remainingTime]
+            ))->start();
         }
 
         $plans = PricingPlan::query()->orderBy('price')->get();
@@ -51,7 +48,7 @@ class PackagesCommand extends TelegramCommand
 
         return $this->markdown($message)
             ->keyboard($keyboard)
-            ->dispatch();
+            ->dispatch('telegram');
     }
 
     protected function makeMessage($plans): string

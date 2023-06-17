@@ -3,6 +3,7 @@
 namespace App\Telegram\Commands;
 
 use App\Actions\Tron\Trade;
+use App\Enums\MessageType;
 use App\Models\User;
 use App\Telegram\Traits\HasChatMenus;
 use App\ValueObjects\USDT;
@@ -17,16 +18,15 @@ class TradeCommand extends TelegramCommand
         $percent = $this->data->get('percent', false);
 
         if (!$percent) {
-            return $this->error(__("You must select an amount to trade."))
-                ->dispatch();
+            return $this->send(__("You must select an amount to trade."), MessageType::Error)
+                ->start();
         }
 
-        $this->sendTyping();
         $user = User::query()
             ->find($this->data->get('user', $userId)) ?? $this->currentUser;
 
         if (!$user) {
-            return $this->error()->dispatch();
+            return $this->send(__('messages.error'), MessageType::Error)->start();
         }
 
         $balance = USDT::make($user->wallet->amount);
@@ -34,16 +34,15 @@ class TradeCommand extends TelegramCommand
         $plan = PricingPlan::query()
             ->highestPlan(
                 $balance->percentage($percent)
-            )
-            ->first();
+            )->first();
 
         try {
             $this->canTrade($user, $plan);
             return $this->trade($user, $plan);
         } catch (\Exception $exception) {
             return $this
-                ->error($exception->getMessage())
-                ->dispatch();
+                ->send($exception->getMessage(), MessageType::Error)
+                ->start();
         }
     }
 
@@ -53,13 +52,11 @@ class TradeCommand extends TelegramCommand
     private function canTrade($user, $plan): void
     {
         if (!$plan) {
-            throw new \Exception(__('You do not have enough funds to trade.'));
+            throw new \Exception(__('trading.insufficient_funds'));
         }
 
         if ($user->tradingPlan()->exists()) {
-            throw new \Exception(
-                __("You have already selected a plan (:plan) that is trading. You can select another one after this one finishes.", ['plan' => $plan->name])
-            );
+            throw new \Exception(__('trading.in_progress', ['plan' => $plan->name]));
         }
     }
 
@@ -69,16 +66,15 @@ class TradeCommand extends TelegramCommand
 
             app(Trade::class)->run($user, $plan);
 
-            $message = __("*Great*! You have started trading using the :plan package. The trade will expire after :hours hours.",
+            $message = __('trading.started',
                 ['plan' => $plan->name, 'hours' => $plan->planSettings->expiration_hours]);
 
-            $this->success($message)->dispatch();
+            return $this->send($message, MessageType::Success)
+                ->start();
 
         } catch (\Throwable $exception) {
-            $this->error(__('*Something went wrong*. I could not set your plan to trade.'))
-                ->dispatch();
+            return $this->send(__('trading.failed'), MessageType::Error)
+                ->start();
         }
-
-        return $this->start();
     }
 }

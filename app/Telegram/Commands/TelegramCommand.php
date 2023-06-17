@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Commands;
 
+use App\Enums\MessageType;
 use App\Telegram\Data\SetHandlerData;
 use App\Telegram\DefaultWebhookHandler;
 use DefStudio\Telegraph\DTO\CallbackQuery;
@@ -10,6 +11,7 @@ use DefStudio\Telegraph\Enums\ChatActions;
 use DefStudio\Telegraph\Keyboard\Keyboard;
 use DefStudio\Telegraph\Models\TelegraphBot;
 use DefStudio\Telegraph\Models\TelegraphChat;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\ForwardsCalls;
@@ -42,6 +44,7 @@ abstract class TelegramCommand
     protected Keyboard $originalKeyboard;
 
     protected ?\App\Models\User $currentUser = null;
+
 
     public function __call(string $name, array $arguments)
     {
@@ -97,6 +100,21 @@ abstract class TelegramCommand
     protected function success($message): \DefStudio\Telegraph\Telegraph
     {
         return $this->chat->markdown('🎉' . $message);
+    }
+
+    protected function send(string $message, MessageType $type = MessageType::Default): static
+    {
+        $this->sendTyping();
+        $pending = match ($type) {
+            MessageType::Success => $this->success($message),
+            MessageType::Error => $this->error($message),
+            MessageType::Ask => $this->ask($message),
+            default => $this->markdown($message),
+        };
+
+        $pending->dispatch('telegram');
+
+        return $this;
     }
 
     protected function error($message = 'I am sorry, I could not do that. Something went wrong.'): \DefStudio\Telegraph\Telegraph

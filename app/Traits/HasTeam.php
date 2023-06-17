@@ -22,6 +22,11 @@ trait HasTeam
         return $this->hasOne(Team::class);
     }
 
+    public function team(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Team::class);
+    }
+
     public function memberOfTeams(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'team_member')->latest();

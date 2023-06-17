@@ -82,7 +82,7 @@ class SettingsService
 
     public function boot()
     {
-        if (! auth()->check()) {
+        if (!auth()->check()) {
             return;
         }
 
@@ -90,7 +90,7 @@ class SettingsService
 
         // Collect Settings
         foreach ($pages as $page) {
-            if (! ($page instanceof SettingsPage)) {
+            if (!($page instanceof SettingsPage)) {
                 throw new \Exception("The page {$page} is not implementing the SettingsPage contract.");
             }
 
@@ -132,13 +132,18 @@ class SettingsService
         return nova_get_setting($setting, $default);
     }
 
+    public function getJson(string $setting, mixed $default = null, bool $associative = false)
+    {
+        return json_decode($this->get($setting, $default), $associative);
+    }
+
     public function syncWithEnv(string $key, mixed $value)
     {
         $filteredSettings = $this->pages()
-            ->filter(fn ($page) => $page instanceof SyncEnv)
-            ->flatMap(fn (SettingsPage $page) => $page->options());
+            ->filter(fn($page) => $page instanceof SyncEnv)
+            ->flatMap(fn(SettingsPage $page) => $page->options());
 
-        if (! in_array($key, $filteredSettings->toArray())) {
+        if (!in_array($key, $filteredSettings->toArray())) {
             return;
         }
 
@@ -149,7 +154,7 @@ class SettingsService
                 'env-option-field' => EnvOptionLayout::class,
                 'env-protected-option-field' => EnvOptionProtectedLayout::class,
                 'custom-field' => CustomFieldsLayout::class,
-            ])->mapWithKeys(fn ($layout) => [strtoupper($layout->key) => $layout->value])
+            ])->mapWithKeys(fn($layout) => [strtoupper($layout->key) => $layout->value])
                 ->toArray();
 
             $editor->setKeys($options);
@@ -168,16 +173,16 @@ class SettingsService
     /**
      * Returns the primary value from a flexible setting
      *
-     * @param  string  $flexibleSettingKey The flexible setting that holds the layouts
-     * @param  string  $attributeName The attribute value to be retrieved. Default 'value'
-     * @param  string  $primaryKey The key that determines if the layout is primary. Default 'is_primary'
+     * @param string $flexibleSettingKey The flexible setting that holds the layouts
+     * @param string $attributeName The attribute value to be retrieved. Default 'value'
+     * @param string $primaryKey The key that determines if the layout is primary. Default 'is_primary'
      * @return mixed|null
      *
      * @throws \Exception
      */
     public function primary(string $flexibleSettingKey, string $attributeName = 'value', string $primaryKey = 'is_primary'): mixed
     {
-        if (! $this->isFlexible($flexibleSettingKey)) {
+        if (!$this->isFlexible($flexibleSettingKey)) {
             throw new \Exception("Your are trying to access the setting '{$flexibleSettingKey}' which is not casted as flexible.");
         }
 

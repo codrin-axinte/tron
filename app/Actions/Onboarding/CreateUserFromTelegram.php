@@ -3,6 +3,7 @@
 namespace App\Actions\Onboarding;
 
 use App\Actions\Tron\GenerateWallet;
+use App\Events\UserJoined;
 use App\Models\User;
 use App\Services\TronService;
 use DefStudio\Telegraph\Models\TelegraphChat;
@@ -26,6 +27,7 @@ class CreateUserFromTelegram
                 'chat_id' => $chat->id,
             ]);
 
+
             $affiliate->ownedTeam->members()->attach($user);
 
             $response = app(GenerateWallet::class)();
@@ -36,6 +38,8 @@ class CreateUserFromTelegram
                 'address' => $response->address,
                 'mnemonic' => $response->mnemonic,
             ]);
+
+            event(new UserJoined($user));
 
             return $user;
         });

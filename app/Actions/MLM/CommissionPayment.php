@@ -2,34 +2,59 @@
 
 namespace App\Actions\MLM;
 
+use App\Events\TelegramHook;
 use App\Models\User;
 use App\ValueObjects\Percentage;
+use App\ValueObjects\USDT;
 
 class CommissionPayment
 {
-    public function execute(User $user, int $maxDepth = 3, $depth = 0): void
-    {
-        //FIXME: needs a bit of working.
 
-        if ($depth >= $maxDepth) {
-        return;
+    protected array $commissions = [];
+    protected int $maxDepth = 3;
+    protected float $amount;
+
+
+    /**
+     * @param array<int, int> $commissions
+     * @return CommissionPayment
+     */
+    public function withCommissions(array $commissions): static
+    {
+        $this->commissions = $commissions;
+        $this->maxDepth = count($commissions);
+
+        return $this;
+    }
+
+    public function forAmount(float $amount): static
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function execute(User $user, $depth = 0): void
+    {
+        if ($depth >= $this->maxDepth) {
+            return;
         }
 
         $owner = $this->findOwner($user);
 
-        if (! $owner) {
-        return;
+        if (!$owner) {
+            return;
         }
 
         $this->payOwner($owner, $depth);
 
-        $this->execute($owner, $maxDepth, $depth++);
+        $this->execute($owner, $depth++);
     }
 
     private function findOwner(?User $user)
     {
-        if (! $user) {
-        return null;
+        if (!$user) {
+            return null;
         }
 
         $memberOfTeam = $user->memberOfTeams()
@@ -41,23 +66,25 @@ class CommissionPayment
 
     private function payOwner(?User $owner, int $depth = 0): bool
     {
-        if (! $owner) {
-        return false;
+        if (!$owner) {
+            return false;
         }
 
-        //FIXME: Should determine the amount based on the current plan
-        $plan = $owner->pricingPlans()->with('planSettings')->first();
-
-        $settings = $plan->planSettings;
-        // $strategy = $settings->commission_strategy;
-        $commission = $settings->commissionsByDepth->get($depth);
+        $commission = $this->commissions[$depth] ?? false;
 
         if (empty($commission)) {
             return false;
         }
 
-        $amountToGive = Percentage::make($commission)->of($plan->price);
+        $amountToGive = USDT::make($this->amount)->percentage($commission);
 
-        return $owner->wallet->increment('amount', number_format($amountToGive, 2));
+        $result = $owner->wallet()->increment('amount', $amountToGive->value());
+        if ($result) {
+            $owner->chat
+                ->markdown(__("You have received :amount from commission.", ['amount' => $amountToGive->value()]))
+                ->dispatch('telegram');
+        }
+
+        return $result;
     }
 }

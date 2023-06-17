@@ -3,6 +3,7 @@
 namespace App\Telegram\Commands;
 
 use App\Actions\Tron\Withdraw;
+use App\Enums\MessageType;
 use App\Enums\PendingActionType;
 use App\Models\PendingAction;
 use App\Models\User;
@@ -25,7 +26,6 @@ class WithdrawCommand extends TelegramCommand
      */
     public function __invoke(): void
     {
-        // TODO: Check if the account is older than
         $percent = $this->data->get('percent', false);
         // $transferToAddress = $this->data->get('account', false);
         $resetAction = $this->data->get('reset', false);
@@ -37,7 +37,8 @@ class WithdrawCommand extends TelegramCommand
         }
 
         if (!$user) {
-            $this->error(__('You are not authorized to perform this action.'))->dispatch();
+            $this->send(__('messages.unauthorized'), MessageType::Error)
+                ->start();
 
             return;
         }
@@ -47,8 +48,6 @@ class WithdrawCommand extends TelegramCommand
         if ($resetAction) {
             $pendingAction = PendingAction::find($resetAction);
             $pendingAction->delete();
-            // TODO: Investigate what is this?
-            $this->markdown(__('You are not authorized to perform this action.'))->dispatch();
             return;
         }
 
@@ -67,7 +66,7 @@ class WithdrawCommand extends TelegramCommand
         }
 
         if (!$userId) {
-            $this->markdown(__('Please, input the wallet address where should transfer the money.'))->dispatch();
+            $this->send(__('Please, send the wallet address where should transfer the money.'));
             $user->pendingActions()->create([
                 'meta' => [
                     'percentage' => (int)$percent
@@ -86,12 +85,12 @@ class WithdrawCommand extends TelegramCommand
         //\Log::debug(__('Pending Action'), ['action' => $pendingAction->id]);
 
         if (!$pendingAction) {
-            $this->error()->dispatch();
+            $this->send(__('messages.error'), MessageType::Error)->start();
             return;
         }
 
         $withdraw = app(Withdraw::class);
-        $this->markdown(__('Initiating transaction...'))->dispatch();
+        $this->send(__('Initiating transaction...'));
 
         try {
             \DB::transaction(function () use ($withdraw, $balance, $user, $pendingAction) {
@@ -100,13 +99,16 @@ class WithdrawCommand extends TelegramCommand
                 $amount = $balance->percentage($percent);
                 $transaction = $withdraw($user->wallet, $transferToAddress, $amount);
                 $pendingAction->delete();
-                $this->markdown('Transaction processed. You have transferred *' . $amount . '* USDT to the address ' . $transferToAddress)->dispatch();
+                $this->send(__(
+                    "Transaction processed. You have transferred * :amount * USDT to the address :address",
+                    ['amount' => $amount, 'address' => $transferToAddress]
+                ));
                 //$this->markdown($transaction->blockchain_reference_id)->dispatch();
             });
 
         } catch (\Throwable $e) {
             \Log::error($e->getMessage(), ['stracktrace' => $e->getTraceAsString()]);
-            $this->error($e->getMessage())->dispatch();
+            $this->send($e->getMessage(), MessageType::Error);
         }
 
     }

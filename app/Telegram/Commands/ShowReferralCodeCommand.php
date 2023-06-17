@@ -16,8 +16,7 @@ class ShowReferralCodeCommand extends TelegramCommand
         $user = $this->currentUser;
         $code = $user->referralLink->code;
 
-        $this->chat->action(ChatActions::TYPING)->send();
-        $this->chat->markdown("Send this code to your friend to be able to join. \n\nYour code is: $code")
-            ->send();
+        $this->send(__("Send this code to your friend to be able to join. \n\nYour code is: :code", ['code' => $code]))
+            ->start($this->currentUser);
     }
 }

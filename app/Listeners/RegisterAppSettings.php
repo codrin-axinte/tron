@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Nova\Settings\CommissionSettingsPage;
 use App\Nova\Settings\GeneralSettingsPage;
 use App\Nova\Settings\TronSettingsPage;
 
@@ -20,12 +21,13 @@ class RegisterAppSettings
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param object $event
      */
     public function handle($event): array
     {
         return [
             new GeneralSettingsPage(),
+            new CommissionSettingsPage(),
             new TronSettingsPage(),
         ];
     }

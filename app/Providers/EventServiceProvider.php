@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\BlockchainTopUp;
 use App\Events\TelegramHook;
+use App\Events\UserJoined;
+use App\Listeners\PayCommissions;
 use App\Listeners\RegisterAppSettings;
 use App\Listeners\SendTemplateMessage;
 use Illuminate\Auth\Events\Registered;
@@ -28,6 +31,14 @@ class EventServiceProvider extends ServiceProvider
 
         TelegramHook::class => [
             SendTemplateMessage::class,
+        ],
+
+        UserJoined::class => [
+            SendTemplateMessage::class,
+        ],
+
+        BlockchainTopUp::class => [
+            PayCommissions::class,
         ],
 
     ];

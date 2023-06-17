@@ -54,7 +54,7 @@ class User extends Resource
 
     public static $with = ['roles', 'wallet'];
 
-    public static $group =  'mlm';
+    public static $group = 'mlm';
 
     /**
      * Get the fields displayed by the resource.
@@ -65,11 +65,16 @@ class User extends Resource
             ID::make()->sortable(),
 
             UiAvatar::make(__('Avatar'))
-                ->resolveUsing(fn () => $this->name ?? implode(' ', explode('@', $this->email))),
+                ->resolveUsing(fn() => $this->name ?? implode(' ', explode('@', $this->email))),
 
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+
+            Text::make('Username')
+                ->sortable()
+                ->updateRules('unique:users,username,{{resourceId}}'),
 
             Text::make('Email')
                 ->sortable()
@@ -79,7 +84,7 @@ class User extends Resource
 
             Multiselect::make(__('Roles'))
                 ->belongsToMany(Role::class)
-                ->canSee(fn () => $request->user()->can(RolePermission::Attach->value)),
+                ->canSee(fn() => $request->user()->can(RolePermission::Attach->value)),
 
             Password::make('Password')
                 ->onlyOnForms()
@@ -95,7 +100,7 @@ class User extends Resource
 
             HasOne::make(__('Referral Link'), 'referralLink', ReferralLink::class)->exceptOnForms(),
             BelongsToMany::make(__('Subscribed Plan'), 'pricingPlans', PricingPlan::class),
-            HasOne::make(__('Team'), 'ownedTeam', Team::class)->exceptOnForms(),
+            HasOne::make(__('Team'), 'team', Team::class)->exceptOnForms(),
 
             SanctumTokens::make()->canSeeWhen(GenericPermission::ManageTokens->value),
         ];

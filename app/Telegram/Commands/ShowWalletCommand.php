@@ -10,12 +10,12 @@ class ShowWalletCommand extends TelegramCommand
     {
     }
 
-    public function __invoke()
+    public function __invoke(): void
     {
-        $this->chat
-            ->markdown(
-                $this->walletRenderer->render($this->currentUser->wallet)
-            )
-            ->send();
+        $message = $this->walletRenderer->render($this->currentUser->wallet);
+
+        $this
+            ->send($message)
+            ->start($this->currentUser);
     }
 }

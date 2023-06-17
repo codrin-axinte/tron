@@ -9,6 +9,7 @@ class MeCommand extends TelegramCommand
 
         $from = $this->message->from();
 
-        $this->message("Name: {$from->firstName()} {$from->lastName()}\nUsername: {$from->username()}\nID:{$from->id()}")->send();
+        $message = "Name: {$from->firstName()} {$from->lastName()}\nUsername: {$from->username()}\nID:{$from->id()}";
+        $this->send($message)->start();
     }
 }

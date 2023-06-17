@@ -17,9 +17,9 @@ class UpdateTradingPlans
     public function execute(): void
     {
         $settings = PricingPlanSettings::query()
-            ->whereHas('pricingPlan', fn ($query) => $query->enabled())
+            ->whereHas('pricingPlan', fn($query) => $query->enabled())
             ->get()
-            ->mapWithKeys(fn (PricingPlanSettings $planSettings) => [$planSettings->pricing_plan_id => $planSettings]);
+            ->mapWithKeys(fn(PricingPlanSettings $planSettings) => [$planSettings->pricing_plan_id => $planSettings]);
 
         $this->updateActivePlans($settings);
         $this->updateExpiredPlans($settings);
@@ -46,17 +46,16 @@ class UpdateTradingPlans
             ->each(function (TradingPlan $tradingPlan) {
                 $result = $tradingPlan->user->wallet()->increment('amount', $tradingPlan->amount);
 
-                event(new TelegramHook($tradingPlan->user, ChatHooks::TradingFinished));
-
                 if ($result) {
                     $tradingPlan->delete();
+                    event(new TelegramHook($tradingPlan->user, ChatHooks::TradingFinished));
                 }
             });
     }
 
     private function updateActivePlans($settings): void
     {
-        $rates = $settings->mapWithKeys(fn (PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage / 100]);
+        $rates = $settings->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage / 100]);
 
         $query = TradingPlan::query();
 
