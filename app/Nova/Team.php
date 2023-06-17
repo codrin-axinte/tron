@@ -13,7 +13,7 @@ class Team extends Resource
      *
      * @var class-string<\App\Models\Team>
      */
-    public static string $model = \App\Models\Team::class;
+    public static $model = \App\Models\Team::class;
 
     public static $displayInNavigation = false;
 

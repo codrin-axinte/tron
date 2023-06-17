@@ -39,7 +39,7 @@ class TronTransaction extends Resource
         'id', 'from', 'to', 'contract', 'blockchain_reference_id'
     ];
 
-    public static $group =  'tron network';
+    public static $group =  'blockchain';
 
     public static $polling = true;
 
@@ -51,7 +51,7 @@ class TronTransaction extends Resource
 
     public static function label()
     {
-        return 'Transactions';
+        return __('Transactions');
     }
 
     /**

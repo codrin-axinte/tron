@@ -6,8 +6,10 @@ use App\Nova\Traits\ResourceIsReadonly;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Currency;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Modules\Wallet\Nova\Resources\PricingPlan;
 
@@ -40,16 +42,18 @@ class TradingPlan extends Resource
 
     public static function label()
     {
-        return 'Active Trading';
+        return __('Active Trading');
     }
 
-    public static $group = 'tron network';
+    public static $group = 'blockchain';
 
     public static $polling = true;
 
     public static $pollingInterval = 15;
 
     public static $showPollingToggle = true;
+
+    public static $with = ['pricingPlan', 'pricingPlan.planSettings'];
 
     /**
      * Get the fields displayed by the resource.
@@ -77,6 +81,9 @@ class TradingPlan extends Resource
                 ->filterable()
                 ->sortable()
                 ->required(),
+
+            DateTime::make(__("Started at"),'created_at'),
+            Text::make(__('Finishes'),'remaining_time'),
 
 
         ];

@@ -26,7 +26,7 @@ trait HasChatMenus
     {
 
         $buttons = $plans->map(
-            fn ($plan) => $plan->id !== $currentPlan?->id ? Button::make('➡️ Change to '.$plan->title)
+            fn($plan) => $plan->id !== $currentPlan?->id ? Button::make('➡️ Change to ' . $plan->title)
                 ->action('upgrade')
                 ->param('package', $plan->id) : null
         )->filter()->toArray();
@@ -44,17 +44,17 @@ trait HasChatMenus
     {
         return Keyboard::make()
             ->buttons([
-                Button::make('💳 Deposit')->action('wallet'),
+                Button::make(__('💳 Deposit'))->action('wallet'),
             ])
             ->when($this->currentUser->hasRole('trader'), function (Keyboard $keyboard) {
                 return $keyboard
                     ->buttons([
-                        Button::make('💵 Withdraw')->action('withdraw'),
-                        Button::make('🔗 Referral code')->action('myCode'),
-                        Button::make('👥 My team')->action('team'),
+                        Button::make(__('💵 Withdraw'))->action('withdraw'),
+                        Button::make(__('🔗 Referral code'))->action('myCode'),
+                        Button::make(__('👥 My team'))->action('team'),
                         // Button::make('👑 Leaderboard')->action('dummy'),
                         // Button::make('📈 Stats')->action('dummy'),
-                        Button::make('⚡ Trade')->action('packages'),
+                        Button::make(__('⚡ Trade'))->action('packages'),
                     ]);
             })
             ->buttons([
@@ -62,7 +62,26 @@ trait HasChatMenus
             ])
             ->when(
                 $this->currentUser->can(GenericPermission::ViewAdmin->value),
-                fn (Keyboard $keyboard) => $keyboard->button('🛠️ Admin')->action('admin')
+                fn(Keyboard $keyboard) => $keyboard->button('🛠️ Admin')->action('admin')
             )->chunk(2);
+    }
+
+    protected function choosePercentageMenu(USDT $balance, $action, $percentages = [10, 25, 50, 75, 100]): Keyboard
+    {
+        $buttons = [];
+
+        foreach ($percentages as $value) {
+            $newAmount = $balance->percentage($value)->formatted(0);
+            $icon = $value === 100 ? '💰' : '💸';
+            $buttons[] = Button::make("$icon $newAmount ($value%)")
+                ->action($action)
+                ->param('percent', $value);
+        }
+
+        $buttons[] = Button::make('⬅️ Back')->action('start')->width(100);
+
+        return Keyboard::make()
+            ->buttons($buttons)
+            ->chunk(2);
     }
 }

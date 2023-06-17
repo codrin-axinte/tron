@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Wallet\Models\PricingPlan;
 
@@ -32,5 +33,20 @@ class TradingPlan extends Model
     public function scopeExpired(Builder $query, int $hours = 1): Builder
     {
         return $query->where('created_at', '<', now()->subHours($hours));
+    }
+
+    public function remainingTime(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                $this->loadMissing(['pricingPlan', 'pricingPlan.planSettings']);
+
+                $plan = $this->pricingPlan;
+                $hours = $plan->planSettings->expiration_hours;
+                $expires_at = $plan->created_at->addHours($hours);
+
+                return $expires_at->diffForHumans();
+            }
+        );
     }
 }

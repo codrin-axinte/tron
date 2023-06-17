@@ -23,7 +23,7 @@ class WalletTransaction extends Resource
      *
      * @var class-string<\App\Models\WalletTransaction>
      */
-    public static string $model = \Modules\Wallet\Models\WalletTransaction::class;
+    public static $model = \Modules\Wallet\Models\WalletTransaction::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

@@ -10,7 +10,7 @@ class StartCommand extends TelegramCommand
 {
     use HasMessageTemplates, HasChatMenus;
 
-    public function __invoke()
+    public function __invoke(): void
     {
         if ($this->isAuth()) {
             $this->showMenu();

@@ -76,12 +76,12 @@ abstract class TelegramCommand
 
     protected function isAuth(): bool
     {
-        return (bool) $this->currentUser;
+        return (bool)$this->currentUser;
     }
 
     protected function isGuest(): bool
     {
-        return ! $this->currentUser;
+        return !$this->currentUser;
     }
 
     protected function message(string $message): \DefStudio\Telegraph\Telegraph
@@ -96,17 +96,17 @@ abstract class TelegramCommand
 
     protected function success($message): \DefStudio\Telegraph\Telegraph
     {
-        return $this->chat->markdown('🎉'.$message);
+        return $this->chat->markdown('🎉' . $message);
     }
 
     protected function error($message = 'I am sorry, I could not do that. Something went wrong.'): \DefStudio\Telegraph\Telegraph
     {
-        return $this->chat->markdown('💀 [ERROR] '.$message);
+        return $this->chat->markdown('💀 [ERROR] ' . $message);
     }
 
     protected function ask($question): \DefStudio\Telegraph\Telegraph
     {
-        return $this->chat->markdown('❓'.$question);
+        return $this->chat->markdown('❓' . $question);
     }
 
     protected function sendTyping(): static

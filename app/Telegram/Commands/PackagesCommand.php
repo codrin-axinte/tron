@@ -3,16 +3,21 @@
 namespace App\Telegram\Commands;
 
 use App\Telegram\Renderers\PricingPlanRenderer;
+use App\Telegram\Traits\HasChatMenus;
+use App\ValueObjects\USDT;
 use DefStudio\Telegraph\Keyboard\Button;
 use DefStudio\Telegraph\Keyboard\Keyboard;
 use Modules\Wallet\Models\PricingPlan;
 
 class PackagesCommand extends TelegramCommand
 {
+    use HasChatMenus;
+
     public function __invoke()
     {
         $user = $this->currentUser;
-        if (! $user) {
+
+        if (!$user) {
             return $this->error()->dispatch();
         }
 
@@ -21,27 +26,36 @@ class PackagesCommand extends TelegramCommand
         $tradingPlan = $user->tradingPlan;
 
         if ($tradingPlan) {
+
             return $this->chat
-                ->markdown('You are already trading. Please, wait to finish the current trading in order to trade again.')
+                ->markdown(__(
+                    '📈 You are already trading. Please, wait to finish the current trading in order to trade again. Finishes :remaining',
+                    ['remaining' => $tradingPlan->remainingTime]
+                ))
                 ->dispatch();
         }
 
-        $plans = PricingPlan::query()->ordered()->get();
+        $plans = PricingPlan::query()->orderBy('price')->get();
+        $balance = USDT::make($user->wallet->amount);
 
-        $message = $this->makeMessage($plans);
+        $message = "\n" .
+            __('🏦 Your current balance is: *:balance*',
+                ['balance' => $balance->formatted()]
+            ) . "\n\n";
 
-        //$keyboard = $this->plansMenu($plans, $currentPlan);
-        $keyboard = $this->confirmMenu($user);
+        $message .= $this->makeMessage($plans);
 
-        $this->chat
-            ->markdown($message)
+        $message .= __('🤑 *How much do you want to trade?*') . "\n";
+
+        $keyboard = $this->choosePercentageMenu($balance, 'trade');
+
+        return $this->markdown($message)
             ->keyboard($keyboard)
             ->dispatch();
     }
 
-    protected function makeMessage($plans)
+    protected function makeMessage($plans): string
     {
-        // $currentPlan = $user->subscribedPlan();
         $message = '';
         $currentPlan = null;
         $renderer = app(PricingPlanRenderer::class);
@@ -53,6 +67,12 @@ class PackagesCommand extends TelegramCommand
         return $message;
     }
 
+    /**
+     * @param $user
+     * @return Keyboard
+     * @deprecated Replaced with percentage menu
+     *
+     */
     protected function confirmMenu($user): Keyboard
     {
         return Keyboard::make()
@@ -64,11 +84,17 @@ class PackagesCommand extends TelegramCommand
             ]);
     }
 
+    /**
+     * @param $plans
+     * @param $currentPlan
+     * @return Keyboard
+     * @deprecated replaced with percentage menu
+     *
+     */
     protected function plansMenu($plans, $currentPlan): Keyboard
     {
-
         $buttons = $plans->map(
-            fn ($plan) => $plan->id !== $currentPlan?->id ? Button::make('➡️ Trade using '.$plan->title)
+            fn($plan) => $plan->id !== $currentPlan?->id ? Button::make('➡️ Trade using ' . $plan->title)
                 ->action('trade')
                 ->param('package', $plan->id) : null
         )->filter()->toArray();

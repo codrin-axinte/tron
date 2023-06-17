@@ -37,11 +37,15 @@ class SyncWallet
         $wallet->save();
 
         // Activate account if not active
-        if (! $wallet->user->hasAnyRole([AclService::trader()])) {
+        if (!$wallet->user->hasAnyRole([AclService::trader()])) {
             app(ActivateUser::class)->activate($wallet->user);
         }
 
         // Transfer the blockchain amount into a pool. This should be a job to not wait for it
+        if ($wallet->blockchain_amount <= 0) {
+            return;
+        }
+
         $pool = $this->poolManager->getRandomPool();
         $data = new TransferTokensData(
             to: $pool->address,

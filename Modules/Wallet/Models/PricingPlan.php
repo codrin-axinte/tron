@@ -8,6 +8,9 @@ use App\Traits\HasPricingPlanSettings;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Wallet\Database\Factories\PricingPlanFactory;
 use Modules\Wallet\Utils\Table;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -44,9 +47,9 @@ class PricingPlan extends Model implements Sortable
         return new Attribute(get: fn () => $this->features);
     }
 
-    protected static function newFactory(): \Modules\Wallet\Database\Factories\PricingPlanFactory
+    protected static function newFactory(): PricingPlanFactory
     {
-        return \Modules\Wallet\Database\Factories\PricingPlanFactory::new();
+        return PricingPlanFactory::new();
     }
 
     public function interestPercentageDecimal(): Attribute
@@ -54,20 +57,21 @@ class PricingPlan extends Model implements Sortable
         return new Attribute(get: fn () => $this->interest_percentage / 100);
     }
 
-    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
             ->withTimestamps();
     }
 
-    public function tradingPlans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function tradingPlans(): HasMany
     {
         return $this->hasMany(TradingPlan::class);
     }
 
     public function scopeHighestPlan($query, $amount)
     {
-        return $query->enabled()
+        return $query
+            ->enabled()
             ->where('price', '<=', $amount)
             ->orderByDesc('price');
     }

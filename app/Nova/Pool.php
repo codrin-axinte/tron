@@ -39,7 +39,7 @@ class Pool extends Resource
         'id', 'address',
     ];
 
-    public static $group =  'tron network';
+    public static $group =  'blockchain';
 
     /**
      * Get the fields displayed by the resource.

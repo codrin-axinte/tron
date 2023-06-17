@@ -19,7 +19,7 @@ class PricingPlanSettings extends Resource
      *
      * @var class-string<\App\Models\PricingPlanSettings>
      */
-    public static string $model = \App\Models\PricingPlanSettings::class;
+    public static $model = \App\Models\PricingPlanSettings::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

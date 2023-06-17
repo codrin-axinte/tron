@@ -20,7 +20,7 @@ use NormanHuth\SecretField\SecretField;
 
 class Wallet extends Resource
 {
-    public static string $model = \Modules\Wallet\Models\Wallet::class;
+    public static $model = \Modules\Wallet\Models\Wallet::class;
 
     public static $title = 'user.email';
 
@@ -32,7 +32,7 @@ class Wallet extends Resource
 
     public static $with = ['user'];
 
-    public static $group =  'tron network';
+    public static $group =  'blockchain';
 
     public function title(): string
     {
