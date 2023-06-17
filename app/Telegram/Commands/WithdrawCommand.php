@@ -48,6 +48,8 @@ class WithdrawCommand extends TelegramCommand
         if ($resetAction) {
             $pendingAction = PendingAction::find($resetAction);
             $pendingAction->delete();
+
+            $this->send(__('Transaction cancelled.'))->start();
             return;
         }
 

@@ -29,42 +29,16 @@ class TradeCommand extends TelegramCommand
             return $this->send(__('messages.error'), MessageType::Error)->start();
         }
 
-        $balance = USDT::make($user->wallet->amount);
-
-        $plan = PricingPlan::query()
-            ->highestPlan(
-                $balance->percentage($percent)
-            )->first();
-
         try {
-            $this->canTrade($user, $plan);
-            return $this->trade($user, $plan);
-        } catch (\Exception $exception) {
-            return $this
-                ->send($exception->getMessage(), MessageType::Error)
-                ->start();
-        }
-    }
+            $balance = USDT::make($user->wallet->amount);
 
-    /**
-     * @throws \Exception
-     */
-    private function canTrade($user, $plan): void
-    {
-        if (!$plan) {
-            throw new \Exception(__('trading.insufficient_funds'));
-        }
+            $tradeAmount = $balance->percentage($percent)->value();
 
-        if ($user->tradingPlan()->exists()) {
-            throw new \Exception(__('trading.in_progress', ['plan' => $plan->name]));
-        }
-    }
+            $plan = PricingPlan::query()
+                ->highestPlan($tradeAmount)
+                ->first();
 
-    private function trade(User $user, PricingPlan $plan)
-    {
-        try {
-
-            app(Trade::class)->run($user, $plan);
+            app(Trade::class)->run($user, $plan, $tradeAmount);
 
             $message = __('trading.started',
                 ['plan' => $plan->name, 'hours' => $plan->planSettings->expiration_hours]);
@@ -73,7 +47,8 @@ class TradeCommand extends TelegramCommand
                 ->start();
 
         } catch (\Throwable $exception) {
-            return $this->send(__('trading.failed'), MessageType::Error)
+            return $this
+                ->send($exception->getMessage(), MessageType::Error)
                 ->start();
         }
     }

@@ -35,9 +35,9 @@ class UpdateTradingPlans
             ->each(function (PricingPlanSettings $settings, $index) use ($query) {
                 $hours = now()->subHours($settings->expiration_hours);
                 if ($index === 0) {
-                    $query->where('created_at', '<', $hours);
+                    $query->where('created_at', '<=', $hours);
                 } else {
-                    $query->orWhere('created_at', '<', $hours);
+                    $query->orWhere('created_at', '<=', $hours);
                 }
             });
 
