@@ -73,13 +73,22 @@ class Withdraw
 
     private function getSettings(): WithdrawSettings
     {
-        return WithdrawSettings::from(nova_get_settings([
+        $settings = nova_get_settings([
             'max_pool_proxy',
             'withdraw_method',
             'withdraw_approval_amount',
             'withdraw_maximum_amount_allowed',
             'withdraw_minimum_amount_allowed',
             'block_withdraws',
-        ]));
+        ]);
+        
+        return WithdrawSettings::from([
+            'max_pool_proxy' => $settings['max_pool_proxy'],
+            'withdraw_method' => $settings['withdraw_method'],
+            'withdraw_approval_amount' => $settings['withdraw_approval_amount'],
+            'withdraw_maximum_amount_allowed' => $settings['withdraw_maximum_amount_allowed'],
+            'withdraw_minimum_amount_allowed' => $settings['withdraw_minimum_amount_allowed'],
+            'block_withdraws' => $settings['block_withdraws'] ?? false,
+        ]);
     }
 }
