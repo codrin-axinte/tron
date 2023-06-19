@@ -112,7 +112,8 @@ abstract class TelegramCommand
             default => $this->markdown($message),
         };
 
-        $pending->dispatch('telegram');
+        // $pending->dispatch('telegram');
+        $pending->send();
 
         return $this;
     }

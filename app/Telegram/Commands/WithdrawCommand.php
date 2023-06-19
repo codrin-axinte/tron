@@ -62,7 +62,7 @@ class WithdrawCommand extends TelegramCommand
 
             $this->markdown($message)
                 ->keyboard($keyboard)
-                ->dispatch();
+                ->send();
 
             return;
         }

@@ -48,7 +48,8 @@ class PackagesCommand extends TelegramCommand
 
         return $this->markdown($message)
             ->keyboard($keyboard)
-            ->dispatch('telegram');
+            ->send();
+            //->dispatch('telegram');
     }
 
     protected function makeMessage($plans): string
