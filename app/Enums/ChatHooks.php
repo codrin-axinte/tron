@@ -17,4 +17,8 @@ enum ChatHooks: string
 
     case TradingFinished = 'trading::finished';
     case TradingStarted = 'trading::started';
+
+    case TransactionApproved = 'transaction::approved';
+    case TransactionRejected = 'transaction::rejected';
+    case TransactionPending = 'transaction::pending';
 }

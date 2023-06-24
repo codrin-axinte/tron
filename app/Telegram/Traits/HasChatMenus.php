@@ -71,7 +71,7 @@ trait HasChatMenus
         $buttons = [];
 
         foreach ($percentages as $value) {
-            $newAmount = $balance->percentage($value)->formatted(0);
+            $newAmount = $balance->percentage($value);
             $icon = $value === 100 ? '💰' : '💸';
             $buttons[] = Button::make("$icon $newAmount ($value%)")
                 ->action($action)

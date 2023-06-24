@@ -2,7 +2,11 @@
 
 namespace App\Services;
 
+use App\Actions\Tron\TransferTokens;
+use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\WithdrawSettings;
+use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Models\Pool;
 use Modules\Wallet\Models\Wallet;
@@ -31,15 +35,16 @@ class PoolManager
         // TODO: Improve performance using guzzle send async
 
         // Aggregate all wallets into a random pool
+        $transferTokens = app(TransferTokens::class);
         Wallet::query()
             ->where('blockchain_amount', '>', $minAmountToTransfer)
-            ->chunk($chunkByPools, function ($wallets) use ($except) {
+            ->chunk($chunkByPools, function ($wallets) use ($except, $transferTokens) {
 
                 $pool = Pool::query()->inRandomOrder()->whereNotCentral()->whereNotIn('id', $except->toArray())->first();
 
                 foreach ($wallets as $wallet) {
 
-                    $this->tronService->transfer(new TransferTokensData(
+                    $transferTokens->run(new TransferTokensData(
                         to: $pool->address,
                         amount: $wallet->blockchain_amount,
                         from: $wallet->address,
@@ -64,12 +69,19 @@ class PoolManager
 
     public function getRandomPool(?float $tokensAmount = null): ?Pool
     {
-        return Pool::query()
-            ->when(! is_null($tokensAmount), fn ($query) => $query->where('balance', '>=', $tokensAmount))
-            ->inRandomOrder()
-            ->whereNotCentral()
-            ->first();
+        $proxies = (int)nova_get_setting('max_pool_proxy', 0);
+
+        $query = Pool::query()
+            ->when(!is_null($tokensAmount), fn($query) => $query->where('balance', '>=', $tokensAmount))
+            ->inRandomOrder();
+
+        if ($proxies > 0) {
+            $query->whereNotCentral();
+        }
+
+        return $query->first();
     }
+
 
     public function sync(): static
     {
@@ -91,7 +103,8 @@ class PoolManager
     public function createRandom(int $amount = 1, bool $isCentral = false)
     {
         if ($amount === 1) {
-            $wallet = $this->tronService->generateWallet();
+
+            $wallet = GenerateWalletResponseData::from(GenerateRandomWalletRequest::make()->send()->json());
 
             return Pool::create([
                 'private_key' => $wallet->privateKey,

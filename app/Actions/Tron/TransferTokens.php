@@ -5,7 +5,9 @@ namespace App\Actions\Tron;
 use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
+use App\Models\TronTransaction;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Database\Eloquent\Model;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class TransferTokens
@@ -20,7 +22,7 @@ class TransferTokens
      * @throws SaloonException
      * @throws \Exception
      */
-    public function run(TransferTokensData $data): \Illuminate\Database\Eloquent\Model|\App\Models\TronTransaction
+    public function run(TransferTokensData $data): TronTransaction
     {
         $response = TransferTokensRequest::make($data)->send();
         $reference = $response->json();
@@ -35,7 +37,7 @@ class TransferTokens
     }
 
 
-    public function __invoke(TransferTokensData $data): \Illuminate\Database\Eloquent\Model|\App\Models\TronTransaction
+    public function __invoke(TransferTokensData $data): TronTransaction
     {
         return $this->run($data);
     }

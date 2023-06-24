@@ -3,6 +3,7 @@
 namespace App\Telegram;
 
 use App\Enums\PendingActionType;
+use App\Models\PendingAction;
 use App\Models\User;
 use App\Telegram\Data\SetHandlerData;
 use App\Telegram\Traits\ExtendsSetupChat;
@@ -66,7 +67,7 @@ class DefaultWebhookHandler extends WebhookHandler
         if ($command->authorized()) {
             $command(...$arguments);
         } else {
-            $this->chat->message('👮‍ You are not authorized to use this command.')->dispatch();
+            $this->chat->message("👮 " . __('You are not authorized to use this command.'))->send();
         }
 
     }
@@ -80,34 +81,86 @@ class DefaultWebhookHandler extends WebhookHandler
             return;
         }
 
-        $pendingTransaction = $user
+        /**
+         * @var PendingAction $pendingAction
+         */
+        $pendingAction = $user
             ->pendingActions()
-            ->where('type', PendingActionType::Withdraw)
             ->latest()
             ->first();
 
-        if ($pendingTransaction) {
-            $pendingTransaction->meta = array_merge($pendingTransaction->meta, [
-                'address' => $text->value(),
-            ]);
-            $pendingTransaction->save();
-
-            $this->chat
-                ->markdown('Is this the correct address? ' . $text)
-                ->keyboard(Keyboard::make()->buttons([
-                    Button::make('✅ Yes, that is correct')
-                        ->action('withdraw')
-                        ->param('user', $user->id),
-                    // ->param('user', $user->id),
-                    Button::make('❌ No, cancel transaction')
-                        ->action('withdraw')
-                        ->param('reset', $pendingTransaction->id),
-                    //  ->param('user', $user->id),
-                ]))->dispatch();
+        if (!$pendingAction) {
+            return;
         }
 
-        // Do nothing
+        switch ($pendingAction->type) {
+            case PendingActionType::Withdraw:
+                $this->handleWithdrawPendingAction($pendingAction, $user, $text->value());
+                break;
+            case PendingActionType::Trade:
+                $this->handleTradePendingAction($pendingAction, $user, $text->value());
+                break;
+        }
     }
+
+    private function handleTradePendingAction(PendingAction $pendingAction, User $user, string $value): void
+    {
+        // silence is golden
+        $wallet = $user->wallet;
+        $amount = filter_var($value, FILTER_VALIDATE_FLOAT);
+
+        if ($amount > $wallet->amount) {
+            $this->chat
+                ->markdown(
+                    __('You cannot trade more than you have. Your balance is :balance. Please, specify another value.',
+                        ['balance' => $wallet->amount]
+                    )
+                )->send();
+            return;
+        }
+
+        $pendingAction->mergeMeta([
+            'amount' => $amount,
+        ])->save();
+
+        $this->chat
+            ->markdown(__('Is this the correct amount? :amount', ['amount' => $amount]))
+            ->keyboard(Keyboard::make()->buttons([
+                Button::make('✅ ' . __('Yes, that is correct'))
+                    ->action('trade')
+                    ->param('user', $user->id),
+                Button::make('❌ ' . __('No, cancel transaction'))
+                    ->action('trade')
+                    ->param('reset', $pendingAction->id),
+            ]))->send();
+
+    }
+
+    private function handleWithdrawPendingAction(PendingAction $pendingAction, User $user, string $value): void
+    {
+        if ($value === $user->wallet->address) {
+            $this->chat
+                ->markdown(__('You cannot use the same wallet address. Please, use a different one.'))
+                ->send();
+            return;
+        }
+
+        $pendingAction->mergeMeta([
+            'address' => $value,
+        ])->save();
+
+        $this->chat
+            ->markdown(__('Is this the correct address? :address', ['address' => $value]))
+            ->keyboard(Keyboard::make()->buttons([
+                Button::make('✅ ' . __('Yes, that is correct'))
+                    ->action('withdraw')
+                    ->param('user', $user->id),
+                Button::make('❌ ' . __('No, cancel transaction'))
+                    ->action('withdraw')
+                    ->param('reset', $pendingAction->id),
+            ]))->send();
+    }
+
 
     protected function canHandle(string $action): bool
     {

@@ -3,6 +3,7 @@
 namespace App\Actions\Tron;
 
 use App\Enums\TransactionStatus;
+use App\Events\TransactionApproved;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
 use App\Models\TronTransaction;
@@ -39,9 +40,9 @@ class ApproveTransaction
             }
         }
 
-        $transaction->status = TransactionStatus::Approved;
+
         $transaction->blockchain_reference_id = $response->json();
-        $transaction->save();
+        $transaction->approve();
 
         return $transaction;
     }

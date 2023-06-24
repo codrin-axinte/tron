@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\InteractsWithTelegram;
 use App\Traits\HasPendingActions;
 use App\Traits\HasReferralLinks;
 use App\Traits\HasTeam;
@@ -9,6 +10,7 @@ use DefStudio\Telegraph\Models\TelegraphChat;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Nova\Auth\Impersonatable;
@@ -20,7 +22,7 @@ use Modules\Wallet\Models\PricingPlan;
 use Modules\Wallet\Traits\HasWallet;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
+class User extends Authenticatable implements MustVerifyEmail, CanOwnModels, InteractsWithTelegram
 {
     use HasApiTokens,
         HasFactory,
@@ -121,7 +123,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels
         return $this->pricingPlans()->first();
     }
 
-    public function chat(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function chat(): BelongsTo
     {
         return $this->belongsTo(TelegraphChat::class);
     }

@@ -12,12 +12,13 @@ use App\Services\PoolManager;
 use App\Services\TronService;
 use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
+use Modules\Wallet\Exceptions\InsufficientCredits;
 use Modules\Wallet\Models\Wallet;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class Withdraw
 {
-    public function __construct(protected TronService $tron, protected PoolManager $poolManager)
+    public function __construct(protected PoolManager $poolManager, protected CreateTransaction $createTransaction)
     {
     }
 
@@ -25,13 +26,17 @@ class Withdraw
      * @throws \ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     * @throws InsufficientCredits
      */
     public function __invoke(Wallet $ownerWallet, string $walletToAddress, USDT $amount)
     {
-
-        $settings = $this->getSettings();
+        $settings = WithdrawSettings::fromNova();
 
         $settings->canWithdraw($amount->value());
+
+        if ($amount->greaterThan($ownerWallet->amount)) {
+            throw new InsufficientCredits(__('The requested amount is greater than what you own in your wallet.'));
+        }
 
         $method = $settings->method;
         $pool = $this->poolManager->getRandomPool($amount->value());
@@ -47,6 +52,16 @@ class Withdraw
             $method = $amount->value() >= $settings->approvalAmount ? WithdrawMethod::Approval : WithdrawMethod::Automatic;
         }
 
+
+        $transaction = $this->createTransaction->run(new TransactionData(
+            $data,
+            status: TransactionStatus::AwaitingConfirmation,
+            type: TransactionType::Withdraw,
+            meta: [
+                'payload' => $data->toArray(),
+            ]
+        ));
+
         if (!$pool) {
             // If there is no money in a pool we must aggregate in one pool the necessary amount
             // $poolManager->aggregateAmountFor($pool, $amount);
@@ -54,41 +69,16 @@ class Withdraw
             $method = WithdrawMethod::Approval;
         }
 
+
         if ($method === WithdrawMethod::Automatic) {
-            return app(TransferTokens::class)($data);
+
+            app(TransferTokens::class)($data);
+
+            return $transaction;
         }
 
 
         // Anything else needs approval
-        return app(CreateTransaction::class)(new TransactionData(
-            $data,
-            status: TransactionStatus::AwaitingConfirmation,
-            type: TransactionType::Out,
-            meta: [
-                'payload' => $data->toArray(),
-            ]
-        ));
-
-    }
-
-    private function getSettings(): WithdrawSettings
-    {
-        $settings = nova_get_settings([
-            'max_pool_proxy',
-            'withdraw_method',
-            'withdraw_approval_amount',
-            'withdraw_maximum_amount_allowed',
-            'withdraw_minimum_amount_allowed',
-            'block_withdraws',
-        ]);
-        
-        return WithdrawSettings::from([
-            'max_pool_proxy' => $settings['max_pool_proxy'],
-            'withdraw_method' => $settings['withdraw_method'],
-            'withdraw_approval_amount' => $settings['withdraw_approval_amount'],
-            'withdraw_maximum_amount_allowed' => $settings['withdraw_maximum_amount_allowed'],
-            'withdraw_minimum_amount_allowed' => $settings['withdraw_minimum_amount_allowed'],
-            'block_withdraws' => $settings['block_withdraws'] ?? false,
-        ]);
+        return $transaction;
     }
 }

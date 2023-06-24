@@ -20,7 +20,7 @@ return new class extends Migration
             $table->float('amount');
             $table->string('contract')->nullable();
             $table->string('blockchain_reference_id')->nullable();
-            $table->string('type')->default(\App\Enums\TransactionType::In->value);
+            $table->string('type')->default(\App\Enums\TransactionType::Deposit->value);
             $table->string('status')->default(\App\Enums\TransactionStatus::Approved->value);
             $table->nullableUuidMorphs('sender');
             $table->nullableUuidMorphs('receiver');

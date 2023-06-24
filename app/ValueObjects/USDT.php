@@ -34,6 +34,21 @@ class USDT
         return number_format($this->amount, $decimals, $decimalSeparator, $thousandsSeparator);
     }
 
+    public function gte(float|int $comparedAmount): bool
+    {
+        return $this->amount >= $comparedAmount;
+    }
+
+    public function greaterThan(float|int $comparedAmount): bool
+    {
+        return $this->amount > $comparedAmount;
+    }
+
+    public function lte(float|int $comparedAmount): bool
+    {
+        return $this->amount <= $comparedAmount;
+    }
+
     public function __toString(): string
     {
         return $this->formatted();

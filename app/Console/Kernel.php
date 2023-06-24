@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\CompoundInterestUpdate;
+use App\Console\Commands\PurgePendingActionsCommand;
 use App\Console\Commands\TronSyncCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('telescope:prune')->daily();
         $schedule->command(CompoundInterestUpdate::class)->everyFiveMinutes();
         $schedule->command(TronSyncCommand::class)->everyMinute();
+        $schedule->command(PurgePendingActionsCommand::class)->everyTenMinutes();
         // Referral
     }
 

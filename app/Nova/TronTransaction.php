@@ -2,7 +2,9 @@
 
 namespace App\Nova;
 
+use App\Enums\TransactionStatus;
 use App\Nova\Actions\ApproveTransaction;
+use App\Nova\Actions\RejectTransaction;
 use App\Nova\Traits\ResourceIsReadonly;
 use Illuminate\Http\Request;
 use Laravel\Nova\Actions\Action;
@@ -39,14 +41,13 @@ class TronTransaction extends Resource
         'id', 'from', 'to', 'contract', 'blockchain_reference_id'
     ];
 
-    public static $group =  'blockchain';
+    public static $group = 'blockchain';
 
     public static $polling = true;
 
     public static $pollingInterval = 15;
 
     public static $showPollingToggle = true;
-
 
 
     public static function label()
@@ -86,7 +87,6 @@ class TronTransaction extends Resource
                 ->hideFromIndex(),
 
 
-
             Text::make(__('Contract'), 'contract')
                 ->filterable()
                 ->hideFromIndex(),
@@ -98,7 +98,17 @@ class TronTransaction extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
-            ApproveTransaction::make()->showInline(),
+            ApproveTransaction::make()
+                ->showInline()
+                ->canRun(
+                    fn(NovaRequest $request) => $request->model()->status === TransactionStatus::AwaitingConfirmation
+                ),
+
+            RejectTransaction::make()
+                ->showInline()
+                ->canRun(
+                    fn(NovaRequest $request) => $request->model()->status === TransactionStatus::AwaitingConfirmation
+                ),
         ];
     }
 

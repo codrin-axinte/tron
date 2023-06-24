@@ -2,6 +2,10 @@
 
 namespace App\Actions\Tron;
 
+use App\Enums\TransactionStatus;
+use App\Events\TransactionApproved;
+use App\Events\TransactionRejected;
+use App\Events\TransactionStatusUpdated;
 use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Models\TronTransaction;
 use App\ValueObjects\USDT;

@@ -92,20 +92,19 @@ class WithdrawCommand extends TelegramCommand
         }
 
         $withdraw = app(Withdraw::class);
-        $this->send(__('Initiating transaction...'));
+        $this->send(__('tron-transactions.initiating'));
 
         try {
             \DB::transaction(function () use ($withdraw, $balance, $user, $pendingAction) {
                 $percent = $pendingAction->meta['percentage'];
                 $transferToAddress = $pendingAction->meta['address'];
                 $amount = $balance->percentage($percent);
-                $transaction = $withdraw($user->wallet, $transferToAddress, $amount);
+                $withdraw($user->wallet, $transferToAddress, $amount);
                 $pendingAction->delete();
-                $this->send(__(
-                    "Transaction processed. You have transferred * :amount * USDT to the address :address",
+
+                $this->send(__("tron-transactions.processing",
                     ['amount' => $amount, 'address' => $transferToAddress]
-                ));
-                //$this->markdown($transaction->blockchain_reference_id)->dispatch();
+                ))->start($this->currentUser);
             });
 
         } catch (\Throwable $e) {

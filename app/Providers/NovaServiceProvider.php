@@ -24,7 +24,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
-        Nova::footer(fn ($request) => view('nova-footer', [
+        Nova::serving(function () {
+            \Cache::forever('nova_valid_license_key', true);
+        });
+
+        Nova::footer(fn($request) => view('nova-footer', [
             'morph' => $module = Module::findOrFail('morphling'),
             'version' => $module->get('version', '0.0.0'),
         ])->render());

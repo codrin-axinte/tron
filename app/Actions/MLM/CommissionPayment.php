@@ -80,9 +80,8 @@ class CommissionPayment
 
         $result = $owner->wallet()->increment('amount', $amountToGive->value());
         if ($result) {
-            $owner->chat
-                ->markdown(__("You have received :amount from commission.", ['amount' => $amountToGive->value()]))
-                ->dispatch('telegram');
+            $owner->chat?->markdown(__("You have received :amount from commission.", ['amount' => $amountToGive->value()]))
+                ->send();
         }
 
         return $result;

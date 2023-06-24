@@ -39,7 +39,7 @@ class Pool extends Resource
         'id', 'address',
     ];
 
-    public static $group =  'blockchain';
+    public static $group = 'blockchain';
 
     /**
      * Get the fields displayed by the resource.
@@ -56,7 +56,9 @@ class Pool extends Resource
                 ->symbol('USDT')
                 ->filterable()
                 ->sortable()
-                ->required(),
+                ->readonly()
+                ->required()
+                ->help(__('The balance it syncs automatically')),
 
             Boolean::make(__('Is central'), 'is_central')
                 ->help('If this is enabled. All the pools will be merged into this one.')

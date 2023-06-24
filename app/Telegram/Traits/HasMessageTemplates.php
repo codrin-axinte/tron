@@ -15,7 +15,7 @@ trait HasMessageTemplates
         $chat = $chat ?? $this->chat;
 
         foreach ($templates as $template) {
-            $chat->markdown($template->content)->dispatch('telegram');
+            $chat->markdown($template->content)->send();
         }
 
         return $this;

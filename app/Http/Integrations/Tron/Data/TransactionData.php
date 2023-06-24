@@ -10,11 +10,12 @@ class TransactionData extends Data
 {
     public function __construct(
         public TransferTokensData $transferData,
-        public TransactionStatus $status = TransactionStatus::Approved,
-        public TransactionType $type = TransactionType::In,
-        public ?string $referenceId = null,
-        public ?array $meta = null
-    ) {
+        public TransactionStatus  $status = TransactionStatus::Approved,
+        public TransactionType    $type = TransactionType::Deposit,
+        public ?string            $referenceId = null,
+        public ?array             $meta = null
+    )
+    {
 
     }
 }

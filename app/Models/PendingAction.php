@@ -19,8 +19,10 @@ class PendingAction extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scopeAwaitsConfirmation($query)
+    public function mergeMeta(array $meta): static
     {
-        return $query->where('type', PendingActionType::AwaitingTransactionConfirmation);
+        $this->meta = array_merge($this->meta, $meta);
+
+        return $this;
     }
 }

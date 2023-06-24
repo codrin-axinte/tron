@@ -29,7 +29,7 @@ class ApproveTransaction extends Action
             \DB::transaction(fn() => $approveAction($model));
         }
 
-        return Action::message('Transactions approved');
+        return Action::message(__('Transactions approved'));
     }
 
     /**

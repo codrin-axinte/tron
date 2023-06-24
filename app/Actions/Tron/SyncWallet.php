@@ -38,24 +38,17 @@ class SyncWallet
             return;
         }
 
-        // Update blockchain_amount
+        // Sync blockchain_amount
         $wallet->blockchain_amount = $amount;
+
         // Update virtual amount
         $wallet->amount += $amount;
 
         $wallet->save();
 
-        if ($wallet->blockchain_amount <= 0) {
-            return;
-        }
-
-        // Activate account if not active
-        if (!$wallet->user->hasAnyRole([AclService::trader()])) {
-            app(ActivateUser::class)->activate($wallet->user);
-        }
-
         event(new BlockchainTopUp($wallet->user, $amount));
 
+        //FIXME: Must remove the blockchain amount after the transfer
         // Transfer the blockchain amount into a pool. This should be a job to not wait for it
         $pool = $this->poolManager->getRandomPool();
         $data = new TransferTokensData(
