@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Actions\Tron\TransferTokens;
 use App\Events\TokenTransferFailed;
-use App\Events\TokenTransferredSuccess;
+use App\Events\TokenTransferSuccessful;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
@@ -37,7 +37,7 @@ class TransferTokensJob implements ShouldQueue
 
         try {
             $transaction = $action($this->data);
-            event(new TokenTransferredSuccess($transaction));
+            event(new TokenTransferSuccessful($transaction));
         } catch (\Throwable $e) {
             \Log::error($e->getMessage(), $e->getTraceAsString());
             event(new TokenTransferFailed($transaction, $e->getMessage()));

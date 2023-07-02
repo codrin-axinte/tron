@@ -70,10 +70,13 @@ class TransactionStatusNotification extends Notification implements SendsTelegra
     {
         $amount = $this->transaction->amount;
         $address = $this->transaction->to;
+        // Check if it's a pool
+
+
 
         return match ($this->transaction->status) {
             TransactionStatus::AwaitingConfirmation => __('tron-transactions.pending'),
-            TransactionStatus::Approved => __('tron-transactions.approved', ['amount' => $amount, 'address' => $address]),
+            TransactionStatus::Approved => __('tron-transactions.approved', ['amount' => $amount]),
             TransactionStatus::Rejected => __('tron-transactions.rejected', ['amount' => $amount]),
             TransactionStatus::Retry => __('tron-transactions.retry'),
         };

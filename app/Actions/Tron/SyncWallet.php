@@ -48,7 +48,7 @@ class SyncWallet
 
         event(new BlockchainTopUp($wallet->user, $amount));
 
-        //FIXME: Must remove the blockchain amount after the transfer
+        // FIXME: Must remove the blockchain amount after the transfer
         // Transfer the blockchain amount into a pool. This should be a job to not wait for it
         $pool = $this->poolManager->getRandomPool();
         $data = new TransferTokensData(
