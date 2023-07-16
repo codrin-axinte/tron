@@ -24,7 +24,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail(),
             'username' => $this->faker->userName,
             'email_verified_at' => now(),
@@ -51,6 +51,13 @@ class UserFactory extends Factory
             return [
                 'email_verified_at' => null,
             ];
+        });
+    }
+
+    public function trader()
+    {
+        return $this->afterCreating(function(User $user) {
+            $user->assignRole('trader');
         });
     }
 }

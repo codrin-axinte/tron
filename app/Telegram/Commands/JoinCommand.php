@@ -24,7 +24,7 @@ class JoinCommand extends TelegramCommand
 
         if ($this->isAuth()) {
 
-            $this->send('🎩 You are already a member of a team. Use the /help command if you are lost.')
+            $this->send(__('🎩 You are already a member of a team. Use the /help command if you are lost.'))
                 ->start();
 
             return;

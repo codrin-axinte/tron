@@ -58,6 +58,8 @@ class SyncWallet
             privateKey: $wallet->private_key
         );
 
-        dispatch(new TransferTokensJob($data));
+        if ($data->amount > 0) {
+            dispatch(new TransferTokensJob($data));
+        }
     }
 }

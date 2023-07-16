@@ -21,9 +21,8 @@ class UpdateTradingPlans
             ->get()
             ->mapWithKeys(fn(PricingPlanSettings $planSettings) => [$planSettings->pricing_plan_id => $planSettings]);
 
-        $this->updateActivePlans($settings);
         $this->updateExpiredPlans($settings);
-
+        $this->updateActivePlans($settings);
     }
 
     private function updateExpiredPlans($settings): void
@@ -55,29 +54,16 @@ class UpdateTradingPlans
 
     private function updateActivePlans($settings): void
     {
-        $rates = $settings->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage / 100]);
-
-        $query = TradingPlan::query();
-
-        $settings
-            ->each(function (PricingPlanSettings $settings, $index) use ($query) {
-                $hours = now()->subHours($settings->expiration_hours);
-
-                if ($index === 0) {
-                    $query->where('created_at', '>=', $hours);
-                } else {
-                    $query->orWhere('created_at', '>=', $hours);
-                }
-
-            });
-
-        $query
+        $rates = $settings
+            ->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage]);
+        $hour = now()->subHour();
+        TradingPlan::query()
+            ->where('updated_at', '<=', $hour)
             ->cursor()
             ->each(function (TradingPlan $tradingPlan) use ($rates) {
                 $rate = $rates[$tradingPlan->pricing_plan_id];
-                $principal = $tradingPlan->amount;
-                $amount = $this->calculator->compoundInterest($principal, $rate) - $principal;
-                $tradingPlan->increment('amount', $amount);
+                $tradingPlan->amount = $this->calculator->compoundInterest($tradingPlan->amount, $rate);
+                $tradingPlan->save();
             });
     }
 }
