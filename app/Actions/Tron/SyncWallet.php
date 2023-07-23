@@ -32,7 +32,7 @@ class SyncWallet
         $this->request->addData('address', $wallet->address);
         $response = $this->request->send();
 
-        $amount = $response->json();
+        $amount = (float) $response->json();
 
         if ($amount <= 0) {
             return;
