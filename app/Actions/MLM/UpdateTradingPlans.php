@@ -60,10 +60,12 @@ class UpdateTradingPlans
         TradingPlan::query()
             ->where('updated_at', '<=', $hour)
             ->cursor()
-            ->each(function (TradingPlan $tradingPlan) use ($rates) {
+            ->each(callback: function (TradingPlan $tradingPlan) use ($rates) {
                 $rate = $rates[$tradingPlan->pricing_plan_id];
-                $tradingPlan->amount = $this->calculator->compoundInterest($tradingPlan->amount, $rate);
-                $tradingPlan->save();
+                $interest = $this->calculator->calculateInterest($tradingPlan->amount, $rate);
+                $tradingPlan->increment('amount', $interest);
+                //$tradingPlan->amount = $this->calculator->compoundInterest($tradingPlan->amount, $rate);
+                //$tradingPlan->save();
             });
     }
 }

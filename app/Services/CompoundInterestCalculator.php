@@ -6,7 +6,13 @@ class CompoundInterestCalculator
 {
     public function compoundInterest($principal, $percentageRate): float|int
     {
-        return $principal + (($percentageRate / 100) * $principal);
+        $result = $principal + (($percentageRate / 100) * $principal);
+        return $result;
+    }
+
+    public function calculateInterest($principal, $percentageRate): float|int
+    {
+        return ($percentageRate / 100) * $principal;
     }
 
     public function simulate($principal, $rate, $hours = 8760): array
