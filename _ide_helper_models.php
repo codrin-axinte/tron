@@ -31,6 +31,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|MessageTemplate whereHooks($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MessageTemplate whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MessageTemplate whereInHooks(array $hooks)
+ * @method static \Illuminate\Database\Eloquent\Builder|MessageTemplate whereLocale(string $column, string $locale)
+ * @method static \Illuminate\Database\Eloquent\Builder|MessageTemplate whereLocales(string $column, array $locales)
  * @method static \Illuminate\Database\Eloquent\Builder|MessageTemplate whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MessageTemplate whereUpdatedAt($value)
  */
@@ -47,7 +49,7 @@ namespace App\Models{
  * @property array|null $meta
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|PendingAction awaitsConfirmation()
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|PendingAction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PendingAction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PendingAction query()
@@ -169,7 +171,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereUserId($value)
  */
-	class Team extends \Eloquent implements \Illuminate\Contracts\Support\Renderable {}
+	class Team extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -228,7 +230,9 @@ namespace App\Models{
  * @property string|null $receiver_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property mixed|null $meta
+ * @property array|null $meta
+ * @property-read \App\Models\User|null $owner
+ * @property-read \Modules\Wallet\Models\Wallet|null $ownerWallet
  * @method static \Illuminate\Database\Eloquent\Builder|TronTransaction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TronTransaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TronTransaction query()
@@ -286,6 +290,7 @@ namespace App\Models{
  * @property-read int|null $referral_links_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
+ * @property-read \App\Models\Team|null $team
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @property-read \App\Models\TradingPlan|null $tradingPlan
@@ -312,7 +317,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  */
-	class User extends \Eloquent implements \Illuminate\Contracts\Auth\MustVerifyEmail, \Modules\Morphling\Contracts\CanOwnModels {}
+	class User extends \Eloquent implements \Illuminate\Contracts\Auth\MustVerifyEmail, \Modules\Morphling\Contracts\CanOwnModels, \App\Contracts\InteractsWithTelegram {}
 }
 
 namespace Modules\Morphling\Models{
@@ -409,6 +414,8 @@ namespace Modules\Wallet\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan whereFrequencyType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan whereIsBest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan whereLocale(string $column, string $locale)
+ * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan whereLocales(string $column, array $locales)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPlan whereSortOrder($value)
