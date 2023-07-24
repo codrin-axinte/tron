@@ -2,10 +2,12 @@
 
 namespace App\Actions\Tron;
 
+use App\Actions\MLM\CommissionPayment;
 use App\Enums\ChatHooks;
 use App\Events\TelegramHook;
 use App\Models\User;
 use Modules\Acl\Services\AclService;
+use Modules\Settings\Services\SettingsService;
 use Modules\Wallet\Models\PricingPlan;
 
 class UserActivateAction
@@ -19,7 +21,7 @@ class UserActivateAction
             // We wait for more money. Should send a telegram message.
             $diff = $plan->price - $wallet->amount;
             $user->chat
-                ->markown('You have to deposit at least '.$diff.' USDT in order to activate your account. You have '.$wallet->amount.' USDT in your wallet.')
+                ->markown('You have to deposit at least ' . $diff . ' USDT in order to activate your account. You have ' . $wallet->amount . ' USDT in your wallet.')
                 ->send();
 
             return;

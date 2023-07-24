@@ -48,7 +48,6 @@ class EventServiceProvider extends ServiceProvider
 
         BlockchainTopUp::class => [
             ActivateUser::class,
-            PayCommissions::class,
         ],
 
         TokenTransferSuccessful::class => [

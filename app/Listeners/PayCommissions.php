@@ -9,6 +9,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Modules\Settings\Services\SettingsService;
 
+/**
+ * @deprecated
+ */
 class PayCommissions
 {
     /**
@@ -32,6 +35,10 @@ class PayCommissions
      */
     public function handle(BlockchainTopUp $event)
     {
+        if ($event->user->hasRole('trader')) {
+            return;
+        }
+
         $commissions = collect($this->settings->getJson('commissions', []))
             ->pluck('percentage')
             ->toArray();
