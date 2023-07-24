@@ -48,7 +48,7 @@ class CommissionPayment
 
         $this->payOwner($owner, $depth);
 
-        $this->execute($owner, $depth++);
+        $this->execute($owner, $depth + 1);
     }
 
     private function findOwner(?User $user)
