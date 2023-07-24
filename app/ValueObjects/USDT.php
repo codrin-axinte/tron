@@ -24,9 +24,9 @@ class USDT
         return new static($amount / self::SUN_UNIT);
     }
 
-    public function toSun(): float|int
+    public function toSun(): float
     {
-        return (int)$this->amount * self::SUN_UNIT;
+        return floor($this->amount * self::SUN_UNIT);
     }
 
     public function formatted(int $decimals = 2, string $decimalSeparator = '.', string $thousandsSeparator = ','): string
