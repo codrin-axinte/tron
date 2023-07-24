@@ -13,6 +13,7 @@ use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
@@ -56,12 +57,14 @@ class Wallet extends Resource
             Text::make(__('Address'), 'address')->nullable(),
 
             Currency::make(__('Virtual Amount'), 'amount')
+                ->displayUsing(fn($amount) => round($amount))
                 ->symbol('USD')
                 ->filterable()
                 ->sortable()
                 ->required(),
 
             Currency::make(__('Blockchain Balance'), 'blockchain_amount')
+                ->displayUsing(fn($amount) => round($amount))
                 ->symbol('USDT')
                 ->filterable()
                 ->sortable()
