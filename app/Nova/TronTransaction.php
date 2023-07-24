@@ -77,6 +77,7 @@ class TronTransaction extends Resource
                 ->filterable(),
 
             Currency::make(__('Amount'), 'amount')
+                ->displayUsing(fn($amount) => round($amount))
                 ->symbol('USDT')
                 ->filterable()
                 ->sortable()

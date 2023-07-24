@@ -77,6 +77,7 @@ class TradingPlan extends Resource
                 ->required(),
 
             Currency::make(__('Amount'), 'amount')
+                ->displayUsing(fn($amount) => round($amount))
                 ->symbol('USDT')
                 ->filterable()
                 ->sortable()
