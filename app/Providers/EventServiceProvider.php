@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\BlockchainTopUp;
 use App\Events\TelegramHook;
 use App\Events\TokenTransferFailed;
 use App\Events\TokenTransferSuccessful;
@@ -46,15 +45,13 @@ class EventServiceProvider extends ServiceProvider
             SendTemplateMessage::class,
         ],
 
-        BlockchainTopUp::class => [
+        TokenTransferSuccessful::class => [
+            UpdateBlockchainWallet::class,
             ActivateUser::class,
         ],
 
-        TokenTransferSuccessful::class => [
-            UpdateBlockchainWallet::class,
-        ],
         TokenTransferFailed::class => [
-
+            // Send notifications? Report the issue?
         ],
 
         TransactionStatusUpdated::class => [

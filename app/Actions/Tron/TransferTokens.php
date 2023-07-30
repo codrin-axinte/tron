@@ -2,6 +2,9 @@
 
 namespace App\Actions\Tron;
 
+use App\Events\TokenTransferFailed;
+use App\Events\TokenTransferSuccessful;
+use App\Exceptions\TronNumericFaultException;
 use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
@@ -24,11 +27,31 @@ class TransferTokens
      */
     public function run(TransferTokensData $data): TronTransaction
     {
+        $transaction = null;
+        try {
+            $transaction = $this->transfer($data);
+            event(new TokenTransferSuccessful($transaction));
+        } catch (\Throwable $e) {
+            \Log::error($e->getMessage(), $e->getTraceAsString());
+            event(new TokenTransferFailed($transaction, $data, $e->getMessage()));
+        }
+
+        return $transaction;
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws GuzzleException
+     * @throws SaloonException
+     * @throws \Exception
+     */
+    private function transfer(TransferTokensData $data): Model|TronTransaction
+    {
         $response = TransferTokensRequest::make($data)->send();
         $reference = $response->json();
 
         if (is_array($reference) && $reference['code'] === 'NUMERIC_FAULT') {
-            throw new \Exception('[NUMERIC_FAULT] Transfer has failed.');
+            throw new TronNumericFaultException;
         }
 
         $transactionData = new TransactionData($data, referenceId: $reference);
@@ -37,6 +60,11 @@ class TransferTokens
     }
 
 
+    /**
+     * @throws \ReflectionException
+     * @throws GuzzleException
+     * @throws SaloonException
+     */
     public function __invoke(TransferTokensData $data): TronTransaction
     {
         return $this->run($data);

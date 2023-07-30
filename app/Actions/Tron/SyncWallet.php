@@ -2,14 +2,12 @@
 
 namespace App\Actions\Tron;
 
-use App\Events\BlockchainTopUp;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Jobs\TransferTokensJob;
 use App\Services\PoolManager;
 use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
-use Modules\Acl\Services\AclService;
 use Modules\Wallet\Models\Wallet;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
@@ -32,24 +30,21 @@ class SyncWallet
         $this->request->addData('address', $wallet->address);
         $response = $this->request->send();
 
-        $amount = (float) $response->json();
+        $amount = (float)$response->json();
 
-        if ($amount <= 0) {
+        if ($amount < 1) {
             return;
         }
 
         // Sync blockchain_amount
-        $wallet->blockchain_amount = $amount;
+        $wallet->update(['blockchain_amount' => $amount]);
 
-        // Update virtual amount
-        $wallet->amount += $amount;
-
-        $wallet->save();
-
-        event(new BlockchainTopUp($wallet->user, $amount));
-
-        // FIXME: Must remove the blockchain amount after the transfer
         // Transfer the blockchain amount into a pool. This should be a job to not wait for it
+        $this->transferToPool($wallet);
+    }
+
+    private function transferToPool(Wallet $wallet): void
+    {
         $pool = $this->poolManager->getRandomPool();
         $data = new TransferTokensData(
             to: $pool->address,
@@ -58,8 +53,6 @@ class SyncWallet
             privateKey: $wallet->private_key
         );
 
-        if ($data->amount > 0) {
-            dispatch(new TransferTokensJob($data));
-        }
+        dispatch(new TransferTokensJob($data));
     }
 }

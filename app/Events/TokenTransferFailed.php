@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Models\TronTransaction;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -20,7 +21,7 @@ class TokenTransferFailed
      *
      * @return void
      */
-    public function __construct(public TronTransaction $transaction, public string $error)
+    public function __construct(public ?TronTransaction $transaction, public TransferTokensData $data, public string $error)
     {
         //
     }

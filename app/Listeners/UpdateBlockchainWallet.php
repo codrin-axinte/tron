@@ -36,5 +36,6 @@ class UpdateBlockchainWallet
         }
 
         $wallet->decrement('blockchain_amount', $transaction->amount);
+        $wallet->increment('amount', $transaction->amount);
     }
 }

@@ -28,20 +28,8 @@ class TransferTokensJob implements ShouldQueue
         //
     }
 
-    /**
-     * Execute the job.
-     */
-    public function handle(): void
+    public function handle(TransferTokens $transferTokens): void
     {
-        $action = app(TransferTokens::class);
-
-        try {
-            $transaction = $action($this->data);
-            event(new TokenTransferSuccessful($transaction));
-        } catch (\Throwable $e) {
-            \Log::error($e->getMessage(), $e->getTraceAsString());
-            event(new TokenTransferFailed($transaction, $e->getMessage()));
-        }
-
+        $transferTokens($this->data);
     }
 }

@@ -4,9 +4,7 @@ namespace App\Listeners;
 
 use App\Actions\MLM\CommissionPayment;
 use App\Actions\Tron\UserActivateAction;
-use App\Events\BlockchainTopUp;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Events\TokenTransferSuccessful;
 use Modules\Acl\Services\AclService;
 use Modules\Settings\Services\SettingsService;
 
@@ -18,7 +16,7 @@ final class ActivateUser
      * @return void
      */
     public function __construct(
-        private UserActivateAction $action,
+        private UserActivateAction $activateAction,
         private CommissionPayment  $commissionPayment,
         private SettingsService    $settings
     )
@@ -29,21 +27,23 @@ final class ActivateUser
     /**
      * Handle the event.
      *
-     * @param BlockchainTopUp $event
+     * @param TokenTransferSuccessful $event
      * @return void
      * @throws \Throwable
      */
-    public function handle(BlockchainTopUp $event): void
+    public function handle(TokenTransferSuccessful $event): void
     {
-        $user = $event->user;
+
+        $transaction = $event->transaction;
+        $user = $transaction->ownerWallet->user;
 
         if ($user->hasAnyRole([AclService::trader()])) {
             return;
         }
 
-        \DB::transaction(function () use ($user, $event) {
-            $this->action->run($user);
-            $this->payCommissions($user, $event->amount);
+        \DB::transaction(function () use ($user, $transaction) {
+            $this->activateAction->run($user);
+            $this->payCommissions($user, $transaction->amount);
         });
     }
 

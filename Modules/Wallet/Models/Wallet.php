@@ -10,7 +10,7 @@ use Modules\Wallet\Utils\Table;
 
 class Wallet extends Model
 {
-    use HasFactory, HasWalletTransactions;
+    use HasWalletTransactions;
 
     protected $guarded = [];
 
