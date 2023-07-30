@@ -3,6 +3,7 @@
 namespace Modules\Wallet\Nova\Resources;
 
 use App\Nova\Actions\TransferTokensAction;
+use App\Nova\Fields\USDT;
 use App\Nova\Resource;
 use App\Nova\User;
 use App\Nova\WalletTransaction;
@@ -56,18 +57,10 @@ class Wallet extends Resource
 
             Text::make(__('Address'), 'address')->nullable(),
 
-            Currency::make(__('Virtual Amount'), 'amount')
-                ->displayUsing(fn($amount) => round($amount))
-                ->symbol('USD')
-                ->filterable()
-                ->sortable()
+            USDT::make(__('Virtual Amount'), 'amount')
                 ->required(),
 
-            Currency::make(__('Blockchain Balance'), 'blockchain_amount')
-                ->displayUsing(fn($amount) => round($amount))
-                ->symbol('USDT')
-                ->filterable()
-                ->sortable()
+            USDT::make(__('Blockchain Balance'), 'blockchain_amount')
                 ->required(),
 
             DateTime::make(__('Created At'), 'created_at')->onlyOnDetail(),

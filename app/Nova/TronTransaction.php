@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\TransactionStatus;
 use App\Nova\Actions\ApproveTransaction;
 use App\Nova\Actions\RejectTransaction;
+use App\Nova\Fields\USDT;
 use App\Nova\Traits\ResourceIsReadonly;
 use Illuminate\Http\Request;
 use Laravel\Nova\Actions\Action;
@@ -76,11 +77,7 @@ class TronTransaction extends Resource
                 ->sortable()
                 ->filterable(),
 
-            Currency::make(__('Amount'), 'amount')
-                ->displayUsing(fn($amount) => round($amount))
-                ->symbol('USDT')
-                ->filterable()
-                ->sortable()
+            USDT::make(__('Amount'), 'amount')
                 ->required(),
 
             Text::make(__('Reference'), 'blockchain_reference_id')

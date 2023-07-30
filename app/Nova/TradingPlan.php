@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Fields\USDT;
 use App\Nova\Traits\ResourceIsReadonly;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -67,24 +68,23 @@ class TradingPlan extends Resource
             ID::make()->sortable(),
             BelongsTo::make(__('User'), 'user', User::class)
                 ->searchable()
-                ->sortable()
-                ->required(),
+                ->sortable(),
 
             BelongsTo::make(__('Pricing Plan'), 'pricingPlan', PricingPlan::class)
                 ->searchable()
                 ->sortable()
-                ->filterable()
-                ->required(),
+                ->filterable(),
 
-            Currency::make(__('Amount'), 'amount')
-                ->displayUsing(fn($amount) => round($amount))
-                ->symbol('USDT')
-                ->filterable()
-                ->sortable()
-                ->required(),
+            USDT::make(__('Start Amount'), 'start_amount'),
 
-            DateTime::make(__("Started at"), 'created_at'),
-            DateTime::make(__("Last Updated at"), 'updated_at'),
+            USDT::make(__('Amount'), 'amount'),
+
+            DateTime::make(__("Started at"), 'created_at')
+                ->filterable()
+                ->sortable(),
+            DateTime::make(__("Last Updated at"), 'updated_at')
+                ->filterable()
+                ->sortable(),
             Text::make(__('Finishes'), 'remaining_time'),
         ];
     }

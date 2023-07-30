@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Nova\Actions\CreateRandomPoolAction;
+use App\Nova\Fields\USDT;
 use Laravel\Nova\Actions\ExportAsCsv;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
@@ -52,10 +53,7 @@ class Pool extends Resource
             ID::make()->sortable(),
             Text::make(__('Address'), 'address')->nullable(),
 
-            Currency::make(__('Balance'), 'balance')
-                ->symbol('USDT')
-                ->filterable()
-                ->sortable()
+            USDT::make(__('Balance'), 'balance')
                 ->readonly()
                 ->required()
                 ->help(__('The balance it syncs automatically')),
