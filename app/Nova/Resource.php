@@ -7,6 +7,7 @@ use Laravel\Nova\Resource as NovaResource;
 
 abstract class Resource extends NovaResource
 {
+    public static $trafficCop = false;
     /**
      * Build an "index" query for the given resource.
      *
