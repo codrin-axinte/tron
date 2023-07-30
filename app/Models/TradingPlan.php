@@ -13,6 +13,7 @@ class TradingPlan extends Model
 
     protected $casts = [
         'amount' => 'float',
+        'start_amount' => 'float',
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

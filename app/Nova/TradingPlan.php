@@ -86,7 +86,6 @@ class TradingPlan extends Resource
             DateTime::make(__("Started at"),'created_at'),
             Text::make(__('Finishes'),'remaining_time'),
 
-
         ];
     }
 }

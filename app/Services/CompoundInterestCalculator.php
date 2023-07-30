@@ -4,15 +4,17 @@ namespace App\Services;
 
 class CompoundInterestCalculator
 {
-    public function compoundInterest($principal, $percentageRate): float|int
+    public function compoundInterest($principal, $percentageRate): float
     {
         $result = $principal + (($percentageRate / 100) * $principal);
         return $result;
     }
 
-    public function calculateInterest($principal, $percentageRate): float|int
+    public function calculateInterest($principal, $percentageRate): float
     {
-        return ($percentageRate / 100) * $principal;
+        $result = ($percentageRate / 100) * $principal;
+
+        return $result;
     }
 
     public function simulate($principal, $rate, $hours = 8760): array

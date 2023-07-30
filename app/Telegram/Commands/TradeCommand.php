@@ -2,7 +2,7 @@
 
 namespace App\Telegram\Commands;
 
-use App\Actions\Tron\Trade;
+use App\Actions\Tron\StartTrade;
 use App\Enums\MessageType;
 use App\Models\User;
 use App\Telegram\Traits\HasChatMenus;
@@ -38,13 +38,12 @@ class TradeCommand extends TelegramCommand
                 ->highestPlan($tradeAmount)
                 ->first();
 
-            app(Trade::class)->run($user, $plan, $tradeAmount);
+            app(StartTrade::class)->run($user, $plan, $tradeAmount);
 
             $message = __('trading.started',
                 ['plan' => $plan->name, 'hours' => $plan->planSettings->expiration_hours]);
 
-            return $this->send($message, MessageType::Success)
-                ->start();
+            return $this->send($message, MessageType::Success);
 
         } catch (\Throwable $exception) {
             return $this

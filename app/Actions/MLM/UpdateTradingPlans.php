@@ -63,7 +63,17 @@ class UpdateTradingPlans
             ->each(callback: function (TradingPlan $tradingPlan) use ($rates) {
                 $rate = $rates[$tradingPlan->pricing_plan_id];
                 $interest = $this->calculator->calculateInterest($tradingPlan->amount, $rate);
+
+                \Log::debug('Should update trading plan', [
+                    'trading_plan' => $tradingPlan->id,
+                    'interest' => $interest,
+                    'start_amount' => $tradingPlan->start_amount,
+                    'current_amount' => $tradingPlan->amount,
+                    'should_be' => $tradingPlan->amount + $interest,
+                ]);
+
                 $tradingPlan->increment('amount', $interest);
+
                 //$tradingPlan->amount = $this->calculator->compoundInterest($tradingPlan->amount, $rate);
                 //$tradingPlan->save();
             });

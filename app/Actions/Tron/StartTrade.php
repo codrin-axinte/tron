@@ -7,7 +7,7 @@ use App\ValueObjects\USDT;
 use Modules\Wallet\Models\PricingPlan;
 use Throwable;
 
-class Trade
+class StartTrade
 {
     /**
      * @throws Throwable
@@ -19,6 +19,7 @@ class Trade
 
             $user->tradingPlans()->create([
                 'pricing_plan_id' => $plan->id,
+                'start_amount' => $tradeAmount,
                 'amount' => $tradeAmount,
             ]);
 
