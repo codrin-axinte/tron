@@ -83,9 +83,9 @@ class TradingPlan extends Resource
                 ->sortable()
                 ->required(),
 
-            DateTime::make(__("Started at"),'created_at'),
-            Text::make(__('Finishes'),'remaining_time'),
-
+            DateTime::make(__("Started at"), 'created_at'),
+            DateTime::make(__("Last Updated at"), 'updated_at'),
+            Text::make(__('Finishes'), 'remaining_time'),
         ];
     }
 }
