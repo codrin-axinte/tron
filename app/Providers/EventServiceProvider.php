@@ -14,7 +14,7 @@ use App\Listeners\NotifyTransactionStatusUpdated;
 use App\Listeners\PayCommissions;
 use App\Listeners\RegisterAppSettings;
 use App\Listeners\SendTemplateMessage;
-use App\Listeners\UpdateBlockchainWallet;
+use App\Listeners\UpdateWalletListener;
 use App\Listeners\UpdateWalletAmount;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -46,7 +46,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         TokenTransferSuccessful::class => [
-            UpdateBlockchainWallet::class,
+            UpdateWalletListener::class,
             ActivateUser::class,
         ],
 

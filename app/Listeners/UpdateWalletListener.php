@@ -6,7 +6,7 @@ use App\Events\TokenTransferSuccessful;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UpdateBlockchainWallet
+class UpdateWalletListener
 {
     /**
      * Create the event listener.
