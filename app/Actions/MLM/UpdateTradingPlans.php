@@ -58,7 +58,7 @@ class UpdateTradingPlans
             ->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage]);
         $hour = now()->subHour();
         TradingPlan::query()
-            ->where('updated_at', '<=', $hour)
+            ->where('updated_at', '>=', $hour)
             ->cursor()
             ->each(callback: function (TradingPlan $tradingPlan) use ($rates) {
                 $rate = $rates[$tradingPlan->pricing_plan_id];
