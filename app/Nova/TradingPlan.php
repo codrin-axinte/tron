@@ -4,13 +4,9 @@ namespace App\Nova;
 
 use App\Nova\Fields\USDT;
 use App\Nova\Traits\ResourceIsReadonly;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\KeyValue;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Modules\Wallet\Nova\Resources\PricingPlan;
 
@@ -85,8 +81,6 @@ class TradingPlan extends Resource
             DateTime::make(__("Last Updated at"), 'updated_at')
                 ->filterable()
                 ->sortable(),
-
-            DateTime::make(__('Finishes'), 'remaining_time'),
         ];
     }
 }

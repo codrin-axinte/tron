@@ -7,6 +7,7 @@ use App\Events\TelegramHook;
 use App\Models\PricingPlanSettings;
 use App\Models\TradingPlan;
 use App\Services\CompoundInterestCalculator;
+use DateTime;
 
 class UpdateTradingPlans
 {
@@ -55,10 +56,10 @@ class UpdateTradingPlans
         $rates = $settings
             ->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage]);
 
-        $hour = now()->subHour();
+        $hour =  now()->subHour();
 
         TradingPlan::query()
-            ->where('updated_at', '>=', $hour)
+            ->where('updated_at', '<=', $hour)
             ->each(callback: function (TradingPlan $tradingPlan) use ($rates) {
                 $rate = $rates[$tradingPlan->pricing_plan_id];
                 $interest = $this->calculator->calculateInterest($tradingPlan->amount, $rate);

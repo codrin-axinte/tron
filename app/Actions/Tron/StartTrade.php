@@ -23,7 +23,9 @@ class StartTrade
                 'amount' => $tradeAmount,
             ]);
 
-            $user->wallet()->decrement('amount', $tradeAmount);
+            $wallet = $user->wallet;
+            $wallet->amount = max(0, $wallet->amount - $tradeAmount);
+            $wallet->save();
         });
     }
 

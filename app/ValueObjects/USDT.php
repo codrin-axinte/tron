@@ -10,7 +10,7 @@ class USDT
 
     public const SUN_UNIT = 1000000;
 
-    public function __construct(private readonly float|int $amount)
+    public function __construct(private readonly float $amount)
     {
     }
 
@@ -19,7 +19,7 @@ class USDT
         return $this->amount;
     }
 
-    public static function makeFromSun(float|int $amount): static
+    public static function makeFromSun(float $amount): static
     {
         return new static($amount / self::SUN_UNIT);
     }

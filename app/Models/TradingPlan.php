@@ -35,17 +35,4 @@ class TradingPlan extends Model
     {
         return $query->where('created_at', '<', now()->subHours($hours));
     }
-
-    public function remainingTime(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                $this->loadMissing(['pricingPlan', 'pricingPlan.planSettings']);
-                $plan = $this->pricingPlan;
-                $hours = $plan->planSettings->expiration_hours;
-
-                return $plan->created_at->addHours($hours);
-            }
-        );
-    }
 }
