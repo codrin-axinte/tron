@@ -85,7 +85,8 @@ class TradingPlan extends Resource
             DateTime::make(__("Last Updated at"), 'updated_at')
                 ->filterable()
                 ->sortable(),
-            Text::make(__('Finishes'), 'remaining_time'),
+
+            DateTime::make(__('Finishes'), 'remaining_time'),
         ];
     }
 }

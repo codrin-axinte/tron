@@ -41,12 +41,10 @@ class TradingPlan extends Model
         return new Attribute(
             get: function () {
                 $this->loadMissing(['pricingPlan', 'pricingPlan.planSettings']);
-
                 $plan = $this->pricingPlan;
                 $hours = $plan->planSettings->expiration_hours;
-                $expires_at = $plan->created_at->addHours($hours);
 
-                return $expires_at->toDateTimeString();
+                return $plan->created_at->addHours($hours);
             }
         );
     }
