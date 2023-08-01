@@ -40,9 +40,7 @@ class UpdateTradingPlans
                 }
             });
 
-        $query
-            ->cursor()
-            ->each(function (TradingPlan $tradingPlan) {
+        $query->each(function (TradingPlan $tradingPlan) {
                 $result = $tradingPlan->user->wallet()->increment('amount', $tradingPlan->amount);
 
                 if ($result) {
@@ -56,10 +54,11 @@ class UpdateTradingPlans
     {
         $rates = $settings
             ->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage]);
+
         $hour = now()->subHour();
+
         TradingPlan::query()
             ->where('updated_at', '>=', $hour)
-            ->cursor()
             ->each(callback: function (TradingPlan $tradingPlan) use ($rates) {
                 $rate = $rates[$tradingPlan->pricing_plan_id];
                 $interest = $this->calculator->calculateInterest($tradingPlan->amount, $rate);

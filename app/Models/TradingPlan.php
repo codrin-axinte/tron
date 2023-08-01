@@ -46,7 +46,7 @@ class TradingPlan extends Model
                 $hours = $plan->planSettings->expiration_hours;
                 $expires_at = $plan->created_at->addHours($hours);
 
-                return $expires_at->diffForHumans();
+                return $expires_at->toDateTimeString();
             }
         );
     }
