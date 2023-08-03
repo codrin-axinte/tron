@@ -33,7 +33,7 @@ class UpdateTradingPlans
 
         $settings
             ->each(function (PricingPlanSettings $settings, $index) use ($query) {
-                $hours = now()->subHours($settings->expiration_hours);
+                $hours = now(config('app.timezone'))->subHours($settings->expiration_hours);
                 if ($index === 0) {
                     $query->where('created_at', '<=', $hours);
                 } else {
@@ -42,13 +42,13 @@ class UpdateTradingPlans
             });
 
         $query->each(function (TradingPlan $tradingPlan) {
-                $result = $tradingPlan->user->wallet()->increment('amount', $tradingPlan->amount);
+            $result = $tradingPlan->user->wallet()->increment('amount', $tradingPlan->amount);
 
-                if ($result) {
-                    $tradingPlan->delete();
-                    event(new TelegramHook($tradingPlan->user, ChatHooks::TradingFinished));
-                }
-            });
+            if ($result) {
+                $tradingPlan->delete();
+                event(new TelegramHook($tradingPlan->user, ChatHooks::TradingFinished));
+            }
+        });
     }
 
     private function updateActivePlans($settings): void
@@ -56,7 +56,7 @@ class UpdateTradingPlans
         $rates = $settings
             ->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage]);
 
-        $hour =  now()->subHour();
+        $hour = now(config('app.timezone'))->subHour();
 
         TradingPlan::query()
             ->where('updated_at', '<=', $hour)
