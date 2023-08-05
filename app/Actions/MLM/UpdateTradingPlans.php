@@ -56,21 +56,26 @@ class UpdateTradingPlans
         $rates = $settings
             ->mapWithKeys(fn(PricingPlanSettings $setting, $id) => [$id => $setting->interest_percentage]);
 
-        $hour = now(config('app.timezone'))->subHour();
+        $now = now(config('app.timezone'));
 
         TradingPlan::query()
-            ->where('updated_at', '<=', $hour)
-            ->each(callback: function (TradingPlan $tradingPlan) use ($rates) {
+            ->lazy()
+            ->each(callback: function (TradingPlan $tradingPlan) use ($rates, $now) {
+                $diff = $tradingPlan->updated_at->diffInDays($now);
+                $hour = $now->addDays($diff)->subHour();
+
+                if ($tradingPlan->updated_at->diffInHours($hour) < 1) {
+                    \Log::debug('Skip trading plan', [
+                        'diff_days' => $diff,
+                        'hour' => $hour->toDateTimeString(),
+                        'now' => $now->toDateTimeString(),
+                        'last_update' => $tradingPlan->updated_at->toDateTimeString(),
+                    ]);
+                    return;
+                }
+
                 $rate = $rates[$tradingPlan->pricing_plan_id];
                 $interest = $this->calculator->calculateInterest($tradingPlan->amount, $rate);
-
-                \Log::debug('Should update trading plan', [
-                    'trading_plan' => $tradingPlan->id,
-                    'interest' => $interest,
-                    'start_amount' => $tradingPlan->start_amount,
-                    'current_amount' => $tradingPlan->amount,
-                    'should_be' => $tradingPlan->amount + $interest,
-                ]);
 
                 $tradingPlan->increment('amount', $interest);
 
