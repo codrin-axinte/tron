@@ -20,6 +20,7 @@ use Modules\Acl\Services\AclService;
 use Modules\Morphling\Contracts\CanOwnModels;
 use Modules\Wallet\Models\PricingPlan;
 use Modules\Wallet\Traits\HasWallet;
+use QCod\Gamify\Gamify;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, CanOwnModels, InteractsWithTelegram
@@ -33,7 +34,8 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels, Int
         HasSettingsTable,
         HasTeam,
         HasReferralLinks,
-        HasPendingActions;
+        HasPendingActions,
+        Gamify;
 
     /**
      * The attributes that are mass assignable.

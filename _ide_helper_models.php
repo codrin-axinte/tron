@@ -192,6 +192,7 @@ namespace App\Models{
  * @property int $id
  * @property int $user_id
  * @property int $pricing_plan_id
+ * @property float $start_amount
  * @property float $amount
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -206,6 +207,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan wherePricingPlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereStartAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TradingPlan whereUserId($value)
  */

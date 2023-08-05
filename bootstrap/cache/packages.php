@@ -288,6 +288,13 @@
     array (
     ),
   ),
+  'qcod/laravel-gamify' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'QCod\\Gamify\\GamifyServiceProvider',
+    ),
+  ),
   'rap2hpoutre/fast-excel' => 
   array (
     'providers' => 

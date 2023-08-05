@@ -39,6 +39,7 @@
         "outl1ne/nova-translatable": "^2.0.4",
         "predis/predis": "^2.0",
         "psr/simple-cache": "^2.0",
+        "qcod/laravel-gamify": "^1.0",
         "sammyjo20/saloon-cache-plugin": "^1.0",
         "sammyjo20/saloon-laravel": "^1.6",
         "spatie/laravel-data": "^3.0",
