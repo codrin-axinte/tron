@@ -28,27 +28,31 @@ class UpdateTradingPlans
 
     private function updateExpiredPlans($settings): void
     {
-        $query = TradingPlan::query()
-            ->with(['user']);
+        TradingPlan::query()
+            ->with(['user'])
+            ->lazy()
+            ->each(function (TradingPlan $tradingPlan) use ($settings) {
+                $now = now(config('app.timezone'));
+                $diff = $tradingPlan->created_at->diffInHours($now);
+                $expiration_hours = $settings[$tradingPlan->pricing_plan_id]->expiration_hours;
 
-        $settings
-            ->each(function (PricingPlanSettings $settings, $index) use ($query) {
-                $hours = now(config('app.timezone'))->subHours($settings->expiration_hours);
-                if ($index === 0) {
-                    $query->where('created_at', '<=', $hours);
-                } else {
-                    $query->orWhere('created_at', '<=', $hours);
+                if ($diff < $expiration_hours) {
+                    \Log::debug('Skip plan, not expired', [
+                        'now' => $now->toDateTimeString(),
+                        'expiration_hours' => $expiration_hours,
+                        'diff_in_days' => $diff,
+                        'created_at' => $tradingPlan->created_at->toDateTimeString()
+                    ]);
+                    return;
+                }
+
+                $result = $tradingPlan->user->wallet()->increment('amount', $tradingPlan->amount);
+
+                if ($result) {
+                    $tradingPlan->delete();
+                    event(new TelegramHook($tradingPlan->user, ChatHooks::TradingFinished));
                 }
             });
-
-        $query->each(function (TradingPlan $tradingPlan) {
-            $result = $tradingPlan->user->wallet()->increment('amount', $tradingPlan->amount);
-
-            if ($result) {
-                $tradingPlan->delete();
-                event(new TelegramHook($tradingPlan->user, ChatHooks::TradingFinished));
-            }
-        });
     }
 
     private function updateActivePlans($settings): void
@@ -61,13 +65,12 @@ class UpdateTradingPlans
         TradingPlan::query()
             ->lazy()
             ->each(callback: function (TradingPlan $tradingPlan) use ($rates, $now) {
-                $diff = $tradingPlan->updated_at->diffInDays($now);
-                $hour = $now->addDays($diff)->subHour();
+                $diffInHours = $tradingPlan->updated_at->diffInHours($now);
+                $min_hours = 1;
 
-                if ($tradingPlan->updated_at->diffInHours($hour) < 1) {
+                if ($diffInHours < $min_hours) {
                     \Log::debug('Skip trading plan', [
-                        'diff_days' => $diff,
-                        'hour' => $hour->toDateTimeString(),
+                        'diff_in_hours' => $diffInHours,
                         'now' => $now->toDateTimeString(),
                         'last_update' => $tradingPlan->updated_at->toDateTimeString(),
                     ]);
