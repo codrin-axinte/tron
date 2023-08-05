@@ -28,11 +28,11 @@ class UpdateTradingPlans
 
     private function updateExpiredPlans($settings): void
     {
+        $now = now(config('app.timezone'));
         TradingPlan::query()
             ->with(['user'])
             ->lazy()
-            ->each(function (TradingPlan $tradingPlan) use ($settings) {
-                $now = now(config('app.timezone'));
+            ->each(function (TradingPlan $tradingPlan) use ($settings, $now) {
                 $diff = $tradingPlan->created_at->diffInHours($now);
                 $expiration_hours = $settings[$tradingPlan->pricing_plan_id]->expiration_hours;
 
