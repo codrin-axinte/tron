@@ -37,12 +37,6 @@ class UpdateTradingPlans
                 $expiration_hours = $settings[$tradingPlan->pricing_plan_id]->expiration_hours;
 
                 if ($diff < $expiration_hours) {
-                    \Log::debug('Skip plan, not expired', [
-                        'now' => $now->toDateTimeString(),
-                        'expiration_hours' => $expiration_hours,
-                        'diff_in_days' => $diff,
-                        'created_at' => $tradingPlan->created_at->toDateTimeString()
-                    ]);
                     return;
                 }
 
@@ -69,11 +63,6 @@ class UpdateTradingPlans
                 $min_hours = 1;
 
                 if ($diffInHours < $min_hours) {
-                    \Log::debug('Skip trading plan', [
-                        'diff_in_hours' => $diffInHours,
-                        'now' => $now->toDateTimeString(),
-                        'last_update' => $tradingPlan->updated_at->toDateTimeString(),
-                    ]);
                     return;
                 }
 
@@ -81,9 +70,6 @@ class UpdateTradingPlans
                 $interest = $this->calculator->calculateInterest($tradingPlan->amount, $rate);
 
                 $tradingPlan->increment('amount', $interest);
-
-                //$tradingPlan->amount = $this->calculator->compoundInterest($tradingPlan->amount, $rate);
-                //$tradingPlan->save();
             });
     }
 }
