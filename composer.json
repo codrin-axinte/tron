@@ -23,6 +23,7 @@
         "laravel/horizon": "^5.9",
         "laravel/nova": "^4.0",
         "laravel/nova-log-viewer": "^0.1.2",
+        "laravel/sail": "^1.26",
         "laravel/sanctum": "^2.14",
         "laravel/scout": "^9.4",
         "laravel/telescope": "^4.7",
