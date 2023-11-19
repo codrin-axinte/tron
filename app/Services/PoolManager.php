@@ -9,7 +9,9 @@ use App\Http\Integrations\Tron\Data\WithdrawSettings;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Models\Pool;
+use GuzzleHttp\Exception\GuzzleException;
 use Modules\Wallet\Models\Wallet;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class PoolManager
 {
@@ -92,9 +94,14 @@ class PoolManager
 
         foreach ($pools as $pool) {
             $request->addData('address', $pool->address);
-            $response = $request->send();
+            try {
+                $response = $request->send();
+                $pool->update(['balance' => $response->json() ?? 0]);
+            } catch (\Throwable $e) {
+                throw $e;
+            }
 
-            $pool->update(['balance' => $response->json()]);
+
         }
 
         return $this;
