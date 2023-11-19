@@ -47,7 +47,7 @@ class TransferTokens
      * @throws SaloonException
      * @throws \Exception
      */
-    private function transfer(TransferTokensData $data): Model|TronTransaction
+    private function transfer(TransferTokensData $data): Model|TronTransaction|null
     {
         $response = TransferTokensRequest::make($data)->send();
         $reference = $response->json();
@@ -67,7 +67,7 @@ class TransferTokens
      * @throws GuzzleException
      * @throws SaloonException
      */
-    public function __invoke(TransferTokensData $data): TronTransaction
+    public function __invoke(TransferTokensData $data): ?TronTransaction
     {
         return $this->run($data);
     }
