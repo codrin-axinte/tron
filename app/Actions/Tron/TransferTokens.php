@@ -11,7 +11,9 @@ use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
 use App\Models\TronTransaction;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
+use Throwable;
 
 class TransferTokens
 {
@@ -31,8 +33,8 @@ class TransferTokens
         try {
             $transaction = $this->transfer($data);
             event(new TokenTransferSuccessful($transaction));
-        } catch (\Throwable $e) {
-            \Log::error($e->getMessage(), $e->getTraceAsString());
+        } catch (Throwable $e) {
+            Log::error($e);
             event(new TokenTransferFailed($transaction, $data, $e->getMessage()));
         }
 
