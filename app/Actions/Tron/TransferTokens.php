@@ -27,7 +27,7 @@ class TransferTokens
      * @throws SaloonException
      * @throws \Exception
      */
-    public function run(TransferTokensData $data): TronTransaction
+    public function run(TransferTokensData $data): ?TronTransaction
     {
         $transaction = null;
         try {
