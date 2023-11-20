@@ -9,7 +9,6 @@ use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Data\WithdrawSettings;
 use App\Services\PoolManager;
-use App\Services\TronService;
 use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
 use Modules\Wallet\Exceptions\InsufficientCredits;

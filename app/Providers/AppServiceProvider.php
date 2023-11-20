@@ -4,13 +4,9 @@ namespace App\Providers;
 
 use App\Services\CompoundInterestCalculator;
 use App\Services\PoolManager;
-use App\Services\TronService;
 use App\Telegram\DefaultWebhookHandler;
 use App\Updater\Updater;
-use Carbon\Carbon;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Nova\Nova;
 use Modules\Acl\Services\AclService;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
             return new DefaultWebhookHandler(value(config('tron.telegram_commands', [])));
         });
 
-        $this->app->singleton(TronService::class);
+
         $this->app->singleton(PoolManager::class);
         $this->app->singleton(CompoundInterestCalculator::class);
 

@@ -5,14 +5,10 @@ namespace App\Actions\Onboarding;
 use App\Actions\Tron\GenerateWallet;
 use App\Events\UserJoined;
 use App\Models\User;
-use App\Services\TronService;
 use DefStudio\Telegraph\Models\TelegraphChat;
 
 class CreateUserFromTelegram
 {
-    public function __construct(protected TronService $tronService)
-    {
-    }
 
     /**
      * @throws \Throwable

@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Tron\SyncWallet;
 use App\Services\PoolManager;
-use App\Services\TronService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
+use Modules\Wallet\Models\Wallet;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class TronSyncCommand extends Command
@@ -31,13 +32,20 @@ class TronSyncCommand extends Command
      * @throws \ReflectionException
      * @throws SaloonException
      */
-    public function handle(TronService $service, PoolManager $poolManager): int
+    public function handle(SyncWallet $syncWallet, PoolManager $poolManager): int
     {
+        $wallets = Wallet::query()
+            ->with('user')
+            ->whereNotNull('address')
+            ->lazy();
 
-        $service->syncWallets();
+        foreach ($wallets as $wallet) {
+            $syncWallet->sync($wallet);
+        }
+
        // $service->syncAccounts();
         $poolManager->sync();
 
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 }

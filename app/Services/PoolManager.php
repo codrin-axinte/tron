@@ -5,19 +5,13 @@ namespace App\Services;
 use App\Actions\Tron\TransferTokens;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
-use App\Http\Integrations\Tron\Data\WithdrawSettings;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Models\Pool;
-use GuzzleHttp\Exception\GuzzleException;
 use Modules\Wallet\Models\Wallet;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class PoolManager
 {
-    public function __construct(private TronService $tronService)
-    {
-    }
 
     /**
      * Aggregate all the wallets into pools
