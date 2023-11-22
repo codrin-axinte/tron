@@ -9,9 +9,11 @@ use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
 use App\Models\TronTransaction;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
 use Log;
+use ReflectionException;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Throwable;
 
@@ -22,10 +24,10 @@ class TransferTokens
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
-     * @throws \Exception
+     * @throws Exception
      */
     public function run(TransferTokensData $data): ?TronTransaction
     {
@@ -42,18 +44,22 @@ class TransferTokens
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
-     * @throws \Exception
+     * @throws Exception
      */
     private function transfer(TransferTokensData $data): Model|TronTransaction|null
     {
         $response = TransferTokensRequest::make($data)->send();
         $reference = $response->json();
 
-        if (is_array($reference) && $reference['code'] === 'NUMERIC_FAULT') {
-            throw new TronNumericFaultException;
+        if (is_array($reference)) {
+            if ($reference['code'] === 'NUMERIC_FAULT') {
+                throw new TronNumericFaultException;
+            }
+
+            throw new Exception(json_encode($reference));
         }
 
         $transactionData = new TransactionData($data, referenceId: $reference);
@@ -63,7 +69,7 @@ class TransferTokens
 
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
      */
