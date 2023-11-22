@@ -27,8 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('telescope:prune')->daily();
-        $schedule->command(CompoundInterestUpdate::class)->everyFiveMinutes()->withoutOverlapping();
-        $schedule->command(TronSyncCommand::class)->everyMinute()->withoutOverlapping();
+        $schedule->command(CompoundInterestUpdate::class)->everyTenMinutes()->withoutOverlapping();
+        $schedule->command(TronSyncCommand::class)->hourly()->withoutOverlapping();
         $schedule->command(PurgePendingActionsCommand::class)->everyTenMinutes();
         // Referral
     }
