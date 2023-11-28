@@ -7,7 +7,9 @@ use App\Services\PoolManager;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Modules\Wallet\Models\Wallet;
+use ReflectionException;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
+use Throwable;
 
 class TronSyncCommand extends Command
 {
@@ -28,9 +30,13 @@ class TronSyncCommand extends Command
     /**
      * Execute the console command.
      *
+     * @param SyncWallet $syncWallet
+     * @param PoolManager $poolManager
      * @throws GuzzleException
-     * @throws \ReflectionException
      * @throws SaloonException
+     * @throws ReflectionException
+     * @throws Throwable
+     * @return int
      */
     public function handle(SyncWallet $syncWallet, PoolManager $poolManager): int
     {
@@ -44,7 +50,7 @@ class TronSyncCommand extends Command
         }
 
        // $service->syncAccounts();
-        $poolManager->sync();
+//        $poolManager->sync();
 
         return self::SUCCESS;
     }

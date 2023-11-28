@@ -10,6 +10,7 @@ use App\Events\TransactionRejected;
 use App\Events\TransactionStatusUpdated;
 use App\Events\UserJoined;
 use App\Listeners\ActivateUser;
+use App\Listeners\NotifyTransactionStatusListener;
 use App\Listeners\NotifyTransactionStatusUpdated;
 use App\Listeners\PayCommissions;
 use App\Listeners\RegisterAppSettings;
@@ -52,6 +53,7 @@ class EventServiceProvider extends ServiceProvider
 
         TokenTransferFailed::class => [
             // Send notifications? Report the issue?
+            NotifyTransactionStatusListener::class,
         ],
 
         TransactionStatusUpdated::class => [

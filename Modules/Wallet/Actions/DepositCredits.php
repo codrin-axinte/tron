@@ -4,11 +4,12 @@ namespace Modules\Wallet\Actions;
 
 use Modules\Wallet\Enums\WalletTransactionType;
 use Modules\Wallet\Models\Wallet;
+use Throwable;
 
 class DepositCredits
 {
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function __invoke(Wallet $wallet, int|float $amount, string $source = null)
     {

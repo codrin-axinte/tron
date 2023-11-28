@@ -5,6 +5,7 @@ namespace App\Telegram\Traits;
 use App\Enums\ChatHooks;
 use App\Models\MessageTemplate;
 use DefStudio\Telegraph\Models\TelegraphChat;
+use Illuminate\Database\Eloquent\Collection;
 
 trait HasMessageTemplates
 {
@@ -21,7 +22,10 @@ trait HasMessageTemplates
         return $this;
     }
 
-    protected function findTemplates(mixed $hooks)
+    /**
+     * @return Collection<MessageTemplate>
+     */
+    protected function findTemplates(mixed $hooks): Collection
     {
         if (is_array($hooks)) {
             $hooks = array_map(fn($hook) => $hook instanceof ChatHooks ? $hook->value : $hook, $hooks);
@@ -29,6 +33,8 @@ trait HasMessageTemplates
             $hooks = $hooks->value;
         }
 
-        return MessageTemplate::query()->whereInHooks(is_array($hooks) ? $hooks : [$hooks])->get();
+        return MessageTemplate::query()
+            ->whereInHooks(is_array($hooks) ? $hooks : [$hooks])
+            ->get();
     }
 }

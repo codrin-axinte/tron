@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Wallet\Models\Wallet;
 
+/**
+ * @property TransactionStatus $status
+ */
 class TronTransaction extends Model
 {
     use HasUuids;
@@ -23,8 +26,7 @@ class TronTransaction extends Model
         'meta' => 'array',
     ];
 
-
-    protected static function booted()
+    protected static function booted(): void
     {
         static::updated(function (TronTransaction $transaction) {
             if (!$transaction->isDirty('status')) {
@@ -47,7 +49,10 @@ class TronTransaction extends Model
 
             $wallet = $transaction->ownerWallet;
 
-            if (in_array($transaction->status, [TransactionStatus::AwaitingConfirmation, TransactionStatus::Approved])) {
+            if (in_array($transaction->status, [
+                TransactionStatus::AwaitingConfirmation,
+                TransactionStatus::Approved,
+            ])) {
                 $wallet?->decrement('amount', $transaction->amount);
             }
 

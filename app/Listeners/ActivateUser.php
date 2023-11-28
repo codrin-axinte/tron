@@ -7,6 +7,7 @@ use App\Actions\Tron\UserActivateAction;
 use App\Events\TokenTransferSuccessful;
 use Modules\Acl\Services\AclService;
 use Modules\Settings\Services\SettingsService;
+use Throwable;
 
 final class ActivateUser
 {
@@ -16,9 +17,9 @@ final class ActivateUser
      * @return void
      */
     public function __construct(
-        private UserActivateAction $activateAction,
-        private CommissionPayment  $commissionPayment,
-        private SettingsService    $settings
+        private readonly UserActivateAction $activateAction,
+        private readonly CommissionPayment  $commissionPayment,
+        private readonly SettingsService $settings
     )
     {
         //
@@ -29,7 +30,7 @@ final class ActivateUser
      *
      * @param TokenTransferSuccessful $event
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(TokenTransferSuccessful $event): void
     {

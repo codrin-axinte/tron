@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(DefaultWebhookHandler::class, function () {
             return new DefaultWebhookHandler(value(config('tron.telegram_commands', [])));
@@ -39,14 +39,14 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         // JsonResource::withoutWrapping();
         // Carbon::setLocale('ro_RO');
         AclService::macro('trader', fn() => config('tron.default_role'));
     }
 
-    public function provides()
+    public function provides(): array
     {
         return [Updater::class];
     }

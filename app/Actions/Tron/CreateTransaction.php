@@ -9,16 +9,17 @@ use App\Events\TransactionStatusUpdated;
 use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Models\TronTransaction;
 use App\ValueObjects\USDT;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateTransaction
 {
 
-    public function __invoke(TransactionData $transactionData): \Illuminate\Database\Eloquent\Model|TronTransaction
+    public function __invoke(TransactionData $transactionData): Model|TronTransaction
     {
         return $this->run($transactionData);
     }
 
-    public function run(TransactionData $transactionData): \Illuminate\Database\Eloquent\Model|TronTransaction
+    public function run(TransactionData $transactionData): Model|TronTransaction
     {
         return TronTransaction::create([
             'from' => $transactionData->transferData->from,

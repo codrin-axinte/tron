@@ -9,12 +9,17 @@ use App\Models\User;
 use Modules\Acl\Services\AclService;
 use Modules\Settings\Services\SettingsService;
 use Modules\Wallet\Models\PricingPlan;
+use Modules\Wallet\Models\Wallet;
 
 class UserActivateAction
 {
     public function run(User $user): void
     {
-        $plan = PricingPlan::query()->enabled()->orderBy('price')->first();
+        $plan = PricingPlan::query()
+            ->enabled()
+            ->orderBy('price')
+            ->first();
+
         $wallet = $user->wallet;
 
         if ($wallet->amount < $plan->price) {

@@ -9,20 +9,15 @@ use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Models\Pool;
 use Modules\Wallet\Models\Wallet;
+use Throwable;
 
 class PoolManager
 {
 
     /**
      * Aggregate all the wallets into pools
-     *
-     * @return void
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function aggregateWallets($minAmountToTransfer = 50, $chunks = 15)
+    public function aggregateWallets(int $minAmountToTransfer = 50, int $chunks = 15): void
     {
         $except = collect();
         $totalPools = Pool::query()->whereNotCentral()->count();
@@ -53,7 +48,7 @@ class PoolManager
 
     }
 
-    public function aggregateAmountFor(Pool $currentPool, float $tokensAmount)
+    public function aggregateAmountFor(Pool $currentPool, float $tokensAmount): void
     {
         $pools = Pool::query()
             ->whereNot('id', $currentPool->id)
@@ -91,7 +86,7 @@ class PoolManager
             try {
                 $response = $request->send();
                 $pool->update(['balance' => $response->json() ?? 0]);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 throw $e;
             }
 

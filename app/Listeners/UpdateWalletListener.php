@@ -24,7 +24,7 @@ class UpdateWalletListener
      * @param TokenTransferSuccessful $event
      * @return void
      */
-    public function handle(TokenTransferSuccessful $event)
+    public function handle(TokenTransferSuccessful $event): void
     {
         $transaction = $event->transaction;
 

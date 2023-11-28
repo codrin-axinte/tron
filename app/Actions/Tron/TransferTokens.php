@@ -24,10 +24,8 @@ class TransferTokens
     }
 
     /**
-     * @throws ReflectionException
-     * @throws GuzzleException
-     * @throws SaloonException
-     * @throws Exception
+     * @param TransferTokensData $data
+     * @return TronTransaction|null
      */
     public function run(TransferTokensData $data): ?TronTransaction
     {
@@ -51,8 +49,12 @@ class TransferTokens
      */
     private function transfer(TransferTokensData $data): Model|TronTransaction|null
     {
-        $response = TransferTokensRequest::make($data)->send();
+        $response = TransferTokensRequest::make($data->except('user'))->send();
         $reference = $response->json();
+        if ($response->status() >= 400) {
+            Log::error('Transfer failed', ['response' => $response->json()]);
+            throw new Exception('Transfer failed');
+        }
 
         if (is_array($reference)) {
             if ($reference['code'] === 'NUMERIC_FAULT') {
@@ -69,9 +71,8 @@ class TransferTokens
 
 
     /**
-     * @throws ReflectionException
-     * @throws GuzzleException
-     * @throws SaloonException
+     * @param TransferTokensData $data
+     * @return TronTransaction|null
      */
     public function __invoke(TransferTokensData $data): ?TronTransaction
     {

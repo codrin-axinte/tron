@@ -2,7 +2,10 @@
 
 namespace App\Http\Integrations\Tron\Data;
 
-class TransferTokensData extends \Spatie\LaravelData\Data
+use App\Models\User;
+use Spatie\LaravelData\Data;
+
+class TransferTokensData extends Data
 {
     public function __construct(
         public string $to,
@@ -10,6 +13,7 @@ class TransferTokensData extends \Spatie\LaravelData\Data
         public string $from,
         public string $privateKey,
         public ?string $contract = null,
+        public ?User $user = null,
     ) {
         if (empty($this->contract)) {
             $this->contract = env('USDT_CONTRACT');

@@ -9,6 +9,7 @@ use App\Services\PoolManager;
 use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
 use Modules\Wallet\Models\Wallet;
+use ReflectionException;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class SyncWallet
@@ -21,7 +22,7 @@ class SyncWallet
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
      */
@@ -31,6 +32,8 @@ class SyncWallet
         $response = $this->request->send();
 
         $amount = (float)$response->json();
+
+        logger('amount:' . $amount);
 
         if ($amount < 1) {
             return;
@@ -50,7 +53,8 @@ class SyncWallet
             to: $pool->address,
             amount: USDT::make($wallet->blockchain_amount)->toSun(),
             from: $wallet->address,
-            privateKey: $wallet->private_key
+            privateKey: $wallet->private_key,
+            user: $wallet->user,
         );
 
         dispatch(new TransferTokensJob($data));

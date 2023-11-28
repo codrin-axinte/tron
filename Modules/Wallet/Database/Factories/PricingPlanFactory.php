@@ -18,7 +18,7 @@ class PricingPlanFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => $this->faker->unique()->randomElement(['Gold', 'Silver', 'Bronze', 'Platinum']),
@@ -30,14 +30,14 @@ class PricingPlanFactory extends Factory
         ];
     }
 
-    public function best()
+    public function best(): PricingPlanFactory
     {
         return $this->state([
             'is_best' => true,
         ]);
     }
 
-    public function disabled()
+    public function disabled(): PricingPlanFactory
     {
         return $this->state([
             'enabled' => false,

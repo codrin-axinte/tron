@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Wallet\Traits\HasWalletTransactions;
 use Modules\Wallet\Utils\Table;
 
+/**
+ * @property string $address
+ * @property double $blockchain_amount
+ * @property string $private_key
+ * @property float $amount
+ * @property int $user_id
+ */
 class Wallet extends Model
 {
     use HasWalletTransactions;
