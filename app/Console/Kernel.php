@@ -7,6 +7,7 @@ use App\Console\Commands\PurgePendingActionsCommand;
 use App\Console\Commands\TronSyncCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Laravel\Telescope\Console\PruneCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,9 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('telescope:prune')->daily();
+        $schedule->command(PruneCommand::class)->daily();
         $schedule->command(CompoundInterestUpdate::class)->everyTenMinutes()->withoutOverlapping();
-        $schedule->command(TronSyncCommand::class)->everyMinute()->withoutOverlapping();
+       // $schedule->command(TronSyncCommand::class)->hourly()->withoutOverlapping();
         $schedule->command(PurgePendingActionsCommand::class)->everyTenMinutes();
         // Referral
     }
