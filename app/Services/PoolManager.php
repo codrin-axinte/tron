@@ -7,8 +7,12 @@ use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
+use App\Jobs\SyncPoolJob;
 use App\Models\Pool;
+use GuzzleHttp\Exception\GuzzleException;
 use Modules\Wallet\Models\Wallet;
+use ReflectionException;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Throwable;
 
 class PoolManager
@@ -60,7 +64,7 @@ class PoolManager
 
     public function getRandomPool(?float $tokensAmount = null): ?Pool
     {
-        $proxies = (int)nova_get_setting('max_pool_proxy', 0);
+        $proxies = (int) nova_get_setting('max_pool_proxy', 0);
 
         $query = Pool::query()
             ->when(!is_null($tokensAmount), fn($query) => $query->where('balance', '>=', $tokensAmount))
@@ -71,29 +75,6 @@ class PoolManager
         }
 
         return $query->first();
-    }
-
-
-    public function sync(): static
-    {
-        $pools = Pool::query()->select(['id', 'address'])->whereNotNull('address')->lazy();
-        // TODO: Improve performance with promises - https://medium.com/@ardanirohman/how-to-handle-async-request-concurrency-with-promise-in-guzzle-6-cac10d76220e
-        // Dispatch jobs for each pool
-        $request = GetAccountBalanceRequest::make();
-
-        foreach ($pools as $pool) {
-            $request->addData('address', $pool->address);
-            try {
-                $response = $request->send();
-                $pool->update(['balance' => $response->json() ?? 0]);
-            } catch (Throwable $e) {
-                throw $e;
-            }
-
-
-        }
-
-        return $this;
     }
 
     public function createRandom(int $amount = 1, bool $isCentral = false)

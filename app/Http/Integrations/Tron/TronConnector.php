@@ -4,10 +4,11 @@ namespace App\Http\Integrations\Tron;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
+use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 
 class TronConnector extends SaloonConnector
 {
-    use AcceptsJson;
+    use AcceptsJson, HasJsonBody;
 
     /**
      * The Base URL of the API.

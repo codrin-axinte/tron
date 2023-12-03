@@ -2,13 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\Tron\SyncWallet;
-use App\Services\PoolManager;
-use GuzzleHttp\Exception\GuzzleException;
+use App\Jobs\SyncPoolJob;
+use App\Jobs\SyncWalletJob;
+use App\Models\Pool;
 use Illuminate\Console\Command;
 use Modules\Wallet\Models\Wallet;
-use ReflectionException;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Throwable;
 
 class TronSyncCommand extends Command
@@ -30,28 +28,46 @@ class TronSyncCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param SyncWallet $syncWallet
-     * @param PoolManager $poolManager
-     * @throws GuzzleException
-     * @throws SaloonException
-     * @throws ReflectionException
-     * @throws Throwable
      * @return int
+     * @throws Throwable
      */
-    public function handle(SyncWallet $syncWallet, PoolManager $poolManager): int
+    public function handle(): int
+    {
+        $this->syncWallets();
+        $this->syncPools();;
+
+        // $service->syncAccounts();
+        return self::SUCCESS;
+    }
+
+    private function syncWallets(): void
     {
         $wallets = Wallet::query()
             ->with('user')
             ->whereNotNull('address')
-            ->lazy();
+            ->cursor();
 
+        $this->info('Dispatching wallet jobs...');
+        $this->output->progressStart($wallets->count());
         foreach ($wallets as $wallet) {
-            $syncWallet->sync($wallet);
+            // Dispatch jobs for each pool
+            dispatch(new SyncWalletJob($wallet));
+            $this->output->progressAdvance();
         }
+        $this->output->progressFinish();
+    }
 
-       // $service->syncAccounts();
-//        $poolManager->sync();
+    private function syncPools(): void
+    {
+        $pools = Pool::query()->select(['id', 'address'])->whereNotNull('address')->cursor();
 
-        return self::SUCCESS;
+        $this->info('Dispatching pool jobs...');
+        $this->output->progressStart($pools->count());
+        foreach ($pools as $pool) {
+            // Dispatch jobs for each pool
+            dispatch(new SyncPoolJob($pool));
+            $this->output->progressAdvance();
+        }
+        $this->output->progressFinish();
     }
 }

@@ -24,7 +24,7 @@ class CreateTransaction
         return TronTransaction::create([
             'from' => $transactionData->transferData->from,
             'to' => $transactionData->transferData->to,
-            'amount' => USDT::makeFromSun($transactionData->transferData->amount)->value(),
+            'amount' => USDT::fromSun($transactionData->transferData->amount)->value(),
             'blockchain_reference_id' => $transactionData->referenceId,
             'type' => $transactionData->type,
             'status' => $transactionData->status,

@@ -48,7 +48,8 @@
         "spatie/laravel-responsecache": "^7.3",
         "stancl/jobpipeline": "^1.6",
         "tailflow/laravel-orion": "^2.13",
-        "whitecube/nova-flexible-content": "^v1.0.0"
+        "whitecube/nova-flexible-content": "^v1.0.0",
+        "ext-bcmath": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.8",

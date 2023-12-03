@@ -32,12 +32,17 @@ return [
 
     'telegram' => [
         'token' => env('TELEGRAM_API_KEY'),
-        'name' => env('APP_NAME').' Bot',
+        'name' => env('APP_NAME') . ' Bot',
     ],
     'tron' => [
         'url' => env('TRON_API_URL', 'http://localhost:3000'),
         //'token' => env('TRON_TOKEN'),
         'default_contract' => env('TRON_DEFAULT_CONTRACT', 'TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj'), // NILE USDT token
-
+    ],
+    'trongrid' => [
+        'api_key' => env('TRON_API_KEY'),
+        'live_url' => env('TRON_LIVE_URL', 'https://api.trongrid.io'),
+        'test_url' => env('TRON_TEST_URL', 'https://nile.trongrid.io'),
+        'live' => env('TRON_LIVE', false),
     ],
 ];

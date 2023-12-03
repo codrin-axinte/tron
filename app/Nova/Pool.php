@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
@@ -52,6 +53,7 @@ class Pool extends Resource
         return [
             ID::make()->sortable(),
             Text::make(__('Address'), 'address')->nullable(),
+
 
             USDT::make(__('Balance'), 'balance')
                 ->readonly()

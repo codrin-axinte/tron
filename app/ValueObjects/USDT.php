@@ -19,17 +19,20 @@ class USDT
         return $this->amount;
     }
 
-    public static function makeFromSun(float $amount): static
+    public static function fromSun(float $amount): static
     {
-        return new static($amount / self::SUN_UNIT);
+        $value = bcdiv($amount, '1000000', 6); // 6 decimal places precision
+
+        return new static($value);
     }
 
     public function toSun(): float
     {
-        return floor($this->amount * self::SUN_UNIT);
+        $sun = bcmul($this->amount, self::SUN_UNIT, 0); // No decimal places for multiplication
+        return is_float($this->amount) || is_int($this->amount) ? $sun : strval($sun);
     }
 
-    public function formatted(int $decimals = 2, string $decimalSeparator = '.', string $thousandsSeparator = ','): string
+    public function formatted(int $decimals = 6, string $decimalSeparator = '.', string $thousandsSeparator = ','): string
     {
         return number_format($this->amount, $decimals, $decimalSeparator, $thousandsSeparator);
     }

@@ -8,9 +8,11 @@ use App\Enums\WithdrawMethod;
 use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Data\WithdrawSettings;
+use App\Models\TronTransaction;
 use App\Services\PoolManager;
 use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Wallet\Exceptions\InsufficientCredits;
 use Modules\Wallet\Models\Wallet;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
@@ -27,7 +29,7 @@ class Withdraw
      * @throws SaloonException
      * @throws InsufficientCredits
      */
-    public function __invoke(Wallet $ownerWallet, string $walletToAddress, USDT $amount)
+    public function __invoke(Wallet $ownerWallet, string $walletToAddress, USDT $amount): Model|TronTransaction
     {
         $settings = WithdrawSettings::fromNova();
 

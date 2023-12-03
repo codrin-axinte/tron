@@ -28,4 +28,21 @@ class GetAccountBalanceRequest extends SaloonRequest
     {
         return '/api/trc20/balance';
     }
+
+    public function __construct(
+        private readonly string $ownerAddress,
+        private readonly string $privateKey,
+    )
+    {
+    }
+
+    public function defaultData(): array
+    {
+        return [
+            'address' => $this->ownerAddress,
+            'private_key' => $this->privateKey,
+        ];
+    }
+
+
 }

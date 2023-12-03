@@ -2,61 +2,49 @@
 
 namespace App\Actions\Tron;
 
-use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
 use App\Jobs\TransferTokensJob;
-use App\Services\PoolManager;
-use App\ValueObjects\USDT;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Modules\Wallet\Models\Wallet;
 use ReflectionException;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class SyncWallet
 {
-    public function __construct(
-        protected GetAccountBalanceRequest $request,
-        protected PoolManager              $poolManager
-    )
-    {
-    }
-
     /**
      * @throws ReflectionException
      * @throws GuzzleException
      * @throws SaloonException
+     * @throws Exception
      */
     public function sync(Wallet $wallet): void
     {
-        $this->request->addData('address', $wallet->address);
-        $response = $this->request->send();
+        $request = new GetAccountBalanceRequest($wallet->address, $wallet->private_key);
 
-        $amount = (float)$response->json();
+        $response = $request->send();
+
+        if ($response->status() >= Response::HTTP_BAD_REQUEST) {
+            Log::error('Error fetching balance.', ['address' => $wallet->address, 'body' => $response->json()]);
+            throw new Exception('Error fetching balance.', $response->status());
+        }
+
+        $amount = (float) $response->json();
 
         logger('amount:' . $amount);
 
+        // TODO: Check if account is activated then we accept any amount,
+        // TODO: If account is not activated and amount is under the smallest package just ignore
         if ($amount < 1) {
+            // We don't care if it's under 1
             return;
         }
 
         // Sync blockchain_amount
         $wallet->update(['blockchain_amount' => $amount]);
 
-        // Transfer the blockchain amount into a pool. This should be a job to not wait for it
-        $this->transferToPool($wallet);
-    }
-
-    private function transferToPool(Wallet $wallet): void
-    {
-        $pool = $this->poolManager->getRandomPool();
-        $data = new TransferTokensData(
-            to: $pool->address,
-            amount: USDT::make($wallet->blockchain_amount)->toSun(),
-            from: $wallet->address,
-            privateKey: $wallet->private_key,
-            user: $wallet->user,
-        );
-
-        dispatch(new TransferTokensJob($data));
+        dispatch(new TransferTokensJob($wallet));
     }
 }

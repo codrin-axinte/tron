@@ -26,7 +26,6 @@ services:
             - mysql
             - redis
             - mailpit
-            - wallet
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -73,19 +72,10 @@ services:
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
-    wallet:
-        build:
-            context: '../tron-wallet'
-            dockerfile: Dockerfile
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        ports:
-            - '${TRON_WALLET_PORT:-3000}:3000'
-        networks:
-            - sail
 networks:
     sail:
         driver: bridge
+        external: true
 volumes:
     sail-mysql:
         driver: local
