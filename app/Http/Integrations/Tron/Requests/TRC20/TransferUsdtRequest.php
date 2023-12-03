@@ -8,7 +8,7 @@ use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 
-class TransferUSDTRequest extends SaloonRequest
+class TransferUsdtRequest extends SaloonRequest
 {
     use HasJsonBody;
 
