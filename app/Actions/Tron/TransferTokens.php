@@ -7,7 +7,7 @@ use App\Events\TokenTransferSuccessful;
 use App\Exceptions\TronNumericFaultException;
 use App\Http\Integrations\Tron\Data\TransactionData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
-use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
+use App\Http\Integrations\Tron\Requests\TRC20\TransferUSDTRequest;
 use App\Models\TronTransaction;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -49,7 +49,7 @@ class TransferTokens
      */
     private function transfer(TransferTokensData $data): Model|TronTransaction|null
     {
-        $response = TransferTokensRequest::make($data->except('user'))->send();
+        $response = TransferUSDTRequest::make($data->except('user'))->send();
         $reference = $response->json();
         if ($response->status() >= 400) {
             Log::error('Transfer failed', ['response' => $response->json()]);

@@ -2,7 +2,7 @@
 
 namespace App\Actions\Tron;
 
-use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
+use App\Http\Integrations\Tron\Requests\TRC20\GetBalanceRequest;
 use App\Jobs\TransferTokensJob;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -22,7 +22,7 @@ class SyncWallet
      */
     public function sync(Wallet $wallet): void
     {
-        $request = new GetAccountBalanceRequest($wallet->address, $wallet->private_key);
+        $request = new GetBalanceRequest($wallet->address, $wallet->private_key);
 
         $response = $request->send();
 

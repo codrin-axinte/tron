@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Integrations\Tron\Requests;
+namespace App\Http\Integrations\Tron\Requests\TRX;
 
+use App\Http\Integrations\Tron\Data\SendTokenData;
 use App\Http\Integrations\Tron\TronConnector;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
-class GetTransactionsRequest extends SaloonRequest
+class TransferTokensRequest extends SaloonRequest
 {
     /**
      * The connector class.
@@ -16,9 +17,9 @@ class GetTransactionsRequest extends SaloonRequest
     /**
      * The HTTP verb the request will use.
      */
-    protected ?string $method = Saloon::GET;
+    protected ?string $method = Saloon::POST;
 
-    public function __construct(public string $id)
+    public function __construct(protected SendTokenData $data)
     {
     }
 
@@ -27,6 +28,11 @@ class GetTransactionsRequest extends SaloonRequest
      */
     public function defineEndpoint(): string
     {
-        return '/api/transactions/'.$this->id;
+        return '/api/tokens/send';
+    }
+
+    public function defaultData(): array
+    {
+        return $this->data->toArray();
     }
 }

@@ -5,7 +5,7 @@ namespace App\Actions\Tron;
 use App\Enums\TransactionStatus;
 use App\Events\TransactionApproved;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
-use App\Http\Integrations\Tron\Requests\TRC20\TransferTokensRequest;
+use App\Http\Integrations\Tron\Requests\TRC20\TransferUSDTRequest;
 use App\Models\TronTransaction;
 use GuzzleHttp\Exception\GuzzleException;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
@@ -28,7 +28,7 @@ class ApproveTransaction
         //  value: 22376139000.000004
         //}
 
-        $response = TransferTokensRequest::make(
+        $response = TransferUSDTRequest::make(
             TransferTokensData::from($transaction->meta['payload'])
         )->send();
 

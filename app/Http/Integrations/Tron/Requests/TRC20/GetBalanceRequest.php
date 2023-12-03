@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Integrations\Tron\Requests;
+namespace App\Http\Integrations\Tron\Requests\TRC20;
 
-use App\Http\Integrations\Tron\Data\SendTokenData;
 use App\Http\Integrations\Tron\TronConnector;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 
-class SendTokensRequest extends SaloonRequest
+class GetBalanceRequest extends SaloonRequest
 {
+    use HasJsonBody;
+
     /**
      * The connector class.
      */
@@ -19,20 +21,28 @@ class SendTokensRequest extends SaloonRequest
      */
     protected ?string $method = Saloon::POST;
 
-    public function __construct(protected SendTokenData $data)
-    {
-    }
-
     /**
      * The endpoint of the request.
      */
     public function defineEndpoint(): string
     {
-        return '/api/tokens/send';
+        return '/api/trc20/balance';
+    }
+
+    public function __construct(
+        private readonly string $ownerAddress,
+        private readonly string $privateKey,
+    )
+    {
     }
 
     public function defaultData(): array
     {
-        return $this->data->toArray();
+        return [
+            'address' => $this->ownerAddress,
+            'private_key' => $this->privateKey,
+        ];
     }
+
+
 }

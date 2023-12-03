@@ -6,7 +6,7 @@ use App\Actions\Tron\TransferTokens;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
 use App\Http\Integrations\Tron\Data\TransferTokensData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
-use App\Http\Integrations\Tron\Requests\TRC20\GetAccountBalanceRequest;
+use App\Http\Integrations\Tron\Requests\TRC20\GetBalanceRequest;
 use App\Jobs\SyncPoolJob;
 use App\Models\Pool;
 use GuzzleHttp\Exception\GuzzleException;

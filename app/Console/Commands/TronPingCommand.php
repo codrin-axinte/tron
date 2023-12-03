@@ -48,6 +48,8 @@ class TronPingCommand extends Command
 
         } catch (\Exception $exception) {
             $this->error("Service is not available. Reason: {$exception->getMessage()}");
+            // TODO: Should notify admins
+
             return Command::FAILURE;
         }
 
