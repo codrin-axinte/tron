@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionBlockchainStatus;
+use App\Enums\TransactionCurrency;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Events\TransactionStatusUpdated;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +25,9 @@ class TronTransaction extends Model
     protected $casts = [
         'status' => TransactionStatus::class,
         'type' => TransactionType::class,
+        'blockchain_status' => TransactionBlockchainStatus::class,
+        'currency' => TransactionCurrency::class,
+        'confirmed' => 'bool',
         'amount' => 'float',
         'meta' => 'array',
     ];
@@ -71,6 +77,20 @@ class TronTransaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function scopeApproved(Builder $query): Builder
+    {
+
+        $query->where('status', TransactionStatus::Approved);
+
+        return $query;
+    }
+
+    public function scopePending(Builder $query): Builder
+    {
+        $query->where('blockchain_status', TransactionBlockchainStatus::Pending);
+
+        return $query;
+    }
 
     public function approve(): bool
     {
@@ -86,7 +106,7 @@ class TronTransaction extends Model
 
     public function retry(): bool
     {
-        $this->status = TransactionStatus::Retry;
+        // TODO: Should retry the transaction;
         return $this->save();
     }
 }

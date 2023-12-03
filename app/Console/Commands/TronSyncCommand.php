@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\SyncPoolJob;
 use App\Jobs\SyncWalletJob;
 use App\Models\Pool;
+use App\Models\TronTransaction;
 use Illuminate\Console\Command;
 use Modules\Wallet\Models\Wallet;
 use Throwable;
@@ -35,9 +36,22 @@ class TronSyncCommand extends Command
     {
         $this->syncWallets();
         $this->syncPools();;
+        $this->syncTransactions();
 
         // $service->syncAccounts();
         return self::SUCCESS;
+    }
+
+    private function syncTransactions(): void
+    {
+        $transactions = TronTransaction::query()
+            ->approved()
+            ->pending()
+            ->cursor();
+
+        foreach ($transactions as $transaction) {
+            $request = '';
+        }
     }
 
     private function syncWallets(): void

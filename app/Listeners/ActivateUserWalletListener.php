@@ -49,7 +49,7 @@ class ActivateUserWalletListener
             amount: $activationAmount,
             privateKey: USDT::make($pool->private_key)->toSun(),
         );
-
+        // TODO: Use the TransferTokensJob
         try {
             $request = new TransferTrxRequest($data);
             $request->send();
