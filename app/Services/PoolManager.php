@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Actions\Tron\TransferTokens;
 use App\Http\Integrations\Tron\Data\Responses\GenerateWalletResponseData;
-use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\TransferUsdtData;
 use App\Http\Integrations\Tron\Requests\GenerateRandomWalletRequest;
-use App\Http\Integrations\Tron\Requests\TRC20\GetBalanceRequest;
+use App\Http\Integrations\Tron\Requests\TRC20\GetUsdtBalanceRequest;
 use App\Jobs\SyncPoolJob;
 use App\Models\Pool;
 use GuzzleHttp\Exception\GuzzleException;
@@ -39,7 +39,7 @@ class PoolManager
 
                 foreach ($wallets as $wallet) {
 
-                    $transferTokens->run(new TransferTokensData(
+                    $transferTokens->run(new TransferUsdtData(
                         to: $pool->address,
                         amount: $wallet->blockchain_amount,
                         from: $wallet->address,

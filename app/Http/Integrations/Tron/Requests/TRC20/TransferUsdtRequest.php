@@ -2,7 +2,7 @@
 
 namespace App\Http\Integrations\Tron\Requests\TRC20;
 
-use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\TransferUsdtData;
 use App\Http\Integrations\Tron\TronConnector;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
@@ -22,7 +22,7 @@ class TransferUsdtRequest extends SaloonRequest
      */
     protected ?string $method = Saloon::POST;
 
-    public function __construct(protected ?TransferTokensData $data = null)
+    public function __construct(protected ?TransferUsdtData $data = null)
     {
     }
 

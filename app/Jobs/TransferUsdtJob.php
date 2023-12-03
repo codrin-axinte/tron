@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Actions\Tron\TransferTokens;
-use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\TransferUsdtData;
 use App\Services\PoolManager;
 use App\ValueObjects\USDT;
 use Illuminate\Bus\Queueable;
@@ -13,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Modules\Wallet\Models\Wallet;
 
-class TransferTokensJob implements ShouldQueue
+class TransferUsdtJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -34,7 +34,7 @@ class TransferTokensJob implements ShouldQueue
     public function handle(PoolManager $poolManager, TransferTokens $transferTokens): void
     {
         $pool = $poolManager->getRandomPool();
-        $data = new TransferTokensData(
+        $data = new TransferUsdtData(
             to: $pool->address,
             amount: USDT::make($this->wallet->blockchain_amount)->toSun(),
             from: $this->wallet->address,

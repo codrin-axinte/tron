@@ -6,7 +6,7 @@ use App\Http\Integrations\Tron\TronConnector;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
-class GetTokensRequest extends SaloonRequest
+class GetTrxBalanceRequest extends SaloonRequest
 {
     /**
      * The connector class.
@@ -18,11 +18,16 @@ class GetTokensRequest extends SaloonRequest
      */
     protected ?string $method = Saloon::GET;
 
+
+    public function __construct(private readonly string $address)
+    {
+    }
+
     /**
      * The endpoint of the request.
      */
     public function defineEndpoint(): string
     {
-        return '/api/tokens';
+        return "/api/tokens/{$this->address}";
     }
 }

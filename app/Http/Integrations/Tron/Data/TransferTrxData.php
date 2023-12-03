@@ -2,15 +2,15 @@
 
 namespace App\Http\Integrations\Tron\Data;
 
+use App\ValueObjects\USDT;
 use Spatie\LaravelData\Data;
 
-class SendTokenData extends Data
+class TransferTrxData extends Data
 {
     public function __construct(
         public string $to,
-        public string $from,
-        public int|float $amount,
-        public string $tokenId
+        public USDT $amount,
+        public string $privateKey,
     ) {
     }
 }

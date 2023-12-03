@@ -4,7 +4,7 @@ namespace App\Actions\Tron;
 
 use App\Enums\TransactionStatus;
 use App\Events\TransactionApproved;
-use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\TransferUsdtData;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferUsdtRequest;
 use App\Models\TronTransaction;
 use GuzzleHttp\Exception\GuzzleException;
@@ -29,7 +29,7 @@ class ApproveTransaction
         //}
 
         $response = TransferUsdtRequest::make(
-            TransferTokensData::from($transaction->meta['payload'])
+            TransferUsdtData::from($transaction->meta['payload'])
         )->send();
 
         $data = $response->json();

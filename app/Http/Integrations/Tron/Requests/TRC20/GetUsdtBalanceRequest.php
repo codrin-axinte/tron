@@ -7,7 +7,7 @@ use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 
-class GetBalanceRequest extends SaloonRequest
+class GetUsdtBalanceRequest extends SaloonRequest
 {
     use HasJsonBody;
 

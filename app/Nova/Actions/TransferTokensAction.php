@@ -3,7 +3,7 @@
 namespace App\Nova\Actions;
 
 use App\Actions\Tron\TransferTokens;
-use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\TransferUsdtData;
 use App\Nova\User;
 use App\ValueObjects\USDT;
 use GuzzleHttp\Exception\GuzzleException;
@@ -40,7 +40,7 @@ class TransferTokensAction extends Action
 
         $transfer = app(TransferTokens::class);
 
-        $transfer(new TransferTokensData(
+        $transfer(new TransferUsdtData(
             to: $to->address,
             amount: $amount->toSun(),
             from: $from->address,

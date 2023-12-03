@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(CompoundInterestUpdate::class)->everyTenMinutes()->withoutOverlapping();
        // $schedule->command(TronSyncCommand::class)->hourly()->withoutOverlapping();
         $schedule->command(PurgePendingActionsCommand::class)->everyTenMinutes();
+        // TODO: Job to sync transactions
         // Referral
     }
 

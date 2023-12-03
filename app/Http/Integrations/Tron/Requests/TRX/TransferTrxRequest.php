@@ -2,12 +2,12 @@
 
 namespace App\Http\Integrations\Tron\Requests\TRX;
 
-use App\Http\Integrations\Tron\Data\SendTokenData;
+use App\Http\Integrations\Tron\Data\TransferTrxData;
 use App\Http\Integrations\Tron\TronConnector;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
-class TransferTokensRequest extends SaloonRequest
+class TransferTrxRequest extends SaloonRequest
 {
     /**
      * The connector class.
@@ -19,7 +19,7 @@ class TransferTokensRequest extends SaloonRequest
      */
     protected ?string $method = Saloon::POST;
 
-    public function __construct(protected SendTokenData $data)
+    public function __construct(protected TransferTrxData $data)
     {
     }
 

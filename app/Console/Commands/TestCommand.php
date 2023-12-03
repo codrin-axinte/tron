@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Actions\Tron\TransferTokens;
-use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\TransferUsdtData;
 use App\Models\Pool;
 use App\Models\User;
 use GuzzleHttp\Exception\GuzzleException;
@@ -39,7 +39,7 @@ class TestCommand extends Command
 
         try {
             $transaction = app(TransferTokens::class)(
-                new TransferTokensData(
+                new TransferUsdtData(
                     to: $user->wallet->address,
                     amount: 10,
                     from: $pool->address,

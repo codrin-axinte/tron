@@ -6,7 +6,7 @@ use App\Events\TokenTransferFailed;
 use App\Events\TokenTransferSuccessful;
 use App\Exceptions\TronNumericFaultException;
 use App\Http\Integrations\Tron\Data\TransactionData;
-use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\TransferUsdtData;
 use App\Http\Integrations\Tron\Requests\TRC20\TransferUsdtRequest;
 use App\Models\TronTransaction;
 use Exception;
@@ -24,10 +24,10 @@ class TransferTokens
     }
 
     /**
-     * @param TransferTokensData $data
+     * @param TransferUsdtData $data
      * @return TronTransaction|null
      */
-    public function run(TransferTokensData $data): ?TronTransaction
+    public function run(TransferUsdtData $data): ?TronTransaction
     {
         $transaction = null;
         try {
@@ -47,7 +47,7 @@ class TransferTokens
      * @throws SaloonException
      * @throws Exception
      */
-    private function transfer(TransferTokensData $data): Model|TronTransaction|null
+    private function transfer(TransferUsdtData $data): Model|TronTransaction|null
     {
         $response = TransferUsdtRequest::make($data->except('user'))->send();
         $reference = $response->json();
@@ -71,10 +71,10 @@ class TransferTokens
 
 
     /**
-     * @param TransferTokensData $data
+     * @param TransferUsdtData $data
      * @return TronTransaction|null
      */
-    public function __invoke(TransferTokensData $data): ?TronTransaction
+    public function __invoke(TransferUsdtData $data): ?TronTransaction
     {
         return $this->run($data);
     }

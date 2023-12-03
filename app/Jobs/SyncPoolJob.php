@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Http\Integrations\Tron\Requests\TRC20\GetBalanceRequest;
+use App\Http\Integrations\Tron\Requests\TRC20\GetUsdtBalanceRequest;
 use App\Models\Pool;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
@@ -39,7 +39,7 @@ class SyncPoolJob implements ShouldQueue
     public function handle(): void
     {
         $ownerAddress = $this->pool->address;
-        $request = new GetBalanceRequest($ownerAddress, $this->pool->private_key);
+        $request = new GetUsdtBalanceRequest($ownerAddress, $this->pool->private_key);
         $response = $request->send();
         $balance = $response->json() ?? 0;
 

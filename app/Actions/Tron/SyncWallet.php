@@ -2,8 +2,8 @@
 
 namespace App\Actions\Tron;
 
-use App\Http\Integrations\Tron\Requests\TRC20\GetBalanceRequest;
-use App\Jobs\TransferTokensJob;
+use App\Http\Integrations\Tron\Requests\TRC20\GetUsdtBalanceRequest;
+use App\Jobs\TransferUsdtJob;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Response;
@@ -22,7 +22,7 @@ class SyncWallet
      */
     public function sync(Wallet $wallet): void
     {
-        $request = new GetBalanceRequest($wallet->address, $wallet->private_key);
+        $request = new GetUsdtBalanceRequest($wallet->address, $wallet->private_key);
 
         $response = $request->send();
 
@@ -45,6 +45,6 @@ class SyncWallet
         // Sync blockchain_amount
         $wallet->update(['blockchain_amount' => $amount]);
 
-        dispatch(new TransferTokensJob($wallet));
+        dispatch(new TransferUsdtJob($wallet));
     }
 }

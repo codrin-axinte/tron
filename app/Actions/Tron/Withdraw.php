@@ -6,7 +6,7 @@ use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Enums\WithdrawMethod;
 use App\Http\Integrations\Tron\Data\TransactionData;
-use App\Http\Integrations\Tron\Data\TransferTokensData;
+use App\Http\Integrations\Tron\Data\TransferUsdtData;
 use App\Http\Integrations\Tron\Data\WithdrawSettings;
 use App\Models\TronTransaction;
 use App\Services\PoolManager;
@@ -42,7 +42,7 @@ class Withdraw
         $method = $settings->method;
         $pool = $this->poolManager->getRandomPool($amount->value());
 
-        $data = new TransferTokensData(
+        $data = new TransferUsdtData(
             to: $walletToAddress,
             amount: $amount->toSun(),
             from: $pool->address,
