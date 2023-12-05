@@ -7,7 +7,9 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "build-wallet-status-card": "cd nova-components/WalletStatusCard && npm run dev",
+        "build-wallet-status-card-prod": "cd nova-components/WalletStatusCard && npm run prod"
     },
     "dependencies": {
         "dotenv": "^16.0.3",

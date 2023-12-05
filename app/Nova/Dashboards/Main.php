@@ -6,6 +6,7 @@ use App\Nova\Metrics\TotalBalance;
 use Laravel\Nova\Dashboards\Main as Dashboard;
 use Modules\Acl\Enums\UserPermission;
 use Modules\Morphling\Nova\Metrics\UsersPerDay;
+use Tron\WalletStatusCard\WalletStatusCard;
 
 class Main extends Dashboard
 {
@@ -17,6 +18,7 @@ class Main extends Dashboard
     public function cards()
     {
         return [
+            WalletStatusCard::make(),
             TotalBalance::make(),
             UsersPerDay::make()->canSeeWhen(UserPermission::ViewAny->value),
         ];

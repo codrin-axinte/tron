@@ -49,7 +49,8 @@
         "stancl/jobpipeline": "^1.6",
         "tailflow/laravel-orion": "^2.13",
         "whitecube/nova-flexible-content": "^v1.0.0",
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+        "tron/wallet-status-card": "@dev"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.8",
@@ -118,6 +119,10 @@
         {
             "type": "composer",
             "url": "https://nova.laravel.com/"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/WalletStatusCard"
         }
     ]
 }

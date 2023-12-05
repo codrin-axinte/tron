@@ -374,6 +374,13 @@
       'Orion' => 'Orion\\Facades\\Orion',
     ),
   ),
+  'tron/wallet-status-card' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Tron\\WalletStatusCard\\CardServiceProvider',
+    ),
+  ),
   'whitecube/nova-flexible-content' => 
   array (
     'providers' => 

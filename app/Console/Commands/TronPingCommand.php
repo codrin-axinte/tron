@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Tron\GetStatusAction;
 use App\Http\Integrations\Tron\Requests\HeartbeatRequest;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 class TronPingCommand extends Command
@@ -27,31 +29,21 @@ class TronPingCommand extends Command
      * Execute the console command.
      *
      * @return int
-     * @throws GuzzleException
-     * @throws \ReflectionException
-     * @throws SaloonException
      */
     public function handle(): int
     {
-        $request = new HeartbeatRequest();
-        try {
-            $response = $request->send();
+        $result = app(GetStatusAction::class)();
 
-            if ($response->status() === 200) {
-                $this->output->success('Service is up and running.');
-                return Command::SUCCESS;
-            }
-
-            $this->error("Service is not available. Reason: {$response->json()}");
-
-            return Command::FAILURE;
-
-        } catch (\Exception $exception) {
-            $this->error("Service is not available. Reason: {$exception->getMessage()}");
-            // TODO: Should notify admins
-
-            return Command::FAILURE;
+        if ($result['status']) {
+            $this->output->success($result['message']);
+            return Command::SUCCESS;
         }
 
+        $message = $result['message'];
+        $context = $result['context'];
+
+        $this->error("$message Reason: $context");
+
+        return Command::FAILURE;
     }
 }
