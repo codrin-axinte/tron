@@ -55,15 +55,16 @@
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.8",
         "fakerphp/faker": "^1.17.1",
-        "laravel/pint": "^v1.0.0",
         "laravel-lang/attributes": "^2.0",
         "laravel-lang/lang": "^12.1",
         "laravel-lang/publisher": "^14.4",
+        "laravel/pint": "^v1.0.0",
         "mockery/mockery": "^1.5.0",
-        "nunomaduro/larastan": "^2.2",
         "nunomaduro/collision": "^6.1",
+        "nunomaduro/larastan": "^2.2",
         "phpunit/phpunit": "^9.5.8",
-        "spatie/laravel-ignition": "^1.0"
+        "spatie/laravel-ignition": "^1.0",
+        "spatie/laravel-ray": "^1.33"
     },
     "autoload": {
         "psr-4": {
