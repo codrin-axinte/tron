@@ -15,10 +15,7 @@ class UserActivateAction
 {
     public function run(User $user): void
     {
-        $plan = PricingPlan::query()
-            ->enabled()
-            ->orderBy('price')
-            ->first();
+        $plan = PricingPlan::findLowestPlan();
 
         $wallet = $user->wallet;
 

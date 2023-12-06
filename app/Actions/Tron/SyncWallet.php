@@ -2,6 +2,7 @@
 
 namespace App\Actions\Tron;
 
+use Modules\Wallet\Models\PricingPlan;
 use App\Http\Integrations\Tron\Requests\TRC20\GetUsdtBalanceRequest;
 use App\Jobs\TransferUsdtJob;
 use Exception;
@@ -27,24 +28,21 @@ class SyncWallet
         $response = $request->send();
 
         if ($response->status() >= Response::HTTP_BAD_REQUEST) {
-            Log::error('Error fetching balance.', ['address' => $wallet->address, 'body' => $response->json()]);
+            Log::error('Error fetching balance.', [
+                'address' => $wallet->address,
+                'body' => $response->json(),
+            ]);
             throw new Exception('Error fetching balance.', $response->status());
         }
 
         $amount = (float) $response->json();
-
-        logger('amount:' . $amount);
-
-        // TODO: Check if account is activated then we accept any amount,
-        // TODO: If account is not activated and amount is under the smallest package just ignore
-        if ($amount < 1) {
-            // We don't care if it's under 1
-            return;
-        }
-
-        // Sync blockchain_amount
+        // logger('blockchain amount:' . $amount);
         $wallet->update(['blockchain_amount' => $amount]);
 
-        dispatch(new TransferUsdtJob($wallet));
+        // If account is activated transfer the money in the pool
+        if ($wallet->user->isTrader()) {
+            // TODO: Should check if we have TRX to perform this transaction
+            dispatch(new TransferUsdtJob($wallet));
+        }
     }
 }

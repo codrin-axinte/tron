@@ -81,6 +81,14 @@ class PricingPlan extends Model implements Sortable
             ->orderByDesc('price');
     }
 
+    public static function findLowestPlan(): PricingPlan
+    {
+        return PricingPlan::query()
+            ->enabled()
+            ->orderBy('price')
+            ->first();
+    }
+
     public function getTable(): string
     {
         return Table::creditsPlans();

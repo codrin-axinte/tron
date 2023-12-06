@@ -106,6 +106,21 @@ class User extends Authenticatable implements MustVerifyEmail, CanOwnModels, Int
         return $this->hasOne(TradingPlan::class)->latestOfMany();
     }
 
+    public function isTrader(): bool
+    {
+        return $this->hasAnyRole([AclService::trader()]);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasAnyRole([AclService::superAdminRole()]);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasAnyRole([AclService::adminRole()]);
+    }
+
     /**
      * @deprecated Use trading plan instead
      */

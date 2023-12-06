@@ -34,11 +34,10 @@ final class ActivateUser
      */
     public function handle(TokenTransferSuccessful $event): void
     {
-
         $transaction = $event->transaction;
         $user = $transaction->ownerWallet->user;
 
-        if ($user->hasAnyRole([AclService::trader()])) {
+        if ($user->isTrader()) {
             return;
         }
 
