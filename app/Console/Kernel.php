@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command(PruneCommand::class)->daily();
         $schedule->command(CompoundInterestUpdate::class)->everyTenMinutes()->withoutOverlapping();
-        // $schedule->command(TronSyncCommand::class)->hourly()->withoutOverlapping();
+        $schedule->command(TronSyncCommand::class)->hourly()->withoutOverlapping();
         $schedule->command(PurgePendingActionsCommand::class)->everyTenMinutes();
         $schedule->command(TronPingCommand::class)->everyFiveMinutes();
         // TODO: Job to sync transactions
