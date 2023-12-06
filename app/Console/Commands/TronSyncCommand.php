@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\SyncPoolJob;
+use App\Jobs\SyncTransactionJob;
 use App\Jobs\SyncWalletJob;
 use App\Models\Pool;
 use App\Models\TronTransaction;
@@ -34,8 +35,8 @@ class TronSyncCommand extends Command
      */
     public function handle(): int
     {
-        $this->syncWallets();
-        $this->syncPools();;
+        //$this->syncWallets();
+        //$this->syncPools();;
         $this->syncTransactions();
 
         // $service->syncAccounts();
@@ -49,9 +50,13 @@ class TronSyncCommand extends Command
             ->pending()
             ->cursor();
 
+        $this->info('Dispatching transaction jobs...');
+        $this->output->progressStart($transactions->count());
         foreach ($transactions as $transaction) {
-            $request = '';
+            dispatch(new SyncTransactionJob($transaction));
+            $this->output->progressAdvance();
         }
+        $this->output->progressFinish();
     }
 
     private function syncWallets(): void

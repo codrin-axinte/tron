@@ -79,7 +79,6 @@ class TronTransaction extends Model
 
     public function scopeApproved(Builder $query): Builder
     {
-
         $query->where('status', TransactionStatus::Approved);
 
         return $query;

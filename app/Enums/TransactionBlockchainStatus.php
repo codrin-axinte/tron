@@ -37,4 +37,27 @@ enum TransactionBlockchainStatus: int
      */
     case Reverted = 5;
 
+    public static function colors(): array
+    {
+        return [
+            TransactionBlockchainStatus::Pending->value => 'info',
+            TransactionBlockchainStatus::Success->value => 'success',
+            TransactionBlockchainStatus::Failed->value => 'danger',
+            TransactionBlockchainStatus::OOEB->value => 'warning',
+            TransactionBlockchainStatus::Invalid->value => 'danger',
+            TransactionBlockchainStatus::Reverted->value => 'warning',
+        ];
+    }
+
+    public static function labels(): array
+    {
+        return [
+            TransactionBlockchainStatus::Pending->value => 'Pending',
+            TransactionBlockchainStatus::Success->value => 'Success',
+            TransactionBlockchainStatus::Failed->value => 'Failed',
+            TransactionBlockchainStatus::OOEB->value => 'Out of Energy or Bandwidth',
+            TransactionBlockchainStatus::Invalid->value => 'Invalid',
+            TransactionBlockchainStatus::Reverted->value => 'Reverted',
+        ];
+    }
 }

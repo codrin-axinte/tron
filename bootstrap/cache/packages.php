@@ -345,6 +345,13 @@
       0 => 'Spatie\\Permission\\PermissionServiceProvider',
     ),
   ),
+  'spatie/laravel-ray' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelRay\\RayServiceProvider',
+    ),
+  ),
   'spatie/laravel-responsecache' => 
   array (
     'providers' => 

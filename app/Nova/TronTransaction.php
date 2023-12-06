@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Laravel\Nova\Fields\Badge;
 use App\Enums\TransactionStatus;
 use App\Nova\Actions\ApproveTransaction;
 use App\Nova\Actions\RejectTransaction;
@@ -13,6 +14,7 @@ use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use App\Enums\TransactionBlockchainStatus;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class TronTransaction extends Resource
@@ -39,7 +41,7 @@ class TronTransaction extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'from', 'to', 'contract', 'blockchain_reference_id'
+        'id', 'from', 'to', 'contract', 'blockchain_reference_id',
     ];
 
     public static $group = 'blockchain';
@@ -66,7 +68,13 @@ class TronTransaction extends Resource
     {
         return [
             //ID::make()->sortable(),
+
             Text::make(__('Status'), 'status')
+                ->filterable(),
+
+            Badge::make(__('Blockchain Status'), 'blockchain_status')
+                ->map(TransactionBlockchainStatus::colors())
+                ->labels(TransactionBlockchainStatus::labels())
                 ->filterable(),
 
             Text::make(__('From'), 'from')
