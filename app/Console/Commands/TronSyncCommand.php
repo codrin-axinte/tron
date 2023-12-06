@@ -35,8 +35,8 @@ class TronSyncCommand extends Command
      */
     public function handle(): int
     {
-        //$this->syncWallets();
-        //$this->syncPools();;
+        $this->syncWallets();
+        $this->syncPools();;
         $this->syncTransactions();
 
         // $service->syncAccounts();
